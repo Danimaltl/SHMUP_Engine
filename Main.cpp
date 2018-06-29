@@ -6,25 +6,53 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Main.hpp>
 
+#include <cmath>
+#include <iostream>
+#include <memory>
+
+#include "Globals.h"
+#include "ViewManager.h"
+#include "AppState.h"
+
+unsigned int sWidth = 1280;
+unsigned int sHeight = 720;
+
+//Window to be displayed throughout game
+RenderWindow window;
+
+//Object for manipulating view
+ViewManager viewMan(window.getDefaultView());
+
+Font font;
+
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
+	window.create(VideoMode(sWidth, sHeight), "Dan's Asteroids!");
+	viewMan.setView(window.getDefaultView());
 
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	font.loadFromFile("arial.ttf");
 
+	Clock clock;
+
+	unique_ptr<AppState> currentState(new MainMenu());
 	while (window.isOpen())
 	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
+		Event event;
+		float dt = clock.restart().asSeconds();
+		while (window.pollEvent(event)) {
+			switch (event.type) {
+			case sf::Event::Closed:
 				window.close();
+				break;
+			}
 		}
 
-		window.clear();
-		window.draw(shape);
+		AppState* next = currentState->update(dt);
+		currentState->draw();
 		window.display();
+
+		if (next != nullptr)
+			currentState.reset(next);
 	}
 
 	return 0;
