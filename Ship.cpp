@@ -156,6 +156,7 @@ void Asteroid::initAsteroid(float r) {
 	lifetime = 1;
 	name = "Asteroid";
 	speed = 20 + (rand() % 100);
+	health = radius * radius;
 }
 
 void Asteroid::update(float dt) {
@@ -166,7 +167,7 @@ void Asteroid::update(float dt) {
 	shape.move(0, speed * dt);
 	if (health <= 0) {
 		shape.setPosition(rand() % sWidth, -50);
-		health = 1000;
+		health = radius * 10;
 		speed = 50 + (rand() % 100);
 	}
 }
