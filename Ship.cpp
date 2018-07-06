@@ -43,8 +43,22 @@ void Ship::update(float dt) {
 	Vector2f mousePosF((float)mousePos.x, (float)mousePos.y);
 	Vector2f newPos = pos;
 
+	if (mousePos.x < 0) {
+		Mouse::setPosition(Vector2i(0, mousePos.y), window);
+	}
+	else if (mousePos.x > sWidth) {
+		Mouse::setPosition(Vector2i(sWidth, mousePos.y), window);
+	}
+
+	if (mousePos.y < 0) {
+		Mouse::setPosition(Vector2i(mousePos.x, 0), window);
+	}
+	else if (mousePos.y > sHeight) {
+		Mouse::setPosition(Vector2i(mousePos.x, sHeight), window);
+	}
+
 	//Move if mouse is on screen and ball isn't past paddle
-	if (mousePosF.x > 0 && mousePosF.x < sWidth && mousePosF.y > 0 && mousePosF.y < sHeight) {
+	if (mousePosF.x >= 0 && mousePosF.x <= sWidth && mousePosF.y >= 0 && mousePosF.y <= sHeight) {
 		float speed = 2000;
 		/*Lerp Implementation*/
 		float distTravelled = speed * dt; //distance travelled in frame
@@ -81,7 +95,7 @@ Laser Class
 */
 
 Laser::Laser() {
-	speed = 500;
+	speed = 1000;
 	radius = 5;
 	shape.setPosition(99999999, 999999999);
 }
@@ -94,7 +108,7 @@ void Laser::fire(Vector2f shipDir, Vector2f shipPos) {
 	shape.setOrigin(radius, radius);
 	shape.setPosition(shipPos);
 
-	lifetime = 3;
+	lifetime = 2;
 }
 
 void Laser::update(float dt) {

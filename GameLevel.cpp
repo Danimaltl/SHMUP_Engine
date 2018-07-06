@@ -82,6 +82,8 @@ namespace game {
 	Ship player;
 	int score = 0;
 	int lives = 0;
+	float laserResetMax = .05f;
+	float laserResetCurrent = 0;
 
 	Vertex bg[] = {
 		Vertex(Vector2f(-(int)sWidth * 1.5,-(int)sHeight * 1.5), sf::Color::Red),
@@ -95,7 +97,7 @@ namespace game {
 
 	void initGame() {
 		objects.push_back(&player);
-		lasers.reserve(50);
+		lasers.reserve(1000);
 		for (int i = 0; i < 50; i++) {
 			Laser * l = new Laser();
 			lasers.push_back(l);
@@ -118,6 +120,13 @@ namespace game {
 		//	else ++it;
 		//}
 
+		//laserResetCurrent -= dt;
+		//if (laserResetCurrent <= 0) {
+		//	laserResetCurrent = laserResetMax;
+		//	firing = false;
+		//}
+		
+
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 			return new MainMenu();
 		}
@@ -125,17 +134,25 @@ namespace game {
 			window.close();
 		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Space) || Mouse::isButtonPressed(Mouse::Left) && !firing) {
-			for (int i = 0; i < lasers.size(); i++) {
-				if (lasers[i]->lifetime <= 0) {
-					lasers[i]->fire(player.dir, player.getCenter());
-					break;
+		if (Mouse::isButtonPressed(Mouse::Left)) {
+			if (firing == false) {
+				for (int i = 0; i < lasers.size(); i++) {
+					if (lasers[i]->lifetime <= 0) {
+						lasers[i]->fire(player.dir, player.getCenter());
+						break;
+					}
 				}
+				laserResetCurrent = laserResetMax;
+				firing = true;
 			}
-			firing = true;
-			cout << objects.size() << endl;
+			laserResetCurrent -= dt;
+			if (laserResetCurrent <= 0) {
+				firing = false;
+			}
+			cout << laserResetCurrent << endl;
 		}
-		else if (!Keyboard::isKeyPressed(Keyboard::Space) && !Mouse::isButtonPressed(Mouse::Left)) {
+		else if (!Mouse::isButtonPressed(Mouse::Left)) {
+			laserResetCurrent = laserResetMax;
 			firing = false;
 		}
 

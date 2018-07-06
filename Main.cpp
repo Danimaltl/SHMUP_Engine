@@ -14,8 +14,8 @@
 #include "ViewManager.h"
 #include "AppState.h"
 
-unsigned int sWidth = 1280;
-unsigned int sHeight = 720;
+unsigned int sWidth = 600;
+unsigned int sHeight = 800;
 
 //Window to be displayed throughout game
 RenderWindow window;
@@ -27,7 +27,8 @@ Font font;
 
 int main()
 {
-	window.create(VideoMode(sWidth, sHeight), "Dan's Asteroids!");
+	ContextSettings settings;
+	window.create(VideoMode(sWidth, sHeight),"Dan's Asteroids!", sf::Style::Titlebar | sf::Style::Close);
 	viewMan.setView(window.getDefaultView());
 
 	font.loadFromFile("arial.ttf");
