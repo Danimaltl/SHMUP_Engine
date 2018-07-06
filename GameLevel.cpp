@@ -4,16 +4,16 @@
 
 namespace game {
 
-	vector<GameObject *> objects;
+	std::vector<GameObject *> objects;
 
 	/*Bucket Grid Code from Walt's slides*/
 	const float BUCKET_WIDTH = 100;
 	const float BUCKET_HEIGHT = 100;
 	const int COLUMNS = 10;
 	const int ROWS = 10;
-	vector<GameObject*> grid[COLUMNS][ROWS];
+	std::vector<GameObject*> grid[COLUMNS][ROWS];
 
-	Vector2i getBucket(Vector2f pos) {
+	sf::Vector2i getBucket(Vector2f pos) {
 		int col = int(pos.x / BUCKET_WIDTH);
 		if (col < 0)
 			col = 0;
@@ -26,13 +26,14 @@ namespace game {
 		else if (row >= ROWS)
 			row = ROWS - 1;
 
-		return Vector2i(col, row);
+		return sf::Vector2i(col, row);
 	}
 
-	void bucket_add(Vector2i b,
+	void bucket_add(sf::Vector2i b,
 		GameObject* obj)
 	{
-		vector<GameObject*> & v
+		printf("Added %s to bucket.\n", obj->name.c_str());
+		std::vector<GameObject*> & v
 			= grid[b.x][b.y];
 
 		v.push_back(obj);
@@ -41,7 +42,7 @@ namespace game {
 	void bucket_remove(Vector2i b,
 		GameObject* obj)
 	{
-		vector<GameObject*> & v
+		std::vector<GameObject*> & v
 			= grid[b.x][b.y];
 
 		for (int i = 0; i < v.size(); ++i)
@@ -57,16 +58,16 @@ namespace game {
 	void detect_collisions(GameObject* obj,
 		Vector2i b)
 	{
-		int left = max(b.x - 1, 0);
-		int right = min(b.x + 1, COLUMNS - 1);
-		int top = max(b.y - 1, 0);
-		int bot = min(b.y + 1, ROWS - 1);
+		int left = std::max(b.x - 1, 0);
+		int right = std::min(b.x + 1, COLUMNS - 1);
+		int top = std::max(b.y - 1, 0);
+		int bot = std::min(b.y + 1, ROWS - 1);
 
 		for (int bx = left; bx <= right; ++bx)
 		{
 			for (int by = top; by <= bot; ++by)
 			{
-				vector<GameObject*> & v = grid[bx][by];
+				std::vector<GameObject*> & v = grid[bx][by];
 				for (GameObject* o : v)
 				{
 					if (o != obj)
@@ -92,8 +93,8 @@ namespace game {
 		Vertex(Vector2f(-(int)sWidth * 1.5,sHeight * 1.5), sf::Color::Magenta)
 	};
 
-	vector<Laser *> lasers;
-	vector<Asteroid *> asteroids;
+	std::vector<Laser *> lasers;
+	std::vector<Asteroid *> asteroids;
 
 	void initGame() {
 		objects.push_back(&player);
@@ -104,7 +105,9 @@ namespace game {
 			objects.push_back(l);
 		}
 
-
+		Asteroid * a = new Asteroid(50);
+		asteroids.push_back(a);
+		objects.push_back(a);
 
 	}
 
@@ -149,7 +152,7 @@ namespace game {
 			if (laserResetCurrent <= 0) {
 				firing = false;
 			}
-			cout << laserResetCurrent << endl;
+			//cout << laserResetCurrent << endl;
 		}
 		else if (!Mouse::isButtonPressed(Mouse::Left)) {
 			laserResetCurrent = laserResetMax;
@@ -159,6 +162,7 @@ namespace game {
 		for (int i = 0; i < objects.size(); ++i)
 		{
 			GameObject * obj = objects[i];
+			//if (obj->name.compare("Asteroid") == 0) printf("Found Asteroid. Name: %s\n", obj->name.c_str());
 			Vector2i curBucket =
 				getBucket(obj->getCenter());
 			obj->update(dt);
@@ -188,7 +192,7 @@ namespace game {
 	void GameLevel::draw() {
 		window.setView(viewMan.getView());
 		window.clear();
-		window.draw(bg, 4, Quads);
+		window.draw(bg, 4, sf::Quads);
 		for (int i = 0; i < objects.size(); i++) {
 			objects[i]->draw();
 		}

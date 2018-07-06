@@ -9,19 +9,17 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 
 #include "ViewManager.h"
 
 #define PI 3.14159265358979323846f
 
-using namespace sf;
-using namespace std;
-
-extern RenderWindow window;
+extern sf::RenderWindow window;
 extern ViewManager viewMan;
 extern unsigned int sWidth;
 extern unsigned int sHeight;
-extern Font font;
+extern sf::Font font;
 
-float length(Vector2f v);
-Vector2f rotate(Vector2f v, float radians);
+float length(sf::Vector2f v);
+sf::Vector2f rotate(sf::Vector2f v, float radians);

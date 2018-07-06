@@ -23,22 +23,22 @@ RenderWindow window;
 //Object for manipulating view
 ViewManager viewMan(window.getDefaultView());
 
-Font font;
+sf::Font font;
 
 int main()
 {
-	ContextSettings settings;
+	sf::ContextSettings settings;
 	window.create(VideoMode(sWidth, sHeight),"Dan's Asteroids!", sf::Style::Titlebar | sf::Style::Close);
 	viewMan.setView(window.getDefaultView());
 
 	font.loadFromFile("arial.ttf");
 
-	Clock clock;
+	sf::Clock clock;
 
-	unique_ptr<AppState> currentState(new MainMenu());
+	std::unique_ptr<AppState> currentState(new MainMenu());
 	while (window.isOpen())
 	{
-		Event event;
+		sf::Event event;
 		float dt = clock.restart().asSeconds();
 		while (window.pollEvent(event)) {
 			switch (event.type) {

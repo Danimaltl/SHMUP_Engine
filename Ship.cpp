@@ -17,10 +17,12 @@ Ship::Ship() {
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height / 2);
 	sprite.setPosition(sWidth / 2, sHeight / 2);
 	sprite.setRotation(-90);
+
+	name = "Player";
 }
 
 void Ship::update(float dt) {
-	Vector2f pos = sprite.getPosition();
+	sf::Vector2f pos = sprite.getPosition();
 
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
 		sprite.move(sf::Vector2f(-speed * dt, 0));
@@ -39,22 +41,22 @@ void Ship::update(float dt) {
 		sprite.move(sf::Vector2f(0, speed * dt));
 	}
 
-	Vector2i mousePos = Mouse::getPosition(window);
-	Vector2f mousePosF((float)mousePos.x, (float)mousePos.y);
-	Vector2f newPos = pos;
+	sf::Vector2i mousePos = Mouse::getPosition(window);
+	sf::Vector2f mousePosF((float)mousePos.x, (float)mousePos.y);
+	sf::Vector2f newPos = pos;
 
 	if (mousePos.x < 0) {
-		Mouse::setPosition(Vector2i(0, mousePos.y), window);
+		sf::Mouse::setPosition(sf::Vector2i(0, mousePos.y), window);
 	}
 	else if (mousePos.x > sWidth) {
-		Mouse::setPosition(Vector2i(sWidth, mousePos.y), window);
+		sf::Mouse::setPosition(sf::Vector2i(sWidth, mousePos.y), window);
 	}
 
 	if (mousePos.y < 0) {
-		Mouse::setPosition(Vector2i(mousePos.x, 0), window);
+		sf::Mouse::setPosition(sf::Vector2i(mousePos.x, 0), window);
 	}
 	else if (mousePos.y > sHeight) {
-		Mouse::setPosition(Vector2i(mousePos.x, sHeight), window);
+		sf::Mouse::setPosition(sf::Vector2i(mousePos.x, sHeight), window);
 	}
 
 	//Move if mouse is on screen and ball isn't past paddle
@@ -75,7 +77,7 @@ void Ship::draw() {
 	window.draw(sprite);
 }
 
-Vector2f Ship::getCenter() {
+sf::Vector2f Ship::getCenter() {
 	return sprite.getPosition();
 }
 
@@ -83,7 +85,7 @@ void Ship::checkCollisionWith(GameObject * other) {
 	float d = length(getCenter() - other->getCenter());
 	float sum = radius + other->radius;
 	if (d < sum) {
-		//cout << "Ship collided!\n";
+		printf("Collided with: %s\n", other->name.c_str());
 	}
 }
 
@@ -98,6 +100,7 @@ Laser::Laser() {
 	speed = 1000;
 	radius = 5;
 	shape.setPosition(99999999, 999999999);
+	name = "Laser";
 }
 
 void Laser::fire(Vector2f shipDir, Vector2f shipPos) {
@@ -147,25 +150,22 @@ void Asteroid::initAsteroid(float r) {
 	texture.loadFromFile("rock.jpg");
 	radius = r;
 	shape.setRadius(r);
-	shape.setPosition(-99999999, -999999999);
+	shape.setOrigin(radius, radius);
+	shape.setPosition(sWidth/2, 100);
 	shape.setTexture(&texture);
 	lifetime = 1;
+	name = "Asteroid";
 }
 
 void Asteroid::update(float dt) {
-	if (lifetime > 0) {
-		shape.move(vel);
-	}
-	else {
-		shape.setPosition(-99999999, -999999999);
-	}
+	shape.move(0, 10 * dt);
 }
 
 void Asteroid::draw() {
 	window.draw(shape);
 }
 
-Vector2f Asteroid::getCenter() {
+sf::Vector2f Asteroid::getCenter() {
 	return shape.getPosition();
 }
 

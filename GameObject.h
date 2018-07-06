@@ -9,4 +9,5 @@ public:
 	virtual void checkCollisionWith(GameObject * obj) = 0;
 	float radius = 0;
 	float lifetime = 0;
+	std::string name = "Unnamed";
 };
