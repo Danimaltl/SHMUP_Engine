@@ -77,6 +77,12 @@ namespace game {
 		}
 	}
 
+	void physics_add_object(GameObject* obj) {
+		objects.push_back(obj);
+		sf::Vector2i coord = getBucket(obj->getCenter());
+		bucket_add(coord, obj);
+	}
+
 	/* *************** */
 
 	bool firing = true;
@@ -87,27 +93,30 @@ namespace game {
 	float laserResetCurrent = 0;
 
 	Vertex bg[] = {
-		Vertex(Vector2f(-(int)sWidth * 1.5,-(int)sHeight * 1.5), sf::Color::Red),
-		Vertex(Vector2f(sWidth * 1.5,-(int)sHeight * 1.5), sf::Color::Blue),
-		Vertex(Vector2f(sWidth * 1.5,sHeight * 1.5), sf::Color::Green),
-		Vertex(Vector2f(-(int)sWidth * 1.5,sHeight * 1.5), sf::Color::Magenta)
+		Vertex(Vector2f(0,0), sf::Color::Red),
+		Vertex(Vector2f(sWidth,0), sf::Color::Blue),
+		Vertex(Vector2f(sWidth,sHeight), sf::Color::Green),
+		Vertex(Vector2f(0,sHeight), sf::Color::Magenta)
 	};
 
 	std::vector<Laser *> lasers;
 	std::vector<Asteroid *> asteroids;
 
 	void initGame() {
-		objects.push_back(&player);
+		physics_add_object(&player);
 		lasers.reserve(1000);
 		for (int i = 0; i < 50; i++) {
 			Laser * l = new Laser();
 			lasers.push_back(l);
-			objects.push_back(l);
+			physics_add_object(l);
 		}
 
-		Asteroid * a = new Asteroid(50);
-		asteroids.push_back(a);
-		objects.push_back(a);
+		for (int i = 0; i < 5; i++) {
+			Asteroid * a = new Asteroid(10 + rand() % 40);
+			asteroids.push_back(a);
+			physics_add_object(a);
+		}
+		
 
 	}
 

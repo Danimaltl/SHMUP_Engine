@@ -45,4 +45,6 @@ private:
 	CircleShape shape;
 	Vector2f vel = Vector2f(0, 0);
 	void initAsteroid(float r);
+	int health = 1000;
+	float speed = 0;
 };

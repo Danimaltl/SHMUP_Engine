@@ -151,14 +151,24 @@ void Asteroid::initAsteroid(float r) {
 	radius = r;
 	shape.setRadius(r);
 	shape.setOrigin(radius, radius);
-	shape.setPosition(sWidth/2, 100);
+	shape.setPosition(rand() % sWidth, 100);
 	shape.setTexture(&texture);
 	lifetime = 1;
 	name = "Asteroid";
+	speed = 20 + (rand() % 100);
 }
 
 void Asteroid::update(float dt) {
-	shape.move(0, 10 * dt);
+	if (shape.getPosition().y > sHeight + 50) {
+		shape.setPosition(rand() % sWidth, -50);
+	}
+
+	shape.move(0, speed * dt);
+	if (health <= 0) {
+		shape.setPosition(rand() % sWidth, -50);
+		health = 1000;
+		speed = 50 + (rand() % 100);
+	}
 }
 
 void Asteroid::draw() {
@@ -170,5 +180,11 @@ sf::Vector2f Asteroid::getCenter() {
 }
 
 void Asteroid::checkCollisionWith(GameObject* other) {
-
+	float d = length(getCenter() - other->getCenter());
+	float sum = radius + other->radius;
+	if (d < sum) {
+		printf("Collided with: %s\n", other->name.c_str());
+		health -= 10;
+		other->lifetime = 0;
+	}
 }
