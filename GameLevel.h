@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "Globals.h"
 #include "AppState.h"
 #include "GameObject.h"

@@ -31,8 +31,8 @@ void Ship::update(float dt) {
 		sprite.move(sf::Vector2f(speed * dt, 0));
 	}
 
-	dir.x = cosf(sprite.getRotation() * (PI / 180));
-	dir.y = sinf(sprite.getRotation() * (PI / 180));
+	dir.x = cosf(sprite.getRotation() * (M_PI / 180));
+	dir.y = sinf(sprite.getRotation() * (M_PI / 180));
 
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
 		sprite.move(sf::Vector2f(0, -speed * dt));
