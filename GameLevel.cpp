@@ -102,6 +102,15 @@ namespace game {
 	std::vector<Laser *> lasers;
 	std::vector<Asteroid *> asteroids;
 
+	/* Parallel Component Arrays */
+	std::vector<sf::Shape> shapeListForDrawing;
+
+	std::vector<sf::Shape> asteroidShapes;
+	std::vector<AsteroidComponent> asteroidComponents;
+	//radius
+
+	
+
 	void initGame() {
 		physics_add_object(&player);
 		lasers.reserve(1000);
@@ -121,6 +130,7 @@ namespace game {
 	}
 
 	AppState* GameLevel::update(float dt) {
+
 		//auto it = objects.begin();
 		//while (it != objects.end()) {
 		//	auto obj = *it;

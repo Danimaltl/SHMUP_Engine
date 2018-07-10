@@ -1,5 +1,6 @@
 #include "Ship.h"
 #include "Easings.h"
+#include <iostream>
 
 /*
 
@@ -22,6 +23,15 @@ Ship::Ship() {
 }
 
 void Ship::update(float dt) {
+	//sizeof(sf::Sprite);
+	//sizeof(texture);
+	//sizeof(radius);
+	//sizeof(dir);
+	sizeof(float);
+	sizeof(int);
+	//sizeof(Ship);
+	//sizeof(std::string);
+
 	sf::Vector2f pos = sprite.getPosition();
 
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
@@ -187,5 +197,26 @@ void Asteroid::checkCollisionWith(GameObject* other) {
 		printf("Collided with: %s\n", other->name.c_str());
 		health -= 10;
 		other->lifetime = 0;
+	}
+}
+
+void AsteroidSystem::updatePositions(float dt) {
+	assert(numAsteroids == stats->size() == shapes->size());
+	for (int i = 0; i < numAsteroids; i++) {
+		float speed = stats->at(i).speed;
+		int health = stats->at(i).health;
+		Shape* shape = &shapes->at(i);
+
+		shape->move(0, speed * dt);
+
+		if (shape->getPosition().y > sHeight + 50) {
+			shape->setPosition(rand() % sWidth, -50);
+		}
+
+		if (health <= 0) {
+			shape->setPosition(rand() % sWidth, -50);
+			stats->at(i).health = maxHealth;
+			stats->at(i).speed = 50 + (rand() % 100);
+		}
 	}
 }

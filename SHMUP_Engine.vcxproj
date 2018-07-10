@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppState.h" />
+    <ClInclude Include="Components.h" />
     <ClInclude Include="dcMath.h" />
     <ClInclude Include="Easings.h" />
     <ClInclude Include="GameLevel.h" />

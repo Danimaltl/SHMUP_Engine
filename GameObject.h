@@ -11,3 +11,5 @@ public:
 	float lifetime = 0;
 	std::string name = "Unnamed";
 };
+
+

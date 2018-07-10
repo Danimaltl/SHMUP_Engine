@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 
+//Size 376
 class Ship : public GameObject {
 public:
 	Ship();
@@ -9,14 +10,16 @@ public:
 	virtual void draw();
 	virtual Vector2f getCenter();
 	virtual void checkCollisionWith(GameObject * obj);
-
-	Vector2f dir = Vector2f(0, 0);
-	Vector2f vel = Vector2f(0, 0);
+	Sprite sprite; //size 272
+	Texture texture; //size 40
+	Vector2f dir = Vector2f(0, 0); //size 8
+	Vector2f vel = Vector2f(0, 0); //size 8
+	float speed = 300; //size 4
 private:
-	Texture texture;
-	Sprite sprite;
+	
+	
 
-	float speed = 300;
+
 };
 
 class Laser : public GameObject {
@@ -47,4 +50,29 @@ private:
 	void initAsteroid(float r);
 	int health = 1000;
 	float speed = 0;
+};
+
+struct AsteroidComponent {
+	int health = 1000;
+	float speed = 0;
+};
+
+struct AsteroidEntity {
+	int m_ID;
+	sf::Shape * shape;
+	AsteroidComponent * data;
+};
+
+class AsteroidSystem {
+	//Shared data
+	int maxHealth;
+	int numAsteroids;
+
+	// Component lists
+	std::vector<sf::Shape>* shapes;
+	std::vector<AsteroidComponent>* stats;
+
+	//Behavior
+	void updatePositions(float dt);
+	void handleCollisions();
 };

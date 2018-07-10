@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <assert.h>
 
 #include "ViewManager.h"
 
