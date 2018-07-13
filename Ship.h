@@ -1,7 +1,9 @@
 #pragma once
 #include "Globals.h"
 #include "GameObject.h"
+#include "Components.h"
 
+/* Player Ship */
 //Size 376
 class Ship : public GameObject {
 public:
@@ -22,6 +24,8 @@ private:
 
 };
 
+/* Laser Stuff */
+
 class Laser : public GameObject {
 public:
 	Laser();
@@ -35,6 +39,27 @@ private:
 	Vector2f dir = Vector2f(0,0);
 	float speed = 0;
 };
+
+struct LaserComponent {
+	Vector2f dir = Vector2f(0, 0);
+	float speed = 0;
+	float lifetime = 0;
+};
+
+class LaserSystem {
+	//Shared data
+	int maxLifetime;
+	int numLasers;
+
+	// Component lists
+	std::vector<sf::Shape>* shapes;
+	std::vector<LaserComponent>* laserComponents;
+
+	void updatePositions(float dt);
+	void handleCollisions();
+};
+
+/* Asteroid Stuff */
 
 class Asteroid : public GameObject {
 public:
@@ -54,25 +79,25 @@ private:
 
 struct AsteroidComponent {
 	int health = 1000;
+	int maxHealth = 1000;
 	float speed = 0;
 };
 
 struct AsteroidEntity {
-	int m_ID;
-	sf::Shape * shape;
-	AsteroidComponent * data;
+	// Component lists
+	std::vector<sf::CircleShape*> shapes;
+	std::vector<AsteroidComponent> asteroidComponents;
+	std::vector<CollisionComponent*> collisionComponents;
+
+	//Shared data
+	int numAsteroids = 0;
 };
 
 class AsteroidSystem {
-	//Shared data
-	int maxHealth;
-	int numAsteroids;
-
-	// Component lists
-	std::vector<sf::Shape>* shapes;
-	std::vector<AsteroidComponent>* stats;
-
+	AsteroidEntity* entity;
+public:
 	//Behavior
+	void initialize(AsteroidEntity* e);
 	void updatePositions(float dt);
 	void handleCollisions();
 };

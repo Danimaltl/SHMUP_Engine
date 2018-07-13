@@ -31,6 +31,7 @@ void Ship::update(float dt) {
 	sizeof(int);
 	//sizeof(Ship);
 	//sizeof(std::string);
+	//sizeof(std::vector<Ship>);
 
 	sf::Vector2f pos = sprite.getPosition();
 
@@ -146,6 +147,8 @@ void Laser::checkCollisionWith(GameObject* other) {
 
 }
 
+
+
 /*
 
 Asteroid Class
@@ -200,23 +203,37 @@ void Asteroid::checkCollisionWith(GameObject* other) {
 	}
 }
 
-void AsteroidSystem::updatePositions(float dt) {
-	assert(numAsteroids == stats->size() == shapes->size());
-	for (int i = 0; i < numAsteroids; i++) {
-		float speed = stats->at(i).speed;
-		int health = stats->at(i).health;
-		Shape* shape = &shapes->at(i);
+void ::AsteroidSystem::initialize(AsteroidEntity* e) {
+	entity = e;
+}
 
+void AsteroidSystem::updatePositions(float dt) {
+	//printf("numAsteroids: %d, asteroidComponents.size(): %d, shapes.size(): %d\n", entity.numAsteroids, entity.asteroidComponents.size(), entity.shapes.size());
+	assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
+	for (int i = 0; i < entity->numAsteroids; i++) {
+		float speed = entity->asteroidComponents[i].speed;
+		int health = entity->asteroidComponents[i].health;
+		CircleShape* shape = entity->shapes[i];
+		if (i == 0) printf("Position:%f\n", shape->getPosition().y);
 		shape->move(0, speed * dt);
 
 		if (shape->getPosition().y > sHeight + 50) {
 			shape->setPosition(rand() % sWidth, -50);
+			shape->setRadius(10 + rand() % 40);
 		}
 
 		if (health <= 0) {
 			shape->setPosition(rand() % sWidth, -50);
-			stats->at(i).health = maxHealth;
-			stats->at(i).speed = 50 + (rand() % 100);
+			shape->setRadius(10 + rand() % 40);
+			entity->asteroidComponents[i].health = entity->asteroidComponents[i].maxHealth;
+			entity->asteroidComponents[i].speed = 50 + (rand() % 100);
 		}
+	}
+}
+
+void AsteroidSystem::handleCollisions() {
+	assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
+	for (int i = 0; i < entity->numAsteroids; i++) {
+		//entity->asteroidComponents[i].health -= 10;
 	}
 }
