@@ -63,7 +63,7 @@ class LaserSystem {
 
 class Asteroid : public GameObject {
 public:
-	Asteroid(float r);
+	Asteroid(float r, sf::Texture* texture);
 	virtual void update(float dt);
 	virtual void draw();
 	virtual Vector2f getCenter();
@@ -72,7 +72,7 @@ private:
 	Texture texture;
 	CircleShape shape;
 	Vector2f vel = Vector2f(0, 0);
-	void initAsteroid(float r);
+	void initAsteroid(float r, sf::Texture* texture);
 	int health = 1000;
 	float speed = 0;
 };

@@ -155,17 +155,16 @@ Asteroid Class
 
 */
 
-Asteroid::Asteroid(float r) {
-	initAsteroid(r);
+Asteroid::Asteroid(float r, sf::Texture* texture) {
+	initAsteroid(r, texture);
 }
 
-void Asteroid::initAsteroid(float r) {
-	texture.loadFromFile("rock.jpg");
+void Asteroid::initAsteroid(float r, sf::Texture* texture) {
 	radius = r;
 	shape.setRadius(r);
 	shape.setOrigin(radius, radius);
 	shape.setPosition(rand() % sWidth, 100);
-	shape.setTexture(&texture);
+	shape.setTexture(texture);
 	lifetime = 1;
 	name = "Asteroid";
 	speed = 20 + (rand() % 100);
@@ -175,11 +174,13 @@ void Asteroid::initAsteroid(float r) {
 void Asteroid::update(float dt) {
 	if (shape.getPosition().y > sHeight + 50) {
 		shape.setPosition(rand() % sWidth, -50);
+		shape.setRadius(10 + rand() % 40);
 	}
 
 	shape.move(0, speed * dt);
 	if (health <= 0) {
 		shape.setPosition(rand() % sWidth, -50);
+		shape.setRadius(10 + rand() % 40);
 		health = radius * 10;
 		speed = 50 + (rand() % 100);
 	}
@@ -197,9 +198,9 @@ void Asteroid::checkCollisionWith(GameObject* other) {
 	float d = length(getCenter() - other->getCenter());
 	float sum = radius + other->radius;
 	if (d < sum) {
-		printf("Collided with: %s\n", other->name.c_str());
-		health -= 10;
-		other->lifetime = 0;
+		//printf("Collided with: %s\n", other->name.c_str());
+		//health -= 10;
+		//other->lifetime = 0;
 	}
 }
 
@@ -211,10 +212,12 @@ void AsteroidSystem::updatePositions(float dt) {
 	//printf("numAsteroids: %d, asteroidComponents.size(): %d, shapes.size(): %d\n", entity.numAsteroids, entity.asteroidComponents.size(), entity.shapes.size());
 	assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
 	for (int i = 0; i < entity->numAsteroids; i++) {
+		
 		float speed = entity->asteroidComponents[i].speed;
 		int health = entity->asteroidComponents[i].health;
 		CircleShape* shape = entity->shapes[i];
-		if (i == 0) printf("Position:%f\n", shape->getPosition().y);
+		//if (i == 0) printf("Position:%f\n", shape->getPosition().y);
+		entity->collisionComponents[i]->oldPos = shape->getPosition();
 		shape->move(0, speed * dt);
 
 		if (shape->getPosition().y > sHeight + 50) {
@@ -225,7 +228,7 @@ void AsteroidSystem::updatePositions(float dt) {
 		if (health <= 0) {
 			shape->setPosition(rand() % sWidth, -50);
 			shape->setRadius(10 + rand() % 40);
-			entity->asteroidComponents[i].health = entity->asteroidComponents[i].maxHealth;
+			entity->asteroidComponents[i].health = shape->getRadius() * shape->getRadius();
 			entity->asteroidComponents[i].speed = 50 + (rand() % 100);
 		}
 	}

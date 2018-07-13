@@ -33,7 +33,8 @@ void initMenu() {
 AppState* MainMenu::update(float dt) {
 	title.rotate(100 * dt);
 	if (Keyboard::isKeyPressed(Keyboard::Space)) {
-		return new game::GameLevel(1);
+		//return new game::GameLevel(1);
+		return new game_component::GameLevel(1);
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Q)) {
 		window.close();

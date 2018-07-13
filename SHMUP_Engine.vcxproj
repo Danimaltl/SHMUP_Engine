@@ -22,7 +22,8 @@
     <ClCompile Include="AppState.cpp" />
     <ClCompile Include="dcMath.cpp" />
     <ClCompile Include="Easings.cpp" />
-    <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="GameLevel_Component.cpp" />
+    <ClCompile Include="GameLevel_Object.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Ship.cpp" />
