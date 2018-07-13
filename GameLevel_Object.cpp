@@ -104,6 +104,7 @@ namespace game {
 	sf::Texture asteroidTexture;
 
 	sf::Text fpsText;
+	sf::Text title;
 	sf::Font font;
 
 	sf::Clock clock;
@@ -116,6 +117,12 @@ namespace game {
 		fpsText.setCharacterSize(50);
 		fpsText.setFillColor(sf::Color::Green);
 		fpsText.setPosition(10, 10);
+
+		title.setFont(font);
+		title.setCharacterSize(50);
+		title.setFillColor(sf::Color::Green);
+		title.setString("Object Version");
+		title.setPosition(sWidth / 2 - title.getLocalBounds().width / 2 + 10, 10);
 
 		//physics_add_object(&player);
 		//lasers.reserve(1000);
@@ -131,33 +138,6 @@ namespace game {
 			asteroids.push_back(a);
 			physics_add_object(a);
 		}
-
-		////Create all asteroids
-		
-		//
-		//int numRocks = 50;
-		//asteroidEntity->numAsteroids = numRocks;
-		//for (int i = 0; i < numRocks; i++) {
-		//	sf::CircleShape* shape = new sf::CircleShape;
-		//	shape->setRadius(10 + rand() % 40);
-		//	shape->setOrigin(shape->getRadius(), shape->getRadius());
-		//	shape->setPosition(rand() % sWidth, 100);
-		//	shape->setTexture(&asteroidTexture);
-		//	shapeListForDrawing.push_back(shape);
-		//	asteroidEntity->shapes.push_back(shape);
-
-		//	CollisionComponent c;
-		//	c.name = "Asteroid";
-		//	c.shape = shape;
-		//	c.oldPos = shape->getPosition();
-		//	asteroidEntity->collisionComponents.push_back(physics_add_object(c));
-
-		//	AsteroidComponent a;
-		//	a.health = shape->getRadius() * shape->getRadius();
-		//	a.speed = 50 + (rand() % 100);
-		//	asteroidEntity->asteroidComponents.push_back(a);
-		//}
-		//asteroidSystem.initialize(asteroidEntity);
 
 	}
 
@@ -202,17 +182,17 @@ namespace game {
 		{
 			GameObject * obj = objects[i];
 			//if (obj->name.compare("Asteroid") == 0) printf("Found Asteroid. Name: %s\n", obj->name.c_str());
-			Vector2i curBucket =
-				getBucket(obj->getCenter());
+			//Vector2i curBucket =
+			//	getBucket(obj->getCenter());
 			obj->update(dt);
-			Vector2i newBucket =
-				getBucket(obj->getCenter());
-			if (curBucket != newBucket)
-			{
-				bucket_remove(curBucket, obj);
-				bucket_add(newBucket, obj);
-			}
-			detect_collisions(obj, newBucket);
+			//Vector2i newBucket =
+			//	getBucket(obj->getCenter());
+			//if (curBucket != newBucket)
+			//{
+			//	bucket_remove(curBucket, obj);
+			//	bucket_add(newBucket, obj);
+			//}
+			//detect_collisions(obj, newBucket);
 		}
 
 		//Vector2f targetCenter = player.getCenter();
@@ -222,9 +202,6 @@ namespace game {
 		//viewMan.getView().setCenter(curCenter);
 		//viewMan.getView().setCenter(player.getCenter());
 		//cout << viewMan.getView().getCenter().x << endl;
-
-		sf::Time elapsed = clock.restart();
-		fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));
 
 		return nullptr;
 	}
@@ -245,6 +222,7 @@ namespace game {
 		sf::Time elapsed = clock.restart();
 		fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));
 		window.draw(fpsText);
+		window.draw(title);
 	}
 
 	GameLevel::GameLevel(int level) {

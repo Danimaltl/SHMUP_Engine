@@ -6,8 +6,9 @@ struct MoveComponent {
 };
 
 struct CollisionComponent {
-	std::vector<std::string> hitNames;
+	std::string otherName;
 	std::string name;
 	sf::Vector2f oldPos;
 	sf::Shape* shape;
+	bool collided = false;
 };

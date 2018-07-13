@@ -80,7 +80,7 @@ namespace game_component {
 	void detect_collisions(CollisionComponent* obj,
 		Vector2i b)
 	{
-		obj->hitNames.clear();
+		obj->collided = false;
 		int left = std::max(b.x - 1, 0);
 		int right = std::min(b.x + 1, COLUMNS - 1);
 		int top = std::max(b.y - 1, 0);
@@ -94,9 +94,10 @@ namespace game_component {
 				for (CollisionComponent* o : v)
 				{
 					if (o != obj) {
-						bool hit = false;//checkCollision(obj->shape->getGlobalBounds(), o->shape->getGlobalBounds());
+						bool hit = checkCollision(obj->shape->getGlobalBounds(), o->shape->getGlobalBounds());
 						if (hit) {
-							obj->hitNames.push_back(o->name);
+							obj->collided = true;
+							obj->otherName = o->name;
 						}
 					}
 				}
@@ -131,7 +132,9 @@ namespace game_component {
 	};
 
 	/* Parallel Component Arrays */
-	std::vector<sf::CircleShape*> shapeListForDrawing;
+	const int shapeListSize = 5000;
+	CircleShape* shapeListForDrawing = new CircleShape[5000];
+	int shapeListCount = 0;
 
 	sf::Texture asteroidTexture;
 
@@ -139,6 +142,7 @@ namespace game_component {
 	AsteroidEntity* asteroidEntity = new AsteroidEntity;
 
 	sf::Text fpsText;
+	sf::Text title;
 	sf::Font font;
 
 	sf::Clock clock;
@@ -152,28 +156,39 @@ namespace game_component {
 		fpsText.setFillColor(sf::Color::Green);
 		fpsText.setPosition(10, 10);
 
+		title.setFont(font);
+		title.setCharacterSize(50);
+		title.setFillColor(sf::Color::Green);
+		title.setString("Component Version");
+		title.setPosition(sWidth/2 - title.getLocalBounds().width / 2 + 10, 10);
+
 		//Create all asteroids
 		asteroidTexture.loadFromFile("rock.jpg");
 
 		int numRocks = 2000;
 		asteroidEntity->numAsteroids = numRocks;
 		for (int i = 0; i < numRocks; i++) {
-			sf::CircleShape* shape = new sf::CircleShape;
-			shape->setRadius(10 + rand() % 40);
-			shape->setOrigin(shape->getRadius(), shape->getRadius());
-			shape->setPosition(rand() % sWidth, 100);
-			shape->setTexture(&asteroidTexture);
-			shapeListForDrawing.push_back(shape);
-			asteroidEntity->shapes.push_back(shape);
+			CircleShape shape;
+			shape.setRadius(10 + rand() % 40);
+			shape.setOrigin(shape.getRadius(), shape.getRadius());
+			shape.setPosition(rand() % sWidth, 100);
+			shape.setTexture(&asteroidTexture);
+
+			shapeListForDrawing[shapeListCount] = shape;
+			CircleShape* shapeptr = &shapeListForDrawing[shapeListCount];
+			shapeListCount++;
+			
+
+			asteroidEntity->shapes.push_back(shapeptr);
 
 			CollisionComponent* c = new CollisionComponent;
 			c->name = "Asteroid";
-			c->shape = shape;
-			c->oldPos = shape->getPosition();
+			c->shape = shapeptr;
+			c->oldPos = shape.getPosition();
 			asteroidEntity->collisionComponents.push_back(physics_add_object(c));
 
 			AsteroidComponent a;
-			a.health = shape->getRadius() * shape->getRadius();
+			a.health = shape.getRadius() * shape.getRadius();
 			a.speed = 50 + (rand() % 100);
 			asteroidEntity->asteroidComponents.push_back(a);
 		}
@@ -193,20 +208,20 @@ namespace game_component {
 		//update positions
 		asteroidSystem.updatePositions(dt);
 
-		//Check all collisions
-		for (int i = 0; i < colliders.size(); ++i) {
-			CollisionComponent * collision = colliders[i];
-			Vector2i curBucket = getBucket(collision->oldPos);
-			Vector2i newBucket = getBucket(collision->shape->getPosition());
-			if (curBucket != newBucket) {
-				bucket_remove(curBucket, collision);
-				bucket_add(newBucket, collision);
-			}
-			detect_collisions(collision, newBucket);
-		}
+		////Check all collisions
+		//for (int i = 0; i < colliders.size(); ++i) {
+		//	CollisionComponent * collision = colliders[i];
+		//	Vector2i curBucket = getBucket(collision->oldPos);
+		//	Vector2i newBucket = getBucket(collision->shape->getPosition());
+		//	if (curBucket != newBucket) {
+		//		bucket_remove(curBucket, collision);
+		//		bucket_add(newBucket, collision);
+		//	}
+		//	detect_collisions(collision, newBucket);
+		//}
 
-		//handle collisions
-		asteroidSystem.handleCollisions();
+		////handle collisions
+		//asteroidSystem.handleCollisions();
 
 		return nullptr;
 	}
@@ -218,13 +233,14 @@ namespace game_component {
 		window.clear();
 		window.draw(bg, 4, sf::Quads);
 
-		for (int i = 0; i < shapeListForDrawing.size(); i++) {
-			window.draw(*shapeListForDrawing[i]);
+		for (int i = 0; i < shapeListCount; i++) {
+			window.draw(shapeListForDrawing[i]);
 		}
 
 		sf::Time elapsed = clock.restart();
 		fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));
 		window.draw(fpsText);
+		window.draw(title);
 	}
 
 	GameLevel::GameLevel(int level) {

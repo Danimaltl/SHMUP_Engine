@@ -69,8 +69,6 @@ public:
 	virtual Vector2f getCenter();
 	virtual void checkCollisionWith(GameObject * obj);
 private:
-	Texture texture;
-	CircleShape shape;
 	Vector2f vel = Vector2f(0, 0);
 	void initAsteroid(float r, sf::Texture* texture);
 	int health = 1000;

@@ -9,7 +9,6 @@ Ship Class
 */
 
 Ship::Ship() {
-	radius = 20;
 
 	texture.loadFromFile("seal.png");
 	sprite.setTexture(texture);
@@ -93,11 +92,11 @@ sf::Vector2f Ship::getCenter() {
 }
 
 void Ship::checkCollisionWith(GameObject * other) {
-	float d = length(getCenter() - other->getCenter());
-	float sum = radius + other->radius;
-	if (d < sum) {
-		printf("Collided with: %s\n", other->name.c_str());
-	}
+	//float d = length(getCenter() - other->getCenter());
+	//float sum = radius + other->radius;
+	//if (d < sum) {
+	//	printf("Collided with: %s\n", other->name.c_str());
+	//}
 }
 
 
@@ -109,7 +108,7 @@ Laser Class
 
 Laser::Laser() {
 	speed = 1000;
-	radius = 5;
+	//radius = 5;
 	shape.setPosition(99999999, 999999999);
 	name = "Laser";
 }
@@ -117,9 +116,9 @@ Laser::Laser() {
 void Laser::fire(Vector2f shipDir, Vector2f shipPos) {
 	dir = shipDir;
 	
-	shape.setRadius(radius);
+	//shape.setRadius(radius);
 	shape.setFillColor(Color::Yellow);
-	shape.setOrigin(radius, radius);
+	//shape.setOrigin(radius, radius);
 	shape.setPosition(shipPos);
 
 	lifetime = 2;
@@ -160,15 +159,14 @@ Asteroid::Asteroid(float r, sf::Texture* texture) {
 }
 
 void Asteroid::initAsteroid(float r, sf::Texture* texture) {
-	radius = r;
 	shape.setRadius(r);
-	shape.setOrigin(radius, radius);
+	shape.setOrigin(r, r);
 	shape.setPosition(rand() % sWidth, 100);
 	shape.setTexture(texture);
 	lifetime = 1;
 	name = "Asteroid";
 	speed = 20 + (rand() % 100);
-	health = radius * radius;
+	health = r * r;
 }
 
 void Asteroid::update(float dt) {
@@ -181,7 +179,7 @@ void Asteroid::update(float dt) {
 	if (health <= 0) {
 		shape.setPosition(rand() % sWidth, -50);
 		shape.setRadius(10 + rand() % 40);
-		health = radius * 10;
+		health = shape.getRadius() * 10;
 		speed = 50 + (rand() % 100);
 	}
 }
@@ -195,12 +193,12 @@ sf::Vector2f Asteroid::getCenter() {
 }
 
 void Asteroid::checkCollisionWith(GameObject* other) {
-	float d = length(getCenter() - other->getCenter());
-	float sum = radius + other->radius;
-	if (d < sum) {
+	collided = false;
+	if (shape.getGlobalBounds().intersects(other->shape.getGlobalBounds())) {
 		//printf("Collided with: %s\n", other->name.c_str());
 		//health -= 10;
 		//other->lifetime = 0;
+		collided = true;
 	}
 }
 
@@ -213,11 +211,11 @@ void AsteroidSystem::updatePositions(float dt) {
 	assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
 	for (int i = 0; i < entity->numAsteroids; i++) {
 		
-		float speed = entity->asteroidComponents[i].speed;
-		int health = entity->asteroidComponents[i].health;
-		CircleShape* shape = entity->shapes[i];
+		float speed = entity->asteroidComponents.data()[i].speed;
+		int health = entity->asteroidComponents.data()[i].health;
+		CircleShape* shape = entity->shapes.data()[i];
 		//if (i == 0) printf("Position:%f\n", shape->getPosition().y);
-		entity->collisionComponents[i]->oldPos = shape->getPosition();
+		entity->collisionComponents.data()[i]->oldPos = shape->getPosition();
 		shape->move(0, speed * dt);
 
 		if (shape->getPosition().y > sHeight + 50) {
@@ -237,6 +235,9 @@ void AsteroidSystem::updatePositions(float dt) {
 void AsteroidSystem::handleCollisions() {
 	assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
 	for (int i = 0; i < entity->numAsteroids; i++) {
-		//entity->asteroidComponents[i].health -= 10;
+		//CollisionComponent* col = entity->collisionComponents[i];
+		//if (col->collided) {
+		//	//printf("Collided with %s\n",col->otherName.c_str());
+		//}
 	}
 }
