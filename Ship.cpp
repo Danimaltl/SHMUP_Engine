@@ -235,9 +235,9 @@ void AsteroidSystem::updatePositions(float dt) {
 void AsteroidSystem::handleCollisions() {
 	assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
 	for (int i = 0; i < entity->numAsteroids; i++) {
-		//CollisionComponent* col = entity->collisionComponents[i];
-		//if (col->collided) {
-		//	//printf("Collided with %s\n",col->otherName.c_str());
-		//}
+		CollisionComponent* col = entity->collisionComponents[i];
+		if (col->collided) {
+			printf("Collided with %s\n",col->otherName.c_str());
+		}
 	}
 }

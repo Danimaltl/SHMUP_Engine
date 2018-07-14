@@ -133,7 +133,7 @@ namespace game {
 		//}
 
 		asteroidTexture.loadFromFile("rock.jpg");
-		for (int i = 0; i < 2000; i++) {
+		for (int i = 0; i < 50; i++) {
 			Asteroid * a = new Asteroid(10 + rand() % 40, &asteroidTexture);
 			asteroids.push_back(a);
 			physics_add_object(a);
@@ -181,18 +181,18 @@ namespace game {
 		for (int i = 0; i < objects.size(); ++i)
 		{
 			GameObject * obj = objects[i];
-			//if (obj->name.compare("Asteroid") == 0) printf("Found Asteroid. Name: %s\n", obj->name.c_str());
-			//Vector2i curBucket =
-			//	getBucket(obj->getCenter());
+			if (obj->name.compare("Asteroid") == 0) printf("Found Asteroid. Name: %s\n", obj->name.c_str());
+			Vector2i curBucket =
+				getBucket(obj->getCenter());
 			obj->update(dt);
-			//Vector2i newBucket =
-			//	getBucket(obj->getCenter());
-			//if (curBucket != newBucket)
-			//{
-			//	bucket_remove(curBucket, obj);
-			//	bucket_add(newBucket, obj);
-			//}
-			//detect_collisions(obj, newBucket);
+			Vector2i newBucket =
+				getBucket(obj->getCenter());
+			if (curBucket != newBucket)
+			{
+				bucket_remove(curBucket, obj);
+				bucket_add(newBucket, obj);
+			}
+			detect_collisions(obj, newBucket);
 		}
 
 		//Vector2f targetCenter = player.getCenter();

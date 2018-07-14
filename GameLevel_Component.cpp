@@ -165,7 +165,7 @@ namespace game_component {
 		//Create all asteroids
 		asteroidTexture.loadFromFile("rock.jpg");
 
-		int numRocks = 2000;
+		int numRocks = 50;
 		asteroidEntity->numAsteroids = numRocks;
 		for (int i = 0; i < numRocks; i++) {
 			CircleShape shape;
@@ -208,20 +208,20 @@ namespace game_component {
 		//update positions
 		asteroidSystem.updatePositions(dt);
 
-		////Check all collisions
-		//for (int i = 0; i < colliders.size(); ++i) {
-		//	CollisionComponent * collision = colliders[i];
-		//	Vector2i curBucket = getBucket(collision->oldPos);
-		//	Vector2i newBucket = getBucket(collision->shape->getPosition());
-		//	if (curBucket != newBucket) {
-		//		bucket_remove(curBucket, collision);
-		//		bucket_add(newBucket, collision);
-		//	}
-		//	detect_collisions(collision, newBucket);
-		//}
+		//Check all collisions
+		for (int i = 0; i < colliders.size(); ++i) {
+			CollisionComponent * collision = colliders[i];
+			Vector2i curBucket = getBucket(collision->oldPos);
+			Vector2i newBucket = getBucket(collision->shape->getPosition());
+			if (curBucket != newBucket) {
+				bucket_remove(curBucket, collision);
+				bucket_add(newBucket, collision);
+			}
+			detect_collisions(collision, newBucket);
+		}
 
-		////handle collisions
-		//asteroidSystem.handleCollisions();
+		//handle collisions
+		asteroidSystem.handleCollisions();
 
 		return nullptr;
 	}
