@@ -3,15 +3,7 @@
 #include "Components.h"
 #include <memory>
 
-namespace game_component {
-
-	/*sf::Shape version*/
-
-	//const int MAX_COLLIDERS = 300;
-	//CollisionComponent colliders[MAX_COLLIDERS];
-	//CollisionComponent* collidersPtr = colliders;
-	//int collidersSize = 0;
-
+namespace collision {
 	std::vector<CollisionComponent*> colliders;
 
 	const float BUCKET_WIDTH = 100;
@@ -36,29 +28,16 @@ namespace game_component {
 		return sf::Vector2i(col, row);
 	}
 
-	void bucket_add(sf::Vector2i b,
-		CollisionComponent* obj)
+	void bucket_add(sf::Vector2i b, CollisionComponent* obj)
 	{
-		try {
 			std::vector<CollisionComponent*> & v
 				= grid[b.x][b.y];
 
 			v.push_back(obj);
-		}
-		catch (std::exception const& e) {
-			std::cout << "Message: " << e.what() << "\n";
-
-			/*
-			* Note this is platform/compiler specific
-			* Your milage may very
-			*/
-			std::cout << "Type:    " << typeid(e).name() << "\n";
-		}
 
 	}
 
-	void bucket_remove(Vector2i b,
-		CollisionComponent* obj)
+	void bucket_remove(Vector2i b, CollisionComponent* obj)
 	{
 		std::vector<CollisionComponent*> & v
 			= grid[b.x][b.y];
@@ -77,8 +56,7 @@ namespace game_component {
 		return box1.intersects(box2);
 	}
 
-	void detect_collisions(CollisionComponent* obj,
-		Vector2i b)
+	void detect_collisions(CollisionComponent* obj,	Vector2i b)
 	{
 		obj->collided = false;
 		int left = std::max(b.x - 1, 0);
@@ -105,7 +83,7 @@ namespace game_component {
 		}
 	}
 
-	CollisionComponent* physics_add_object(CollisionComponent* obj) {
+	CollisionComponent* add_object(CollisionComponent* obj) {
 		//assert(collidersSize < MAX_COLLIDERS);
 		/*colliders[collidersSize] = obj;
 		CollisionComponent* objPtr = &colliders[collidersSize];*/
@@ -115,14 +93,40 @@ namespace game_component {
 		return obj;
 	}
 
+	void CheckAllCollisions() {
+		//Check all collisions
+		for (int i = 0; i < colliders.size(); ++i) {
+			CollisionComponent * collision = colliders[i];
+			if (collision->active == false) continue;
+			Vector2i curBucket = getBucket(collision->oldPos);
+			Vector2i newBucket = getBucket(collision->shape->getPosition());
+			if (curBucket != newBucket) {
+				bucket_remove(curBucket, collision);
+				bucket_add(newBucket, collision);
+			}
+			detect_collisions(collision, newBucket);
+		}
+	}
+
+}
+
+namespace game_component {
+
+	/*sf::Shape version*/
+
+	//const int MAX_COLLIDERS = 300;
+	//CollisionComponent colliders[MAX_COLLIDERS];
+	//CollisionComponent* collidersPtr = colliders;
+	//int collidersSize = 0;
+
+	
+
 	/* *************** */
 
 	bool firing = true;
-	Ship player;
+	PlayerShip player;
 	int score = 0;
 	int lives = 0;
-	float laserResetMax = .05f;
-	float laserResetCurrent = 0;
 
 	Vertex bg[] = {
 		Vertex(Vector2f(0,0), sf::Color::Red),
@@ -131,15 +135,8 @@ namespace game_component {
 		Vertex(Vector2f(0,sHeight), sf::Color::Magenta)
 	};
 
-	/* Parallel Component Arrays */
-	const int shapeListSize = 5000;
-	CircleShape* shapeListForDrawing = new CircleShape[5000];
-	int shapeListCount = 0;
-
-	sf::Texture asteroidTexture;
-
 	AsteroidSystem asteroidSystem;
-	AsteroidEntity* asteroidEntity = new AsteroidEntity;
+	LaserSystem laserSystem;
 
 	sf::Text fpsText;
 	sf::Text title;
@@ -162,37 +159,10 @@ namespace game_component {
 		title.setString("Component Version");
 		title.setPosition(sWidth/2 - title.getLocalBounds().width / 2 + 10, 10);
 
-		//Create all asteroids
-		asteroidTexture.loadFromFile("rock.jpg");
+		player.init();
 
-		int numRocks = 50;
-		asteroidEntity->numAsteroids = numRocks;
-		for (int i = 0; i < numRocks; i++) {
-			CircleShape shape;
-			shape.setRadius(10 + rand() % 40);
-			shape.setOrigin(shape.getRadius(), shape.getRadius());
-			shape.setPosition(rand() % sWidth, 100);
-			shape.setTexture(&asteroidTexture);
-
-			shapeListForDrawing[shapeListCount] = shape;
-			CircleShape* shapeptr = &shapeListForDrawing[shapeListCount];
-			shapeListCount++;
-			
-
-			asteroidEntity->shapes.push_back(shapeptr);
-
-			CollisionComponent* c = new CollisionComponent;
-			c->name = "Asteroid";
-			c->shape = shapeptr;
-			c->oldPos = shape.getPosition();
-			asteroidEntity->collisionComponents.push_back(physics_add_object(c));
-
-			AsteroidComponent a;
-			a.health = shape.getRadius() * shape.getRadius();
-			a.speed = 50 + (rand() % 100);
-			asteroidEntity->asteroidComponents.push_back(a);
-		}
-		asteroidSystem.initialize(asteroidEntity);
+		asteroidSystem.initialize(20, 20);
+		laserSystem.initialize(200, 200, &player);
 
 	}
 
@@ -206,22 +176,16 @@ namespace game_component {
 		}
 
 		//update positions
+		player.updatePosition(dt);
+		laserSystem.updatePositions(dt);
 		asteroidSystem.updatePositions(dt);
 
-		//Check all collisions
-		for (int i = 0; i < colliders.size(); ++i) {
-			CollisionComponent * collision = colliders[i];
-			Vector2i curBucket = getBucket(collision->oldPos);
-			Vector2i newBucket = getBucket(collision->shape->getPosition());
-			if (curBucket != newBucket) {
-				bucket_remove(curBucket, collision);
-				bucket_add(newBucket, collision);
-			}
-			detect_collisions(collision, newBucket);
-		}
+		collision::CheckAllCollisions();
 
 		//handle collisions
+		player.handleCollision();
 		asteroidSystem.handleCollisions();
+		laserSystem.handleCollisions();
 
 		return nullptr;
 	}
@@ -233,9 +197,11 @@ namespace game_component {
 		window.clear();
 		window.draw(bg, 4, sf::Quads);
 
-		for (int i = 0; i < shapeListCount; i++) {
-			window.draw(shapeListForDrawing[i]);
-		}
+		asteroidSystem.drawShapes();
+		window.draw(player.m_shape);
+		laserSystem.drawShapes();
+
+
 
 		sf::Time elapsed = clock.restart();
 		fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));

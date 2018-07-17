@@ -11,4 +11,5 @@ struct CollisionComponent {
 	sf::Vector2f oldPos;
 	sf::Shape* shape;
 	bool collided = false;
+	bool active = true;
 };

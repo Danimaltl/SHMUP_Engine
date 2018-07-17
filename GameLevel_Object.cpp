@@ -85,7 +85,7 @@ namespace game {
 	}
 
 	bool firing = true;
-	Ship player;
+	PlayerShip player;
 	int score = 0;
 	int lives = 0;
 	float laserResetMax = .05f;
@@ -149,39 +149,39 @@ namespace game {
 		//}
 		
 
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-			return new MainMenu();
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Q)) {
-			window.close();
-		}
+		//if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		//	return new MainMenu();
+		//}
+		//if (Keyboard::isKeyPressed(Keyboard::Q)) {
+		//	window.close();
+		//}
 
-		if (Mouse::isButtonPressed(Mouse::Left)) {
-			if (firing == false) {
-				for (int i = 0; i < lasers.size(); i++) {
-					if (lasers[i]->lifetime <= 0) {
-						lasers[i]->fire(player.dir, player.getCenter());
-						break;
-					}
-				}
-				laserResetCurrent = laserResetMax;
-				firing = true;
-			}
-			laserResetCurrent -= dt;
-			if (laserResetCurrent <= 0) {
-				firing = false;
-			}
-			//cout << laserResetCurrent << endl;
-		}
-		else if (!Mouse::isButtonPressed(Mouse::Left)) {
-			laserResetCurrent = laserResetMax;
-			firing = false;
-		}
+		//if (Mouse::isButtonPressed(Mouse::Left)) {
+		//	if (firing == false) {
+		//		for (int i = 0; i < lasers.size(); i++) {
+		//			if (lasers[i]->lifetime <= 0) {
+		//				lasers[i]->fire(player.dir, player.getCenter());
+		//				break;
+		//			}
+		//		}
+		//		laserResetCurrent = laserResetMax;
+		//		firing = true;
+		//	}
+		//	laserResetCurrent -= dt;
+		//	if (laserResetCurrent <= 0) {
+		//		firing = false;
+		//	}
+		//	//cout << laserResetCurrent << endl;
+		//}
+		//else if (!Mouse::isButtonPressed(Mouse::Left)) {
+		//	laserResetCurrent = laserResetMax;
+		//	firing = false;
+		//}
 
 		for (int i = 0; i < objects.size(); ++i)
 		{
 			GameObject * obj = objects[i];
-			if (obj->name.compare("Asteroid") == 0) printf("Found Asteroid. Name: %s\n", obj->name.c_str());
+			//if (obj->name.compare("Asteroid") == 0) printf("Found Asteroid. Name: %s\n", obj->name.c_str());
 			Vector2i curBucket =
 				getBucket(obj->getCenter());
 			obj->update(dt);

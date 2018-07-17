@@ -2,25 +2,29 @@
 #include "Globals.h"
 #include "GameObject.h"
 #include "Components.h"
+#include "GameLevel.h"
 
 /* Player Ship */
 //Size 376
-class Ship : public GameObject {
+class PlayerShip {
 public:
-	Ship();
-	virtual void update(float dt);
-	virtual void draw();
-	virtual Vector2f getCenter();
-	virtual void checkCollisionWith(GameObject * obj);
-	Sprite sprite; //size 272
-	Texture texture; //size 40
+	sf::ConvexShape m_shape; //size 272
+	sf::Texture m_texture;
+
+	//State Data
 	Vector2f dir = Vector2f(0, 0); //size 8
 	Vector2f vel = Vector2f(0, 0); //size 8
 	float speed = 300; //size 4
-private:
-	
-	
 
+	//Components
+	CollisionComponent* collisionComponent;
+
+	//Behavior
+	void init();
+	void updatePosition(float dt);
+	void handleCollision();
+
+private:
 
 };
 
@@ -42,21 +46,31 @@ private:
 
 struct LaserComponent {
 	Vector2f dir = Vector2f(0, 0);
-	float speed = 0;
 	float lifetime = 0;
 };
 
 class LaserSystem {
 	//Shared data
-	int maxLifetime;
-	int numLasers;
+	PlayerShip* m_player;
+	int m_maxLifetime;
+	int m_numLasers;
+	int m_maxShapes;
+	float m_speed = 0;
+	float laserResetMax = .05f;
+	float laserResetCurrent = 0;
+	bool firing = false;
 
 	// Component lists
-	std::vector<sf::Shape>* shapes;
-	std::vector<LaserComponent>* laserComponents;
+	CircleShape* shapes = nullptr;
+	std::vector<LaserComponent> laserComponents;
+	std::vector<CollisionComponent*> collisionComponents;
 
+public:
+	void initialize(int numLasers, int maxShapes, PlayerShip* player);
+	void fire(Vector2f shipDir, Vector2f shipPos);
 	void updatePositions(float dt);
 	void handleCollisions();
+	void drawShapes();
 };
 
 /* Asteroid Stuff */
@@ -81,21 +95,20 @@ struct AsteroidComponent {
 	float speed = 0;
 };
 
-struct AsteroidEntity {
+class AsteroidSystem {
 	// Component lists
-	std::vector<sf::CircleShape*> shapes;
+	CircleShape* shapes = nullptr;
+	int m_maxShapes;
 	std::vector<AsteroidComponent> asteroidComponents;
 	std::vector<CollisionComponent*> collisionComponents;
 
 	//Shared data
-	int numAsteroids = 0;
-};
-
-class AsteroidSystem {
-	AsteroidEntity* entity;
+	int m_numAsteroids = 0;
+	sf::Texture asteroidTexture;
 public:
 	//Behavior
-	void initialize(AsteroidEntity* e);
+	void initialize(int numAsteroids, int maxShapes);
 	void updatePositions(float dt);
 	void handleCollisions();
+	void drawShapes();
 };
