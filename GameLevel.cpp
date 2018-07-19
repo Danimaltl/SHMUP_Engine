@@ -6,8 +6,8 @@
 namespace collision {
 	std::vector<CollisionComponent*> colliders;
 
-	const float BUCKET_WIDTH = 100;
-	const float BUCKET_HEIGHT = 100;
+	const float BUCKET_WIDTH = sWidth/4;
+	const float BUCKET_HEIGHT = sHeight/6;
 	const int COLUMNS = 10;
 	const int ROWS = 10;
 	std::vector<CollisionComponent*> grid[COLUMNS][ROWS];
@@ -162,7 +162,7 @@ namespace game_component {
 		player.init();
 
 		asteroidSystem.initialize(20, 20);
-		laserSystem.initialize(200, 200, &player);
+		laserSystem.initialize(50, 50, &player);
 
 	}
 
@@ -198,8 +198,8 @@ namespace game_component {
 		window.draw(bg, 4, sf::Quads);
 
 		asteroidSystem.drawShapes();
-		window.draw(player.m_shape);
 		laserSystem.drawShapes();
+		window.draw(player.m_shape);
 
 
 

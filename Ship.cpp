@@ -9,13 +9,17 @@ Ship Class
 */
 
 void PlayerShip::init() {
+	m_speed = 1000;
+	m_armor = 100;
+	m_shields = 100;
+
 	m_texture.loadFromFile("Seal.png");
-	m_shape.setTexture(&m_texture);
+	//m_shape.setTexture(&m_texture);
 	m_shape.setPointCount(4);
 	m_shape.setPoint(0, sf::Vector2f(0, 0));
-	m_shape.setPoint(1, sf::Vector2f(120, 0));
-	m_shape.setPoint(2, sf::Vector2f(120, 40));
-	m_shape.setPoint(3, sf::Vector2f(0, 40));
+	m_shape.setPoint(1, sf::Vector2f(50, 25));
+	m_shape.setPoint(2, sf::Vector2f(50, 50));
+	m_shape.setPoint(3, sf::Vector2f(0,75));
 
 	m_shape.setOrigin(m_shape.getLocalBounds().width/2, m_shape.getLocalBounds().height / 2);
 	m_shape.setPosition(sWidth / 2, sHeight / 2);
@@ -82,10 +86,9 @@ void PlayerShip::updatePosition(float dt) {
 
 	//Move if mouse is on screen and ball isn't past paddle
 	if (mousePosF.x >= 0 && mousePosF.x <= sWidth && mousePosF.y >= 0 && mousePosF.y <= sHeight) {
-		float speed = 2000;
 		/*Lerp Implementation*/
-		float distTravelled = speed * dt; //distance travelled in frame
-		float distTarget = abs(pos.x - mousePosF.x); //distance to move towards target
+		float distTravelled = m_speed * dt; //distance travelled in frame
+		float distTarget = dcMath::Magnitude(mousePosF - m_shape.getPosition()); //distance to move towards target
 		if (distTarget == 0) return;
 		float prog = distTravelled / distTarget; //Fraction of the progress made
 		newPos.x = lerp(newPos.x, mousePosF.x, prog);
@@ -95,7 +98,14 @@ void PlayerShip::updatePosition(float dt) {
 }
 
 void PlayerShip::handleCollision() {
-
+	if (collisionComponent->otherName == "Asteroid") {
+		if (m_shields < 0) {
+			m_armor -= 10;
+		}
+		else {
+			m_shields -= 10;
+		}
+	}
 }
 
 
@@ -153,8 +163,8 @@ void LaserSystem::initialize(int numLasers, int maxShapes, PlayerShip* player) {
 	m_maxShapes = maxShapes;
 	m_speed = 500;
 	m_maxLifetime = 2;
-	float laserResetMax = .1f;
-	float laserResetCurrent = 0;
+	laserResetMax = .1f;
+	laserResetCurrent = 0;
 
 	if (shapes != nullptr) {
 		delete(shapes);

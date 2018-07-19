@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "GameLevel.h"
+#include "dcMath.h"
 
 /* Player Ship */
 //Size 376
@@ -14,7 +15,9 @@ public:
 	//State Data
 	Vector2f dir = Vector2f(0, 0); //size 8
 	Vector2f vel = Vector2f(0, 0); //size 8
-	float speed = 300; //size 4
+	float m_speed = 0; //size 4
+	int m_armor = 0;
+	int m_shields = 0;
 
 	//Components
 	CollisionComponent* collisionComponent;
@@ -56,7 +59,7 @@ class LaserSystem {
 	int m_numLasers;
 	int m_maxShapes;
 	float m_speed = 0;
-	float laserResetMax = .05f;
+	float laserResetMax = 0;
 	float laserResetCurrent = 0;
 	bool firing = false;
 
