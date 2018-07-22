@@ -8,10 +8,14 @@ Ship Class
 
 */
 
-void PlayerShip::init() {
+void PlayerShip::init(sf::Font& font) {
 	m_speed = 1000;
 	m_armor = 100;
 	m_shields = 100;
+	m_regenRate = 10;
+	
+	iTimerMax = 0.75f;
+	iTimerCurr = iTimerMax;
 
 	m_texture.loadFromFile("Seal.png");
 	//m_shape.setTexture(&m_texture);
@@ -25,11 +29,44 @@ void PlayerShip::init() {
 	m_shape.setPosition(sWidth / 2, sHeight / 2);
 	m_shape.setRotation(-90);
 
+	shieldsText.setFont(font);
+	shieldsText.setCharacterSize(50);
+	shieldsText.setFillColor(sf::Color::Blue);
+	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 0));
+
+	armorText.setFont(font);
+	armorText.setCharacterSize(50);
+	armorText.setFillColor(sf::Color::Black);
+	armorText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 20));
+
+	shieldsText.setString(std::to_string(m_shields));
+	armorText.setString(std::to_string(m_armor));
+
 	CollisionComponent* c = new CollisionComponent;
 	c->name = "Player";
 	c->oldPos = m_shape.getPosition();
 	c->shape = &m_shape;
 	collisionComponent = collision::add_object(c);
+}
+
+void PlayerShip::updateFirst(float dt) {
+	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 0));
+	armorText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 20));
+
+	shieldsText.setString(std::to_string(m_shields));
+	armorText.setString(std::to_string(m_armor));
+
+	if (m_shields < 100) {
+		m_shields += m_regenRate * dt;
+	}
+
+	if (invincible) {
+		iTimerCurr -= dt;
+		if (iTimerCurr <= 0) {
+			invincible = false;
+			m_shape.setFillColor(sf::Color::White);
+		}
+	}
 }
 
 void PlayerShip::updatePosition(float dt) {
@@ -98,16 +135,26 @@ void PlayerShip::updatePosition(float dt) {
 }
 
 void PlayerShip::handleCollision() {
-	if (collisionComponent->otherName == "Asteroid") {
-		if (m_shields < 0) {
-			m_armor -= 10;
+	if (collisionComponent->collided && collisionComponent->otherName == "Asteroid") {
+		if (!invincible) {
+			if (m_shields < 0) {
+				m_armor -= 10;
+			}
+			else {
+				m_shields -= 30;
+			}
+			iTimerCurr = iTimerMax;
+			invincible = true;
+			m_shape.setFillColor(sf::Color::Yellow);
 		}
-		else {
-			m_shields -= 10;
-		}
+
 	}
 }
 
+void PlayerShip::drawTexts() {
+	window.draw(shieldsText);
+	window.draw(armorText);
+}
 
 
 /*

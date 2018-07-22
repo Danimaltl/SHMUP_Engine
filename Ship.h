@@ -11,21 +11,30 @@ class PlayerShip {
 public:
 	sf::ConvexShape m_shape; //size 272
 	sf::Texture m_texture;
+	sf::Text shieldsText;
+	sf::Text armorText;
 
 	//State Data
 	Vector2f dir = Vector2f(0, 0); //size 8
 	Vector2f vel = Vector2f(0, 0); //size 8
 	float m_speed = 0; //size 4
-	int m_armor = 0;
-	int m_shields = 0;
+	float m_armor = 0;
+	float m_shields = 0;
+	float m_regenRate = 0;
+	
+	float iTimerCurr = 0;
+	float iTimerMax = 0;
+	bool invincible = false;
 
 	//Components
 	CollisionComponent* collisionComponent;
 
 	//Behavior
-	void init();
+	void init(sf::Font& font);
+	void updateFirst(float dt);
 	void updatePosition(float dt);
 	void handleCollision();
+	void drawTexts();
 
 private:
 

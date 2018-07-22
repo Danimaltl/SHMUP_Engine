@@ -159,7 +159,7 @@ namespace game_component {
 		title.setString("Component Version");
 		title.setPosition(sWidth/2 - title.getLocalBounds().width / 2 + 10, 10);
 
-		player.init();
+		player.init(font);
 
 		asteroidSystem.initialize(20, 20);
 		laserSystem.initialize(50, 50, &player);
@@ -174,6 +174,8 @@ namespace game_component {
 		if (Keyboard::isKeyPressed(Keyboard::Q)) {
 			window.close();
 		}
+
+		player.updateFirst(dt);
 
 		//update positions
 		player.updatePosition(dt);
@@ -201,7 +203,7 @@ namespace game_component {
 		laserSystem.drawShapes();
 		window.draw(player.m_shape);
 
-
+		player.drawTexts();
 
 		sf::Time elapsed = clock.restart();
 		fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));
