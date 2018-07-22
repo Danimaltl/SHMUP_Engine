@@ -17,6 +17,9 @@ void PlayerShip::init(sf::Font& font) {
 	iTimerMax = 0.75f;
 	iTimerCurr = iTimerMax;
 
+	regenDelayMax = 2.0f;
+	regenDelayCurr = regenDelayMax ;
+
 	m_texture.loadFromFile("Seal.png");
 	//m_shape.setTexture(&m_texture);
 	m_shape.setPointCount(4);
@@ -32,15 +35,15 @@ void PlayerShip::init(sf::Font& font) {
 	shieldsText.setFont(font);
 	shieldsText.setCharacterSize(50);
 	shieldsText.setFillColor(sf::Color::Blue);
-	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 0));
+	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, -20));
 
 	armorText.setFont(font);
 	armorText.setCharacterSize(50);
 	armorText.setFillColor(sf::Color::Black);
 	armorText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 20));
 
-	shieldsText.setString(std::to_string(m_shields));
-	armorText.setString(std::to_string(m_armor));
+	shieldsText.setString(std::to_string((int)m_shields));
+	armorText.setString(std::to_string((int)m_armor));
 
 	CollisionComponent* c = new CollisionComponent;
 	c->name = "Player";
@@ -50,13 +53,26 @@ void PlayerShip::init(sf::Font& font) {
 }
 
 void PlayerShip::updateFirst(float dt) {
-	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 0));
+	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, -20));
 	armorText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 20));
 
-	shieldsText.setString(std::to_string(m_shields));
-	armorText.setString(std::to_string(m_armor));
+	shieldsText.setString(std::to_string((int)m_shields));
+	armorText.setString(std::to_string((int)m_armor));
 
-	if (m_shields < 100) {
+	if (m_shields <= 0 && !regenDelayActive) {
+		m_shields = 0;
+		regenDelayActive = true;
+		regenDelayCurr = regenDelayMax;
+	}
+
+	if (regenDelayActive) {
+		regenDelayCurr -= dt;
+		if (regenDelayCurr <= 0) {
+			regenDelayActive = false;
+		}
+	}
+
+	if (m_shields < 100 && !regenDelayActive) {
 		m_shields += m_regenRate * dt;
 	}
 
@@ -137,13 +153,16 @@ void PlayerShip::updatePosition(float dt) {
 void PlayerShip::handleCollision() {
 	if (collisionComponent->collided && collisionComponent->otherName == "Asteroid") {
 		if (!invincible) {
-			if (m_shields < 0) {
-				m_armor -= 10;
+			float damage = m_shields - 30;
+			if (damage < 0) {
+				m_shields = 0;
+				m_armor += damage;
 			}
 			else {
-				m_shields -= 30;
+				m_shields = damage;
 			}
 			iTimerCurr = iTimerMax;
+			regenDelayCurr = regenDelayMax;
 			invincible = true;
 			m_shape.setFillColor(sf::Color::Yellow);
 		}

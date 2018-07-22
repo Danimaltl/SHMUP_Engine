@@ -27,6 +27,7 @@
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="VehicleSystem.cpp" />
     <ClCompile Include="ViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +39,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="VehicleSystem.h" />
     <ClInclude Include="ViewManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

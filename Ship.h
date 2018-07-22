@@ -26,6 +26,10 @@ public:
 	float iTimerMax = 0;
 	bool invincible = false;
 
+	float regenDelayCurr = 0;
+	float regenDelayMax = 0;
+	bool regenDelayActive = false;
+
 	//Components
 	CollisionComponent* collisionComponent;
 

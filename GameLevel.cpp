@@ -1,6 +1,7 @@
 #include "GameLevel.h"
 #include "Ship.h"
 #include "Components.h"
+#include "VehicleSystem.h"
 #include <memory>
 
 namespace collision {
@@ -137,6 +138,7 @@ namespace game_component {
 
 	AsteroidSystem asteroidSystem;
 	LaserSystem laserSystem;
+	VehicleSystem vehicleSystem;
 
 	sf::Text fpsText;
 	sf::Text title;
@@ -145,6 +147,8 @@ namespace game_component {
 	sf::Clock clock;
 
 	void initGame() {
+		vehicleSystem.Init(10);
+
 		if (!font.loadFromFile("arial.ttf")) {
 			std::cout << "Couldn't load font!" << std::endl;
 		}
@@ -175,6 +179,8 @@ namespace game_component {
 			window.close();
 		}
 
+		vehicleSystem.Update(dt);
+
 		player.updateFirst(dt);
 
 		//update positions
@@ -202,6 +208,8 @@ namespace game_component {
 		asteroidSystem.drawShapes();
 		laserSystem.drawShapes();
 		window.draw(player.m_shape);
+
+		vehicleSystem.Draw();
 
 		player.drawTexts();
 
