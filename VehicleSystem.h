@@ -34,6 +34,7 @@ public:
 	float m_Separation = 1.2f;
 	float m_Alignment = 0.8f;
 	float m_Cohesion = 1.1f;
+	float m_Seek = 1.0f;
 
 	float m_SepToggle = 1;
 	float m_AlToggle = 1;
@@ -56,6 +57,8 @@ private:
 	float m_ArriveRadius;
 	float m_NeighborRadius;
 
+	float m_seekRange;
+
 	PlayerShip* m_player;
 
 	void ApplyForce(const sf::Vector2f& force);
@@ -66,6 +69,6 @@ private:
 	sf::Vector2f WallsForce(VehicleComponent* v);
 
 	//Move towards target
-	void Seek(VehicleComponent* v,const sf::Vector2f& target);
-	void Arrive(VehicleComponent* v, const sf::Vector2f& target);
+	sf::Vector2f Seek(VehicleComponent* v,const sf::Vector2f& target);
+	sf::Vector2f Arrive(VehicleComponent* v, const sf::Vector2f& target);
 };

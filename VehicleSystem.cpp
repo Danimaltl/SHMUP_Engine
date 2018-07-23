@@ -42,6 +42,7 @@ void VehicleSystem::Init(int count, PlayerShip* player) {
 	
 	m_ArriveRadius = 100;
 	m_NeighborRadius = 75;
+	m_seekRange = 800;
 	m_MaxSpeed = 400;
 	m_MaxForce = 300;
 
@@ -145,6 +146,7 @@ void VehicleSystem::Update(float dt) {
 		ApplyForce(ComputeSeparation(&vehicleComponents[i]) * m_Separation);
 		ApplyForce(ComputeAlignment(&vehicleComponents[i]) * m_Alignment);
 		ApplyForce(ComputeCohesion(&vehicleComponents[i]) * m_Cohesion);
+		ApplyForce(Seek(&vehicleComponents[i], m_player->m_shape.getPosition()) * m_Seek);
 		ApplyForce(WallsForce(&vehicleComponents[i]) * 2.0f);
 
 		//printf("Separation:%f \n", ComputeSeparation(&vehicleComponents[i]));
@@ -193,19 +195,24 @@ void VehicleSystem::RemoveVehicle(unsigned int count = 1) {
 	//vehicleComponents.resize(vehicleComponents.size() - count, Vehicle(sf::Vector2f(sWidth / 2, sHeight / 2)));
 }
 
-void VehicleSystem::Seek(VehicleComponent* v, const sf::Vector2f& target) {
+sf::Vector2f VehicleSystem::Seek(VehicleComponent* v, const sf::Vector2f& target) {
 	sf::Vector2f desired = target - v->m_Position;  //Vector to target from my position
-	desired = dcMath::Normalize(desired);     //Normalize
-	desired *= m_MaxSpeed;                       //Magnitude = maxSpeed
+	float magnitude = dcMath::Magnitude(desired);
+	sf::Vector2f steer(0,0);
 
-	sf::Vector2f steer = desired - v->m_Velocity;   //Vector to desired velocity from my velocity (force)
+	if (magnitude < m_seekRange) {
+		desired = dcMath::Normalize(desired);     //Normalize
+		desired *= m_MaxSpeed;                       //Magnitude = maxSpeed
 
-	dcMath::Limit(steer, m_MaxForce);         //Limit magnitude of force
+		steer = desired - v->m_Velocity;   //Vector to desired velocity from my velocity (force)
 
-	ApplyForce(steer);
+		dcMath::Limit(steer, m_MaxForce);         //Limit magnitude of force
+	}
+
+	return steer;
 }
 
-void VehicleSystem::Arrive(VehicleComponent* v, const sf::Vector2f& target) {
+sf::Vector2f VehicleSystem::Arrive(VehicleComponent* v, const sf::Vector2f& target) {
 	sf::Vector2f desired = target - v->m_Position;
 	float d = dcMath::Magnitude(desired);
 	desired = dcMath::Normalize(desired);
@@ -222,7 +229,7 @@ void VehicleSystem::Arrive(VehicleComponent* v, const sf::Vector2f& target) {
 
 	dcMath::Limit(steer, m_MaxForce);
 
-	ApplyForce(steer * .5f);
+	return steer;
 }
 
 void VehicleSystem::ApplyForce(const sf::Vector2f& force) {
