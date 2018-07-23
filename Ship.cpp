@@ -151,7 +151,7 @@ void PlayerShip::updatePosition(float dt) {
 }
 
 void PlayerShip::handleCollision() {
-	if (collisionComponent->collided && collisionComponent->otherName == "Asteroid") {
+	if (collisionComponent->collided && collisionComponent->otherName != "Laser") {
 		if (!invincible) {
 			float damage = m_shields - 30;
 			if (damage < 0) {
@@ -408,7 +408,7 @@ void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes) {
 		CircleShape shape;
 		shape.setRadius(10 + rand() % 40);
 		shape.setOrigin(shape.getRadius(), shape.getRadius());
-		shape.setPosition(rand() % sWidth, 100);
+		shape.setPosition(rand() % sWidth, -(50 + rand() % 500));
 		shape.setTexture(&asteroidTexture);
 
 		shapes[i] = shape;
@@ -453,7 +453,7 @@ void AsteroidSystem::handleCollisions() {
 		CollisionComponent* col = collisionComponents[i];
 		if (col->collided) {
 			if (col->otherName == "Laser") {
-				printf("Collided with laser. \n");
+				//printf("Collided with laser. \n");
 				asteroidComponents[i].health -= 10;
 			}
 		}

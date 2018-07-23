@@ -1,7 +1,10 @@
 #include "VehicleSystem.h"
+#include "GameLevel.h"
 
 void VehicleSystem::Init(int count) {
 	m_numVehicles = count;
+
+	m_maxHealth = 30;
 
 	if (shapes != nullptr) {
 		delete(shapes);
@@ -21,9 +24,20 @@ void VehicleSystem::Init(int count) {
 		shape.setOutlineThickness(1);
 		shape.setOutlineColor(sf::Color(100, 100, 100));
 		shape.setOrigin(sf::Vector2f(10, 10));
-		shape.setPosition(sWidth / 2, sHeight / 2);
+		shape.setPosition(rand() % sWidth, -50);
 
 		shapes[i] = shape;
+
+		VehicleComponent v;
+		v.m_Position = sf::Vector2f(rand() % sWidth, -50);
+		v.health = m_maxHealth;
+		vehicleComponents.push_back(v);
+
+		CollisionComponent* c = new CollisionComponent;
+		c->name = "Boid";
+		c->oldPos = shapes[i].getPosition();
+		c->shape = &shapes[i];
+		collisionComponents.push_back(collision::add_object(c));
 	}
 	
 	m_ArriveRadius = 100;
@@ -42,6 +56,18 @@ void VehicleSystem::Init(int count) {
 	m_Text.setCharacterSize(28);
 	m_Text.setString("BNAG");
 	m_Text.setOrigin(m_Text.getGlobalBounds().width / 2, m_Text.getGlobalBounds().height / 2);
+}
+
+void VehicleSystem::handleCollisions() {
+	for (int i = 0; i < m_numVehicles; i++) {
+		CollisionComponent* col = collisionComponents[i];
+		if (col->collided) {
+			if (col->otherName == "Laser") {
+				printf("Collided with Laser\n");
+				vehicleComponents[i].health -= 10;
+			}
+		}
+	}
 }
 
 void VehicleSystem::Update(float dt) {
@@ -105,18 +131,25 @@ void VehicleSystem::Update(float dt) {
 	}
 
 	for (size_t i = 0; i < m_numVehicles; i++) {
-		//m_Vehicles[i].Seek(m_Target);
-		//m_Vehicles[i].Arrive(m_Target);
+		collisionComponents[i]->oldPos = vehicleComponents[i].m_Position;
 
-		ApplyForce(ComputeSeparation(&m_Vehicles[i]) * m_Separation);
-		ApplyForce(ComputeAlignment(&m_Vehicles[i]) * m_Alignment);
-		ApplyForce(ComputeCohesion(&m_Vehicles[i]) * m_Cohesion);
-		ApplyForce(WallsForce(&m_Vehicles[i]) * 2.0f);
+		if (vehicleComponents[i].health <= 0 || (shapes[i].getPosition().y > sHeight + 50)) {
+			vehicleComponents[i].m_Position = sf::Vector2f(rand() % sWidth, -50);
+			shapes[i].setPosition(rand() % sWidth, -50);
+			vehicleComponents[i].health = m_maxHealth;
+		}
+		//vehicleComponents[i].Seek(m_Target);
+		//vehicleComponents[i].Arrive(m_Target);
 
-		//printf("Separation:%f \n", ComputeSeparation(&m_Vehicles[i]));
-		m_Vehicles[i].m_Velocity += m_Acceleration * dt;
-		dcMath::Limit(m_Vehicles[i].m_Velocity, m_MaxSpeed);
-		m_Vehicles[i].m_Position += m_Vehicles[i].m_Velocity * dt;
+		ApplyForce(ComputeSeparation(&vehicleComponents[i]) * m_Separation);
+		ApplyForce(ComputeAlignment(&vehicleComponents[i]) * m_Alignment);
+		ApplyForce(ComputeCohesion(&vehicleComponents[i]) * m_Cohesion);
+		ApplyForce(WallsForce(&vehicleComponents[i]) * 2.0f);
+
+		//printf("Separation:%f \n", ComputeSeparation(&vehicleComponents[i]));
+		vehicleComponents[i].m_Velocity += m_Acceleration * dt;
+		dcMath::Limit(vehicleComponents[i].m_Velocity, m_MaxSpeed);
+		vehicleComponents[i].m_Position += vehicleComponents[i].m_Velocity * dt;
 		m_Acceleration = m_Acceleration * 0.0f; //reset so forces don't continue when stopped
 
 		//if (m_Position.x > SCREEN_WIDTH) {
@@ -136,30 +169,30 @@ void VehicleSystem::Update(float dt) {
 		//printf("m_Velocity: %f, %f\n", m_Velocity.x, m_Velocity.y);
 
 		//Set new shape position and rotation
-		m_Vehicles[i].m_Shape.setPosition(m_Vehicles[i].m_Position);
+		shapes[i].setPosition(vehicleComponents[i].m_Position);
 		//printf("Heading: %f\n", dcMath::Heading(m_Velocity));
-		m_Vehicles[i].m_Shape.setRotation(dcMath::Heading(m_Vehicles[i].m_Velocity));
+		shapes[i].setRotation(dcMath::Heading(vehicleComponents[i].m_Velocity));
 	}
 }
 
 void VehicleSystem::Draw() {
-	for (size_t i = 0; i < m_Vehicles.size(); i++) {
-		m_Vehicles[i].Draw();
+	for (size_t i = 0; i < vehicleComponents.size(); i++) {
+		window.draw(shapes[i]);
 	}
 	m_Text.setOrigin(m_Text.getGlobalBounds().width / 2, m_Text.getGlobalBounds().height / 2);
 	//window.draw(m_Text);
 }
 
 void VehicleSystem::AddVehicle(const unsigned int count = 1, sf::Vector2f position = sf::Vector2f(sWidth / 2, sHeight / 2)) {
-	m_Vehicles.resize(m_Vehicles.size() + count, Vehicle(position));
+	//vehicleComponents.resize(vehicleComponents.size() + count, Vehicle(position));
 }
 
 void VehicleSystem::RemoveVehicle(unsigned int count = 1) {
-	if (count > m_Vehicles.size()) count = 0;
-	m_Vehicles.resize(m_Vehicles.size() - count, Vehicle(sf::Vector2f(sWidth / 2, sHeight / 2)));
+	//if (count > vehicleComponents.size()) count = 0;
+	//vehicleComponents.resize(vehicleComponents.size() - count, Vehicle(sf::Vector2f(sWidth / 2, sHeight / 2)));
 }
 
-void VehicleSystem::Seek(Vehicle* v, const sf::Vector2f& target) {
+void VehicleSystem::Seek(VehicleComponent* v, const sf::Vector2f& target) {
 	sf::Vector2f desired = target - v->m_Position;  //Vector to target from my position
 	desired = dcMath::Normalize(desired);     //Normalize
 	desired *= m_MaxSpeed;                       //Magnitude = maxSpeed
@@ -171,7 +204,7 @@ void VehicleSystem::Seek(Vehicle* v, const sf::Vector2f& target) {
 	ApplyForce(steer);
 }
 
-void VehicleSystem::Arrive(Vehicle* v, const sf::Vector2f& target) {
+void VehicleSystem::Arrive(VehicleComponent* v, const sf::Vector2f& target) {
 	sf::Vector2f desired = target - v->m_Position;
 	float d = dcMath::Magnitude(desired);
 	desired = dcMath::Normalize(desired);
@@ -195,7 +228,7 @@ void VehicleSystem::ApplyForce(const sf::Vector2f& force) {
 	m_Acceleration += force;
 }
 
-sf::Vector2f VehicleSystem::WallsForce(Vehicle* v) {
+sf::Vector2f VehicleSystem::WallsForce(VehicleComponent* v) {
 	sf::Vector2f desired;
 	sf::Vector2f steer(0, 0);
 	if (v->m_Position.x < 100) {
@@ -221,18 +254,18 @@ sf::Vector2f VehicleSystem::WallsForce(Vehicle* v) {
 	return steer;
 }
 
-sf::Vector2f VehicleSystem::ComputeSeparation(Vehicle* v) {
+sf::Vector2f VehicleSystem::ComputeSeparation(VehicleComponent* v) {
 
 	sf::Vector2f desired;
 	float count = 0;
 
-	if (m_Vehicles.size() == 0) {
+	if (vehicleComponents.size() == 0) {
 		printf("Size is 0\n");
 		return sf::Vector2f(0, 0);
 	}
 
-	for (size_t i = 0; i < m_Vehicles.size(); i++) {
-		Vehicle* current = &m_Vehicles[i];
+	for (size_t i = 0; i < vehicleComponents.size(); i++) {
+		VehicleComponent* current = &vehicleComponents[i];
 		if (current == v)
 			continue;
 
@@ -256,17 +289,17 @@ sf::Vector2f VehicleSystem::ComputeSeparation(Vehicle* v) {
 	return steer;
 }
 
-sf::Vector2f VehicleSystem::ComputeAlignment(Vehicle* v) {
+sf::Vector2f VehicleSystem::ComputeAlignment(VehicleComponent* v) {
 	sf::Vector2f desired;
 	float count = 0;
 
-	if (m_Vehicles.size() == 0) {
+	if (vehicleComponents.size() == 0) {
 		printf("Size is 0\n");
 		return sf::Vector2f(0, 0);
 	}
 
-	for (size_t i = 0; i < m_Vehicles.size(); i++) {
-		Vehicle* current = &m_Vehicles[i];
+	for (size_t i = 0; i < vehicleComponents.size(); i++) {
+		VehicleComponent* current = &vehicleComponents[i];
 		if (current == v)
 			continue;
 
@@ -297,17 +330,17 @@ sf::Vector2f VehicleSystem::ComputeAlignment(Vehicle* v) {
 	return steer;
 }
 
-sf::Vector2f VehicleSystem::ComputeCohesion(Vehicle* v) {
+sf::Vector2f VehicleSystem::ComputeCohesion(VehicleComponent* v) {
 	sf::Vector2f desired;
 	float count = 0;
 
-	if (m_Vehicles.size() == 0) {
+	if (vehicleComponents.size() == 0) {
 		printf("Size is 0\n");
 		return sf::Vector2f(0, 0);
 	}
 
-	for (size_t i = 0; i < m_Vehicles.size(); i++) {
-		Vehicle* current = &m_Vehicles[i];
+	for (size_t i = 0; i < vehicleComponents.size(); i++) {
+		VehicleComponent* current = &vehicleComponents[i];
 		if (current == v)
 			continue;
 

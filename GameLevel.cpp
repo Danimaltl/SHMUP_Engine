@@ -165,7 +165,7 @@ namespace game_component {
 
 		player.init(font);
 
-		asteroidSystem.initialize(20, 20);
+		asteroidSystem.initialize(10, 10);
 		laserSystem.initialize(50, 50, &player);
 
 	}
@@ -193,6 +193,7 @@ namespace game_component {
 		//handle collisions
 		player.handleCollision();
 		asteroidSystem.handleCollisions();
+		vehicleSystem.handleCollisions();
 		laserSystem.handleCollisions();
 
 		return nullptr;

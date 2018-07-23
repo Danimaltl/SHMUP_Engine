@@ -9,12 +9,14 @@
 struct VehicleComponent {
 	sf::Vector2f m_Position;
 	sf::Vector2f m_Velocity;
+	int health = 0;
 };
 
 class VehicleSystem {
 public:
 	void Init(int count);
 	void Update(float dt);
+	void handleCollisions();
 	void Draw();
 
 	void AddVehicle(const unsigned int count, sf::Vector2f position);
@@ -46,6 +48,8 @@ private:
 
 	float m_MaxSpeed;
 	float m_MaxForce;
+
+	float m_maxHealth;
 
 	float m_ArriveRadius;
 	float m_NeighborRadius;
