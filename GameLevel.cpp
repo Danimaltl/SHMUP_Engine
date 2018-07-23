@@ -147,7 +147,7 @@ namespace game_component {
 	sf::Clock clock;
 
 	void initGame() {
-		vehicleSystem.Init(10);
+		vehicleSystem.Init(10, &player);
 
 		if (!font.loadFromFile("arial.ttf")) {
 			std::cout << "Couldn't load font!" << std::endl;
@@ -165,7 +165,7 @@ namespace game_component {
 
 		player.init(font);
 
-		asteroidSystem.initialize(10, 10);
+		asteroidSystem.initialize(10, 10, &player);
 		laserSystem.initialize(50, 50, &player);
 
 	}
@@ -181,7 +181,9 @@ namespace game_component {
 
 		vehicleSystem.Update(dt);
 
-		player.updateFirst(dt);
+		if (player.updateFirst(dt)) {
+			return new MainMenu();
+		}
 
 		//update positions
 		player.updatePosition(dt);
@@ -217,7 +219,7 @@ namespace game_component {
 		sf::Time elapsed = clock.restart();
 		fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));
 		window.draw(fpsText);
-		window.draw(title);
+		//window.draw(title);
 	}
 
 	GameLevel::GameLevel(int level) {

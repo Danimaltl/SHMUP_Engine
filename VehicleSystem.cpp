@@ -1,7 +1,7 @@
 #include "VehicleSystem.h"
-#include "GameLevel.h"
 
-void VehicleSystem::Init(int count) {
+void VehicleSystem::Init(int count, PlayerShip* player) {
+	m_player = player;
 	m_numVehicles = count;
 
 	m_maxHealth = 30;
@@ -133,7 +133,8 @@ void VehicleSystem::Update(float dt) {
 	for (size_t i = 0; i < m_numVehicles; i++) {
 		collisionComponents[i]->oldPos = vehicleComponents[i].m_Position;
 
-		if (vehicleComponents[i].health <= 0 || (shapes[i].getPosition().y > sHeight + 50)) {
+		if (vehicleComponents[i].health <= 0) {
+			m_player->m_score += 20;
 			vehicleComponents[i].m_Position = sf::Vector2f(rand() % sWidth, -50);
 			shapes[i].setPosition(rand() % sWidth, -50);
 			vehicleComponents[i].health = m_maxHealth;

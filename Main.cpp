@@ -1,3 +1,5 @@
+//#define GLEW_STATIC
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
@@ -5,6 +7,8 @@
 #include <SFML/System.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/Main.hpp>
+
+//#include <GL/glew.h>
 
 #include <cmath>
 #include <iostream>

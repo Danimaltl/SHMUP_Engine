@@ -5,6 +5,8 @@
 #include "dcMath.h"
 #include "Globals.h"
 #include "Components.h"
+#include "GameLevel.h"
+#include "Ship.h"
 
 struct VehicleComponent {
 	sf::Vector2f m_Position;
@@ -14,7 +16,7 @@ struct VehicleComponent {
 
 class VehicleSystem {
 public:
-	void Init(int count);
+	void Init(int count, PlayerShip* player);
 	void Update(float dt);
 	void handleCollisions();
 	void Draw();
@@ -53,6 +55,8 @@ private:
 
 	float m_ArriveRadius;
 	float m_NeighborRadius;
+
+	PlayerShip* m_player;
 
 	void ApplyForce(const sf::Vector2f& force);
 

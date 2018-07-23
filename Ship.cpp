@@ -13,6 +13,7 @@ void PlayerShip::init(sf::Font& font) {
 	m_armor = 100;
 	m_shields = 100;
 	m_regenRate = 10;
+	m_score = 0;
 	
 	iTimerMax = 0.75f;
 	iTimerCurr = iTimerMax;
@@ -42,6 +43,12 @@ void PlayerShip::init(sf::Font& font) {
 	armorText.setFillColor(sf::Color::Black);
 	armorText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 20));
 
+	scoreText.setFont(font);
+	scoreText.setCharacterSize(50);
+	scoreText.setFillColor(sf::Color::Yellow);
+	scoreText.setPosition(sf::Vector2f(20, sHeight - 100));
+	scoreText.setString(std::to_string(m_score));
+
 	shieldsText.setString(std::to_string((int)m_shields));
 	armorText.setString(std::to_string((int)m_armor));
 
@@ -52,12 +59,13 @@ void PlayerShip::init(sf::Font& font) {
 	collisionComponent = collision::add_object(c);
 }
 
-void PlayerShip::updateFirst(float dt) {
+bool PlayerShip::updateFirst(float dt) {
 	shieldsText.setPosition(m_shape.getPosition() + sf::Vector2f(30, -20));
 	armorText.setPosition(m_shape.getPosition() + sf::Vector2f(30, 20));
 
 	shieldsText.setString(std::to_string((int)m_shields));
 	armorText.setString(std::to_string((int)m_armor));
+	scoreText.setString(std::to_string(m_score));
 
 	if (m_shields <= 0 && !regenDelayActive) {
 		m_shields = 0;
@@ -83,6 +91,11 @@ void PlayerShip::updateFirst(float dt) {
 			m_shape.setFillColor(sf::Color::White);
 		}
 	}
+
+	if (m_armor <= 0) {
+		return true;
+	}
+	return false;
 }
 
 void PlayerShip::updatePosition(float dt) {
@@ -173,6 +186,7 @@ void PlayerShip::handleCollision() {
 void PlayerShip::drawTexts() {
 	window.draw(shieldsText);
 	window.draw(armorText);
+	window.draw(scoreText);
 }
 
 
@@ -390,7 +404,8 @@ void Asteroid::checkCollisionWith(GameObject* other) {
 	}
 }
 
-void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes) {
+void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* player) {
+	m_player = player;
 	m_numAsteroids = numAsteroids;
 	m_maxShapes = maxShapes;
 
@@ -439,6 +454,9 @@ void AsteroidSystem::updatePositions(float dt) {
 		shapes[i].move(0, speed * dt);
 
 		if (health <= 0 || (shapes[i].getPosition().y > sHeight + 50)) {
+			if (health <= 0) {
+				m_player->m_score += shapes[i].getRadius();
+			}
 			shapes[i].setPosition(rand() % sWidth, -50);
 			newRadius = 10 + rand() % 40;
 			shapes[i].setRadius(newRadius);

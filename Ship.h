@@ -13,6 +13,7 @@ public:
 	sf::Texture m_texture;
 	sf::Text shieldsText;
 	sf::Text armorText;
+	sf::Text scoreText;
 
 	//State Data
 	Vector2f dir = Vector2f(0, 0); //size 8
@@ -21,7 +22,8 @@ public:
 	float m_armor = 0;
 	float m_shields = 0;
 	float m_regenRate = 0;
-	
+	int m_score;
+
 	float iTimerCurr = 0;
 	float iTimerMax = 0;
 	bool invincible = false;
@@ -35,7 +37,7 @@ public:
 
 	//Behavior
 	void init(sf::Font& font);
-	void updateFirst(float dt);
+	bool updateFirst(float dt);
 	void updatePosition(float dt);
 	void handleCollision();
 	void drawTexts();
@@ -121,9 +123,10 @@ class AsteroidSystem {
 	//Shared data
 	int m_numAsteroids = 0;
 	sf::Texture asteroidTexture;
+	PlayerShip* m_player;
 public:
 	//Behavior
-	void initialize(int numAsteroids, int maxShapes);
+	void initialize(int numAsteroids, int maxShapes, PlayerShip* player);
 	void updatePositions(float dt);
 	void handleCollisions();
 	void drawShapes();
