@@ -281,6 +281,9 @@ void LaserSystem::destroy() {
 
 	//Let Collision system destroy colliders?
 	collisionComponents.clear();
+	collisionComponents.resize(0);
+	laserComponents.clear();
+	laserComponents.resize(0);
 }
 
 void LaserSystem::fire(Vector2f shipDir, Vector2f shipPos) {
@@ -427,6 +430,10 @@ void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* p
 		printf("Could not load asteroid texture!");
 	}
 
+	if (!asteroidComponents.empty()) {
+		printf("AsteroidComponent list isn't empty.\n");
+	}
+
 	for (int i = 0; i < numAsteroids; i++) {
 		CircleShape shape;
 		shape.setRadius(10 + rand() % 40);
@@ -443,6 +450,7 @@ void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* p
 		c->oldPos = shape.getPosition();
 		collisionComponents.push_back(collision::add_object(c));
 
+
 		AsteroidComponent a;
 		a.health = shape.getRadius() * 1.5f;
 		a.speed = 50 + (rand() % 100);
@@ -456,6 +464,9 @@ void AsteroidSystem::destroy() {
 
 	//Let Collision system destroy colliders?
 	collisionComponents.clear();
+	collisionComponents.resize(0);
+	asteroidComponents.clear();
+	asteroidComponents.resize(0);
 }
 
 void AsteroidSystem::updatePositions(float dt) {
@@ -566,6 +577,9 @@ void VehicleSystem::destroy() {
 
 	//Let Collision system destroy colliders?
 	collisionComponents.clear();
+	collisionComponents.resize(0);
+	vehicleComponents.clear();
+	vehicleComponents.resize(0);
 }
 
 void VehicleSystem::handleCollisions() {
@@ -585,60 +599,60 @@ void VehicleSystem::Update(float dt) {
 	m_Target.x = (float)mousePos.x;
 	m_Target.y = (float)mousePos.y;
 
-	if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-		m_MousePressed = false;
-	}
+	//if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+	//	m_MousePressed = false;
+	//}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_MousePressed) {
-		m_MousePressed = true;
-		AddVehicle(1, m_Target);
-	}
+	//if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_MousePressed) {
+	//	m_MousePressed = true;
+	//	AddVehicle(1, m_Target);
+	//}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !m_MousePressed) {
-		m_MousePressed = true;
-		RemoveVehicle(1);
-	}
+	//if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !m_MousePressed) {
+	//	m_MousePressed = true;
+	//	RemoveVehicle(1);
+	//}
 
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
-		m_KeyPressed = false;
-	}
+	//if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+	//	m_KeyPressed = false;
+	//}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_KeyPressed) {
-		m_SepToggle = (m_SepToggle == 0) ? 1 : 0;
-		m_KeyPressed = true;
-		if (m_SepToggle == 0) {
-			m_Text.setString("Separation: Off");
-		}
-		else {
-			m_Text.setString("Separation: On");
-		}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_KeyPressed) {
+	//	m_SepToggle = (m_SepToggle == 0) ? 1 : 0;
+	//	m_KeyPressed = true;
+	//	if (m_SepToggle == 0) {
+	//		m_Text.setString("Separation: Off");
+	//	}
+	//	else {
+	//		m_Text.setString("Separation: On");
+	//	}
 
-		printf("Separation: %f\n", m_SepToggle);
-	}
+	//	printf("Separation: %f\n", m_SepToggle);
+	//}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_KeyPressed) {
-		m_AlToggle = (m_AlToggle == 0) ? 1 : 0;
-		m_KeyPressed = true;
-		if (m_AlToggle == 0) {
-			m_Text.setString("Alignment: Off");
-		}
-		else {
-			m_Text.setString("Alignment: On");
-		}
-		printf("Alignment: %f\n", m_AlToggle);
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_KeyPressed) {
+	//	m_AlToggle = (m_AlToggle == 0) ? 1 : 0;
+	//	m_KeyPressed = true;
+	//	if (m_AlToggle == 0) {
+	//		m_Text.setString("Alignment: Off");
+	//	}
+	//	else {
+	//		m_Text.setString("Alignment: On");
+	//	}
+	//	printf("Alignment: %f\n", m_AlToggle);
+	//}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && !m_KeyPressed) {
-		m_CoToggle = (m_CoToggle == 0) ? 1 : 0;
-		m_KeyPressed = true;
-		if (m_CoToggle == 0) {
-			m_Text.setString("Cohesion: Off");
-		}
-		else {
-			m_Text.setString("Cohesion: On");
-		}
-		printf("Cohesion: %f\n", m_CoToggle);
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && !m_KeyPressed) {
+	//	m_CoToggle = (m_CoToggle == 0) ? 1 : 0;
+	//	m_KeyPressed = true;
+	//	if (m_CoToggle == 0) {
+	//		m_Text.setString("Cohesion: Off");
+	//	}
+	//	else {
+	//		m_Text.setString("Cohesion: On");
+	//	}
+	//	printf("Cohesion: %f\n", m_CoToggle);
+	//}
 
 	for (size_t i = 0; i < m_numVehicles; i++) {
 		collisionComponents[i]->oldPos = vehicleComponents[i].m_Position;
