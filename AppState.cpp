@@ -56,3 +56,7 @@ void MainMenu::draw() {
 MainMenu::MainMenu() {
 	initMenu();
 }
+
+void MainMenu::destroy() {
+
+}

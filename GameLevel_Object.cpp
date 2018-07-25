@@ -141,6 +141,10 @@ namespace game {
 
 	}
 
+	void GameLevel::destroy() {
+
+	}
+
 	AppState* GameLevel::update(float dt) {
 		//laserResetCurrent -= dt;
 		//if (laserResetCurrent <= 0) {

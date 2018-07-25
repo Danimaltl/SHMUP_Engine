@@ -42,7 +42,7 @@
     <ClCompile Include="GameLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VehicleSystem.cpp">
+    <ClCompile Include="Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VehicleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

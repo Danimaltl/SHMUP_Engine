@@ -6,6 +6,7 @@ class AppState {
 public:
 	virtual AppState* update(float dt) = 0;
 	virtual void draw() = 0;
+	virtual void destroy() = 0;
 };
 
 class MainMenu :public AppState {
@@ -16,4 +17,5 @@ public:
 	MainMenu();
 	virtual AppState* update(float dt);
 	virtual void draw();
+	virtual void destroy();
 };

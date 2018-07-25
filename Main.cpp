@@ -56,8 +56,11 @@ int main()
 		currentState->draw();
 		window.display();
 
-		if (next != nullptr)
+		if (next != nullptr) {
+			currentState->destroy();
 			currentState.reset(next);
+		}
+			
 	}
 
 	return 0;

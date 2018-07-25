@@ -3,6 +3,8 @@
 #include "AppState.h"
 #include "GameObject.h"
 #include "Components.h"
+#include "Ship.h"
+#include <memory>
 
 namespace game {
 
@@ -14,6 +16,7 @@ namespace game {
 
 		virtual AppState* update(float dt);
 		virtual void draw();
+		virtual void destroy();
 	};
 }
 
@@ -21,22 +24,33 @@ namespace game_component {
 	class GameLevel :public AppState {
 	public:
 		GameLevel(int level);
+		~GameLevel();
+
+		bool firing = true;
+		PlayerShip player;
+		int score = 0;
+		int lives = 0;
+
+		Vertex background[4];
+
+		AsteroidSystem asteroidSystem;
+		LaserSystem laserSystem;
+		VehicleSystem vehicleSystem;
+
+		sf::Text fpsText;
+		sf::Text title;
+		sf::Font font;
+
+		sf::Clock clock;
+
+		void initGame();
 
 		int highscore = 0;
 
 		virtual AppState* update(float dt);
 		virtual void draw();
+		virtual void destroy();
 	};
-}
-
-namespace collision {
-	sf::Vector2i getBucket(Vector2f pos);
-	void bucket_add(sf::Vector2i b, CollisionComponent* obj);
-	void bucket_remove(Vector2i b, CollisionComponent* obj);
-	bool checkCollision(const sf::FloatRect& box1, const sf::FloatRect& box2);
-	void detect_collisions(CollisionComponent* obj, Vector2i b);
-	CollisionComponent* add_object(CollisionComponent* obj);
-	void CheckAllCollisions();
 }
 
 
