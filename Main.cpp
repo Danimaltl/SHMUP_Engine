@@ -33,6 +33,16 @@ int main()
 {
 	sf::ContextSettings settings;
 	window.create(VideoMode(sWidth, sHeight),"Dan's Asteroids!", sf::Style::Titlebar | sf::Style::Close);
+
+	glewExperimental = GL_TRUE;
+	glewInit();
+
+	GLuint vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
+
+	printf("%u\n", vertexBuffer);
+
+
 	viewMan.setView(window.getDefaultView());
 
 	font.loadFromFile("arial.ttf");

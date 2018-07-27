@@ -24,7 +24,7 @@ namespace game_component {
 	class GameLevel :public AppState {
 	public:
 		GameLevel(int level);
-		~GameLevel();
+		virtual ~GameLevel();
 
 		bool firing = true;
 		PlayerShip player;

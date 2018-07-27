@@ -57,6 +57,10 @@ MainMenu::MainMenu() {
 	initMenu();
 }
 
+MainMenu::~MainMenu() {
+	printf("Destructor is being called.\n");
+}
+
 void MainMenu::destroy() {
 
 }

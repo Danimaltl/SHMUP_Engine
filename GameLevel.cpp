@@ -107,6 +107,6 @@ namespace game_component {
 	}
 
 	GameLevel::~GameLevel() {
-		printf("Destructor is being called.");
+		printf("Destructor is being called.\n");
 	}
 }
