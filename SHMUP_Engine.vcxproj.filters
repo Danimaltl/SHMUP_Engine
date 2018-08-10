@@ -45,6 +45,9 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dcRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppState.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dcRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

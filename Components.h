@@ -1,15 +1,12 @@
 #pragma once
 #include "Globals.h"
 
-struct MoveComponent {
-	Vector2f velocity;
-};
-
 struct CollisionComponent {
 	std::string otherName;
 	std::string name;
 	sf::Vector2f oldPos;
-	sf::Shape* shape;
+	sf::Vector2f currPos;
+	float radius;
 	bool collided = false;
 	bool active = true;
 };

@@ -19,7 +19,7 @@ namespace game_component {
 		background[2] = Vertex(Vector2f(sWidth, sHeight), sf::Color::Green);
 		background[3] = Vertex(Vector2f(0, sHeight), sf::Color::Magenta);
 
-		vehicleSystem.Init(10, &player);
+		//vehicleSystem.Init(10, &player);
 
 		if (!font.loadFromFile("arial.ttf")) {
 			std::cout << "Couldn't load font!" << std::endl;
@@ -43,7 +43,7 @@ namespace game_component {
 	}
 
 	void GameLevel::destroy() {
-		vehicleSystem.destroy();
+		//vehicleSystem.destroy();
 		laserSystem.destroy();
 		asteroidSystem.destroy();
 
@@ -59,7 +59,7 @@ namespace game_component {
 			window.close();
 		}
 
-		vehicleSystem.Update(dt);
+		//vehicleSystem.Update(dt);
 
 		if (player.updateFirst(dt)) {
 			return new MainMenu();
@@ -75,7 +75,7 @@ namespace game_component {
 		//handle collisions
 		player.handleCollision();
 		asteroidSystem.handleCollisions();
-		vehicleSystem.handleCollisions();
+		//vehicleSystem.handleCollisions();
 		laserSystem.handleCollisions();
 
 		return nullptr;
@@ -84,7 +84,7 @@ namespace game_component {
 
 
 	void GameLevel::draw() {
-		window.setView(viewMan.getView());
+		//window.setView(viewMan.getView());
 		window.clear();
 		window.draw(background, 4, sf::Quads);
 
@@ -92,7 +92,7 @@ namespace game_component {
 		laserSystem.drawShapes();
 		window.draw(player.m_shape);
 
-		vehicleSystem.Draw();
+		//vehicleSystem.Draw();
 
 		player.drawTexts();
 

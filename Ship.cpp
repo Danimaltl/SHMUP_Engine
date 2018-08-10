@@ -53,7 +53,8 @@ void PlayerShip::init(sf::Font& font) {
 	CollisionComponent* c = new CollisionComponent;
 	c->name = "Player";
 	c->oldPos = m_shape.getPosition();
-	c->shape = &m_shape;
+	c->currPos = m_shape.getPosition();
+	c->radius = m_shape.getLocalBounds().height / 2;
 	collisionComponent = collision::add_object(c);
 }
 
@@ -159,6 +160,7 @@ void PlayerShip::updatePosition(float dt) {
 		newPos.y = lerp(newPos.y, mousePosF.y, prog);
 	}
 	m_shape.setPosition(newPos);
+	collisionComponent->currPos = newPos;
 }
 
 void PlayerShip::handleCollision() {
@@ -263,8 +265,9 @@ void LaserSystem::initialize(int numLasers, int maxShapes, PlayerShip* player) {
 
 		CollisionComponent* c = new CollisionComponent;
 		c->name = "Laser";
-		c->shape = shapeptr;
+		c->currPos = shape.getPosition();
 		c->oldPos = shape.getPosition();
+		c->radius = shape.getRadius();
 		c->active = false;
 		collisionComponents.push_back(collision::add_object(c));
 
@@ -340,6 +343,7 @@ void LaserSystem::updatePositions(float dt) {
 			collisionComponents[i]->active = false;
 			shapes[i].setPosition(99999999, 999999999);
 		}
+		collisionComponents[i]->currPos = shapes[i].getPosition();
 	}
 }
 
@@ -446,8 +450,9 @@ void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* p
 
 		CollisionComponent* c = new CollisionComponent;
 		c->name = "Asteroid";
-		c->shape = shapeptr;
+		c->currPos = shape.getPosition();
 		c->oldPos = shape.getPosition();
+		c->radius = shape.getRadius();
 		collisionComponents.push_back(collision::add_object(c));
 
 
@@ -487,9 +492,12 @@ void AsteroidSystem::updatePositions(float dt) {
 			shapes[i].setPosition(rand() % sWidth, -50);
 			newRadius = 10 + rand() % 40;
 			shapes[i].setRadius(newRadius);
+			shapes[i].setOrigin(newRadius, newRadius);
+			collisionComponents[i]->radius = newRadius;
 			asteroidComponents[i].health = newRadius * 1.5f;
 			asteroidComponents[i].speed = 50 + (rand() % 100);
 		}
+		collisionComponents[i]->currPos = shapes[i].getPosition();
 	}
 }
 
@@ -548,7 +556,8 @@ void VehicleSystem::Init(int count, PlayerShip* player) {
 		CollisionComponent* c = new CollisionComponent;
 		c->name = "Boid";
 		c->oldPos = shapes[i].getPosition();
-		c->shape = &shapes[i];
+		c->currPos = shapes[i].getPosition();
+		c->radius = 11.0f;
 		collisionComponents.push_back(collision::add_object(c));
 	}
 
@@ -698,6 +707,7 @@ void VehicleSystem::Update(float dt) {
 		shapes[i].setPosition(vehicleComponents[i].m_Position);
 		//printf("Heading: %f\n", dcMath::Heading(m_Velocity));
 		shapes[i].setRotation(dcMath::Heading(vehicleComponents[i].m_Velocity));
+		collisionComponents[i]->currPos = shapes[i].getPosition();
 	}
 }
 

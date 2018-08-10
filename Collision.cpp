@@ -1,4 +1,5 @@
 #include "Components.h"
+#include "dcMath.h"
 
 namespace collision {
 	std::vector<CollisionComponent*> colliders;
@@ -53,6 +54,10 @@ namespace collision {
 		return box1.intersects(box2);
 	}
 
+	bool checkCollisionRadius(float r1, float r2, sf::Vector2f p1, sf::Vector2f p2) {
+		return dcMath::Magnitude(p1 - p2) < (r1 + r2);
+	}
+
 	void detect_collisions(CollisionComponent* obj, Vector2i b)
 	{
 		obj->collided = false;
@@ -69,7 +74,7 @@ namespace collision {
 				for (CollisionComponent* o : v)
 				{
 					if (o != obj) {
-						bool hit = checkCollision(obj->shape->getGlobalBounds(), o->shape->getGlobalBounds());
+						bool hit = checkCollisionRadius(obj->radius, o->radius, obj->currPos, o->currPos);
 						if (hit) {
 							obj->collided = true;
 							obj->otherName = o->name;
@@ -85,7 +90,7 @@ namespace collision {
 		/*colliders[collidersSize] = obj;
 		CollisionComponent* objPtr = &colliders[collidersSize];*/
 		colliders.push_back(obj);
-		sf::Vector2i coord = getBucket(obj->shape->getPosition());
+		sf::Vector2i coord = getBucket(obj->oldPos);
 		bucket_add(coord, obj);
 		return obj;
 	}
@@ -96,7 +101,7 @@ namespace collision {
 			CollisionComponent * collision = colliders[i];
 			if (collision->active == false) continue;
 			Vector2i curBucket = getBucket(collision->oldPos);
-			Vector2i newBucket = getBucket(collision->shape->getPosition());
+			Vector2i newBucket = getBucket(collision->currPos);
 			if (curBucket != newBucket) {
 				bucket_remove(curBucket, collision);
 				bucket_add(newBucket, collision);
