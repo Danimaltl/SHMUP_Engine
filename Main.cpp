@@ -42,7 +42,7 @@ int main()
 
 
 	bool running = true;
-	std::unique_ptr<AppState> currentState(new game_component::GameLevel(1));
+	std::unique_ptr<AppState> currentState(new MainMenu());
 	while (window.isOpen())
 	{
 		sf::Event event;

@@ -10,14 +10,14 @@ public:
 	virtual void destroy() = 0;
 };
 
-//class MainMenu :public AppState {
-//private:
-//
-//
-//public:
-//	MainMenu();
-//	virtual ~MainMenu();
-//	virtual AppState* update(float dt);
-//	virtual void draw();
-//	virtual void destroy();
-//};
+class MainMenu :public AppState {
+private:
+
+
+public:
+	MainMenu();
+	virtual ~MainMenu();
+	virtual AppState* update(float dt);
+	virtual void draw();
+	virtual void destroy();
+};

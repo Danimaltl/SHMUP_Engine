@@ -40,24 +40,6 @@ namespace game_component {
 		asteroidSystem.initialize(10, &player);
 		laserSystem.initialize(50, 50, &player);
 
-		circleShader = new dcRender::Shader;
-		circleShader->loadFromFile("2dshape.vert", "2dshape.frag");
-
-		GLfloat vertices[] = {
-			0.0f, 0.0f,
-			50.0f, 25.0f,
-			50.0f, 50.0f,
-			0.0f, 75.0f
-		};
-
-		polyRenderer.init(vertices, 8, glm::vec2(25.0f, 37.5f), GL_TRIANGLES, circleShader);
-
-		glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
-		//glm::vec4 test = projection * glm::vec4(200.0f, 200.0f, 0.0f, 1.0f);
-		//printf("x: %f, y: %f\n", test.x, test.y);
-		circleShader->use();
-		circleShader->SetMatrix4("projection", projection);
-
 	}
 
 	void GameLevel::destroy() {
@@ -70,7 +52,7 @@ namespace game_component {
 
 	AppState* GameLevel::update(float dt) {
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-			return new GameLevel(1);
+			return new MainMenu();
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Q)) {
 			window.close();
@@ -79,7 +61,7 @@ namespace game_component {
 		vehicleSystem.Update(dt);
 
 		if (player.updateFirst(dt)) {
-			return new GameLevel(1);
+			return new MainMenu();
 		}
 
 		//update positions

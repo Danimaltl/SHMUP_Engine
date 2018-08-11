@@ -9,6 +9,8 @@ namespace dcRender {
 
 	class CircleRenderer {
 	public:
+		CircleRenderer();
+		~CircleRenderer();
 		void init(int numPoints, Shader* shader);
 		void draw(glm::vec2 position, float rotation, float radius, glm::vec3 color);
 	private:
@@ -20,6 +22,8 @@ namespace dcRender {
 
 	class PolyRenderer {
 	public:
+		PolyRenderer();
+		~PolyRenderer();
 		void init(GLfloat* points, int size, glm::vec2 center, GLuint drawMethod, Shader* shader);
 		void draw(glm::vec2 position, float rotation, glm::vec2 scale, glm::vec3 color);
 	private:
@@ -35,6 +39,7 @@ namespace dcRender {
 	public:
 		const glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 		Shader();
+		~Shader();
 		void use() { glUseProgram(m_id); }
 		void compile(const GLchar* vertexSource, const GLchar* fragmentSource);
 		void loadFromFile(const char* vertexFile, const char* fragmentFile);

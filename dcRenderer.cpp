@@ -6,6 +6,14 @@
 #define M_PI 3.14159265358979323846
 #endif // !M_PI
 
+dcRender::CircleRenderer::CircleRenderer() {
+
+}
+
+dcRender::CircleRenderer::~CircleRenderer() {
+
+}
+
 void dcRender::CircleRenderer::init(int numPoints, Shader* shader) {
 	float radius = 1;
 	m_shader = shader;
@@ -59,6 +67,14 @@ void dcRender::CircleRenderer::draw(glm::vec2 position, float rotation, float ra
 	glBindVertexArray(0);
 }
 
+dcRender::PolyRenderer::PolyRenderer() {
+
+}
+
+dcRender::PolyRenderer::~PolyRenderer() {
+
+}
+
 void dcRender::PolyRenderer::init(GLfloat* points, int size, glm::vec2 center, GLuint drawMethod, Shader* shader) {
 	float radius = 1;
 	m_shader = shader;
@@ -106,6 +122,10 @@ void dcRender::PolyRenderer::draw(glm::vec2 position, float rotation, glm::vec2 
 }
 
 dcRender::Shader::Shader() {
+
+}
+
+dcRender::Shader::~Shader() {
 
 }
 

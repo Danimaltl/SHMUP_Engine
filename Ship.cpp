@@ -558,7 +558,7 @@ void VehicleSystem::Init(int count, PlayerShip* player) {
 		//shapes[i] = shape;
 
 		VehicleComponent v;
-		v.m_Position = glm::vec2(300, 100);
+		v.m_Position = glm::vec2(rand() % sWidth, -50);
 		v.health = m_maxHealth;
 		vehicleComponents.push_back(v);
 
@@ -675,10 +675,10 @@ void VehicleSystem::Update(float dt) {
 		}
 
 		ApplyForce(ComputeSeparation(&vehicleComponents[i]) * m_Separation);
-		//ApplyForce(ComputeAlignment(&vehicleComponents[i]) * m_Alignment);
-		//ApplyForce(ComputeCohesion(&vehicleComponents[i]) * m_Cohesion);
-		//ApplyForce(Seek(&vehicleComponents[i], m_player->getPosition()) * m_Seek);
-		//ApplyForce(WallsForce(&vehicleComponents[i]) * 2.0f);
+		ApplyForce(ComputeAlignment(&vehicleComponents[i]) * m_Alignment);
+		ApplyForce(ComputeCohesion(&vehicleComponents[i]) * m_Cohesion);
+		ApplyForce(Seek(&vehicleComponents[i], m_player->getPosition()) * m_Seek);
+		ApplyForce(WallsForce(&vehicleComponents[i]) * 2.0f);
 
 		//if (i == 2) printf("Position %d: x:%f, y:%f\n", i, vehicleComponents[i].m_Position.x, vehicleComponents[i].m_Position.y);
 
@@ -796,7 +796,7 @@ glm::vec2 VehicleSystem::WallsForce(VehicleComponent* v) {
 
 glm::vec2 VehicleSystem::ComputeSeparation(VehicleComponent* v) {
 
-	glm::vec2 desired;
+	glm::vec2 desired = glm::vec2(0,0);
 	float count = 0;
 
 	if (vehicleComponents.size() == 0) {
@@ -831,7 +831,7 @@ glm::vec2 VehicleSystem::ComputeSeparation(VehicleComponent* v) {
 }
 
 glm::vec2 VehicleSystem::ComputeAlignment(VehicleComponent* v) {
-	glm::vec2 desired;
+	glm::vec2 desired = glm::vec2(0, 0);
 	float count = 0;
 
 	if (vehicleComponents.size() == 0) {
@@ -872,7 +872,7 @@ glm::vec2 VehicleSystem::ComputeAlignment(VehicleComponent* v) {
 }
 
 glm::vec2 VehicleSystem::ComputeCohesion(VehicleComponent* v) {
-	glm::vec2 desired;
+	glm::vec2 desired = glm::vec2(0, 0);
 	float count = 0;
 
 	if (vehicleComponents.size() == 0) {
