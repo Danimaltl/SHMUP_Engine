@@ -36,8 +36,9 @@ float dcMath::AngleBetween(glm::vec2 v1, glm::vec2 v2) {
 }
 
 float dcMath::Heading(const glm::vec2& vector) {
-	float result = atan2(vector.y, vector.x);
-	result = result * (float)(180 / M_PI);
+	glm::vec2 v = Normalize(vector);
+	float result = atan2(v.y, v.x);
+	//result = result * (float)(180 / M_PI);
 	return result;
 }
 

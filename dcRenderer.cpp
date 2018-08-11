@@ -25,7 +25,7 @@ void dcRender::CircleRenderer::init(int numPoints, Shader* shader) {
 		vertices[i + 1] = sin(angle) * radius;
 
 		glm::vec4 vert = model * glm::vec4(vertices[i], vertices[i + 1], 0.0f, 1.0f);
-		printf("Vert%d: x:%f, y:%f\n", i, vert.x, vert.y);
+		//printf("Vert%d: x:%f, y:%f\n", i, vert.x, vert.y);
 	}
 
 	glGenVertexArrays(1, &m_VAO);
@@ -63,6 +63,7 @@ void dcRender::PolyRenderer::init(GLfloat* points, int size, glm::vec2 center, G
 	float radius = 1;
 	m_shader = shader;
 	m_vertArraySize = size;
+	m_numPoints = size / 2;
 	m_drawMethod = drawMethod;
 	m_center = center;
 
@@ -86,7 +87,7 @@ void dcRender::PolyRenderer::draw(glm::vec2 position, float rotation, glm::vec2 
 	m_shader->use();
 	glm::mat4 model(1);
 
-	model = glm::translate(model, glm::vec3(position, 0.0f));
+	model = glm::translate(model, glm::vec3(position - m_center, 0.0f));
 
 	//model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
 	model = glm::translate(model, glm::vec3(m_center.x * scale.x, m_center.y * scale.y, 0.0f));

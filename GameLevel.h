@@ -31,6 +31,10 @@ namespace game_component {
 		int score = 0;
 		int lives = 0;
 
+		float rotateAngle = 0;
+		dcRender::Shader* circleShader = nullptr;
+		dcRender::PolyRenderer polyRenderer;
+
 		//Vertex background[4];
 
 		AsteroidSystem asteroidSystem;

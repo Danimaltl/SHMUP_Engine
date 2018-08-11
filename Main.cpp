@@ -39,29 +39,18 @@ int main()
 
 	sf::Clock clock;
 
-	dcRender::Shader* circleShader = new dcRender::Shader;
-	circleShader->loadFromFile("2dshape.vert", "2dshape.frag");
 
-	dcRender::CircleRenderer circleRenderer;
-	circleRenderer.init(60, circleShader);
-	float rotateAngle = 0;
-
-	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
-	//glm::vec4 test = projection * glm::vec4(200.0f, 200.0f, 0.0f, 1.0f);
-	//printf("x: %f, y: %f\n", test.x, test.y);
-	circleShader->use();
-	circleShader->SetMatrix4("projection", projection);
 
 	bool running = true;
 	std::unique_ptr<AppState> currentState(new game_component::GameLevel(1));
-	while (running)
+	while (window.isOpen())
 	{
 		sf::Event event;
 		float dt = clock.restart().asSeconds();
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
-				running = false;
+				window.close();
 				break;
 			}
 		}
@@ -69,9 +58,6 @@ int main()
 		// Clear the screen to black
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		rotateAngle += dt;
-		circleRenderer.draw(glm::vec2(200,200), rotateAngle, 100.0f, glm::vec3(1.0f, 0.0f, 1.0f));
 
 		AppState* next = currentState->update(dt);
 		currentState->draw();

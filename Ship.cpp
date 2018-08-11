@@ -32,20 +32,23 @@ void PlayerShip::init() {
 	
 	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
 	m_shader.use();
-	m_shader.SetMatrix4("projection", m_shader.projection);
+	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
+	m_shader.SetMatrix4("projection", projection);
 
 	GLfloat vertices[] = {
 		0.0f, 0.0f,
+		50.0f, 25.0f,
+		0.0f, 75.0f,
 		50.0f, 25.0f,
 		50.0f, 50.0f,
 		0.0f, 75.0f
 	};
 
-	m_polyRenderer.init(vertices, 8, glm::vec2(25.0f, 37.5f), GL_TRIANGLES, &m_shader);
+	m_polyRenderer.init(vertices, 12, glm::vec2(25.0f, 37.5f), GL_TRIANGLES, &m_shader);
 
 	/*Spatial data*/
 	m_position = glm::vec2(sWidth / 2, sHeight / 2);
-	m_rotation = -90;
+	m_rotation = -M_PI/2;
 	//m_shape.setPosition(sWidth / 2, sHeight / 2);
 	//m_shape.setRotation(-90);
 
@@ -106,7 +109,7 @@ bool PlayerShip::updateFirst(float dt) {
 		iTimerCurr -= dt;
 		if (iTimerCurr <= 0) {
 			invincible = false;
-			//m_shape.setFillColor(sf::Color::White);
+			m_color = glm::vec3(1,1,1);
 		}
 	}
 
@@ -195,7 +198,7 @@ void PlayerShip::handleCollision() {
 			iTimerCurr = iTimerMax;
 			regenDelayCurr = regenDelayMax;
 			invincible = true;
-			//m_shape.setFillColor(sf::Color::Yellow);
+			m_color = glm::vec3(1,1,0);
 		}
 
 	}
@@ -208,53 +211,6 @@ void PlayerShip::draw() {
 	//printf("m_position x:%f, y:%f\n", m_position.x, m_position.y);
 	m_polyRenderer.draw(m_position, m_rotation, glm::vec2(1, 1), glm::vec3(1, 1, 1));
 }
-
-
-/*
-
-Laser Class
-
-*/
-
-//Laser::Laser() {
-//	speed = 1000;
-//	//radius = 5;
-//	shape.setPosition(99999999, 999999999);
-//	name = "Laser";
-//}
-//
-//void Laser::fire(Vector2f shipDir, Vector2f shipPos) {
-//	dir = shipDir;
-//	
-//	//shape.setRadius(radius);
-//	shape.setFillColor(Color::Yellow);
-//	//shape.setOrigin(radius, radius);
-//	shape.setPosition(shipPos);
-//
-//	lifetime = 2;
-//}
-//
-//void Laser::update(float dt) {
-//	if (lifetime > 0) {
-//		shape.move(dir * (dt * speed));
-//		lifetime -= dt;
-//	}
-//	else {
-//		shape.setPosition(99999999, 999999999);
-//	}
-//}
-//
-//void Laser::draw() {
-//	window.draw(shape);
-//}
-//
-//Vector2f Laser::getCenter() {
-//	return shape.getPosition();
-//}
-//
-//void Laser::checkCollisionWith(GameObject* other) {
-//
-//}
 
 
 void LaserSystem::initialize(int numLasers, int maxShapes, PlayerShip* player) {
@@ -273,6 +229,13 @@ void LaserSystem::initialize(int numLasers, int maxShapes, PlayerShip* player) {
 	//}
 	//shapes = new sf::CircleShape[maxShapes];
 
+	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.use();
+	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
+	m_shader.SetMatrix4("projection", projection);
+
+	m_circleRenderer.init(60, &m_shader);
+
 	for (int i = 0; i < numLasers; i++) {
 		//CircleShape shape;
 		//shape.setFillColor(Color::Yellow);
@@ -283,18 +246,24 @@ void LaserSystem::initialize(int numLasers, int maxShapes, PlayerShip* player) {
 		//shapes[i] = shape;
 		//CircleShape* shapeptr = &shapes[i];
 
+		m_color = glm::vec3(1,1,0);
+
+		LaserComponent l;
+		l.position = glm::vec2(99999999, 999999999);
+		l.radius = 5.0f;
+		l.lifetime = 0;
+		l.dir = glm::vec2(0, -1);
+		laserComponents.push_back(l);
+
 		CollisionComponent* c = new CollisionComponent;
 		c->name = "Laser";
-		//c->currPos = shape.getPosition();
-		//c->oldPos = shape.getPosition();
-		//c->radius = shape.getRadius();
+		c->currPos = l.position;
+		c->oldPos = l.position;
+		c->radius = l.radius;
 		c->active = false;
 		collisionComponents.push_back(collision::add_object(c));
 
-		LaserComponent l;
-		l.lifetime = 0;
-		l.dir = Vector2f(0, -1);
-		laserComponents.push_back(l);
+
 	}
 }
 
@@ -309,19 +278,19 @@ void LaserSystem::destroy() {
 	laserComponents.resize(0);
 }
 
-void LaserSystem::fire(Vector2f shipDir, Vector2f shipPos) {
-
-}
+//void LaserSystem::fire(glm::vec2 shipDir, glm::vec2 shipPos) {
+//
+//}
 
 void LaserSystem::updatePositions(float dt) {
 	if (Mouse::isButtonPressed(Mouse::Left)) {
 		//printf("Left mouse pressed.\n");
 		if (firing == false) {
 			for (int i = 0; i < m_numLasers; i++) {
-				//collisionComponents[i]->oldPos = shapes[i].getPosition();
+				collisionComponents[i]->oldPos = laserComponents[i].position;
 				if (laserComponents[i].lifetime <= 0) {
 					laserComponents[i].lifetime = m_maxLifetime;
-					//shapes[i].setPosition(m_player->m_shape.getPosition());
+					laserComponents[i].position = m_player->getPosition();
 					//printf("Setting position to: %f, %f\n", m_player->m_shape.getPosition().x, m_player->m_shape.getPosition().y);
 					collisionComponents[i]->active = true;
 					break;
@@ -342,28 +311,28 @@ void LaserSystem::updatePositions(float dt) {
 	}
 
 	for (int i = 0; i < m_numLasers; i++) {
-		//glm::vec2 pos = shapes[i].getPosition();
-		//collisionComponents[i]->oldPos = shapes[i].getPosition();
-		Vector2f dir = laserComponents.data()[i].dir;
+		glm::vec2 pos = laserComponents[i].position;
+		collisionComponents[i]->oldPos = pos;
+		glm::vec2 dir = laserComponents.data()[i].dir;
 		float lifetime = laserComponents[i].lifetime;
 
-		//if (pos.y < -10) {
+		if (pos.y < -10) {
 		//	printf("Resetting OOB\n");
-		//	lifetime = 0;
-		//	collisionComponents[i]->active = false;
-		//	//shapes[i].setPosition(99999999, 999999999);
-		//	continue;
-		//}
+			laserComponents[i].lifetime = 0;
+			collisionComponents[i]->active = false;
+			laserComponents[i].position = glm::vec2(99999999, 999999999);
+			continue;
+		}
 
-		if (lifetime > 0 /*&& (pos.x < sWidth + 10 && pos.x > -10 && pos.y > -10 && pos.y < sHeight + 10)*/) {
-			//shapes[i].move(dir * (dt * m_speed));
+		if (laserComponents[i].lifetime > 0 /*&& (pos.x < sWidth + 10 && pos.x > -10 && pos.y > -10 && pos.y < sHeight + 10)*/) {
+			laserComponents[i].position += dir * (dt * m_speed);
 			laserComponents[i].lifetime -= dt;
 		}
 		else {
 			collisionComponents[i]->active = false;
-			//shapes[i].setPosition(99999999, 999999999);
+			laserComponents[i].position = glm::vec2(99999999, 999999999);
 		}
-		//collisionComponents[i]->currPos = shapes[i].getPosition();
+		collisionComponents[i]->currPos = laserComponents[i].position;
 	}
 }
 
@@ -379,7 +348,7 @@ void LaserSystem::handleCollisions() {
 
 void LaserSystem::drawShapes() {
 	for (int i = 0; i < m_numLasers; i++) {
-		//window.draw(shapes[i]);
+		m_circleRenderer.draw(laserComponents[i].position, 0.0f, laserComponents[i].radius, m_color);
 	}
 }
 
@@ -438,10 +407,9 @@ Asteroid Class
 //	}
 //}
 
-void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* player) {
+void ::AsteroidSystem::initialize(int numAsteroids, PlayerShip* player) {
 	m_player = player;
 	m_numAsteroids = numAsteroids;
-	m_maxShapes = maxShapes;
 
 	//if (shapes != nullptr) {
 	//	fprintf(stderr, "Shape array isn't null!");
@@ -453,6 +421,13 @@ void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* p
 	//if (!asteroidTexture.loadFromFile("rock.jpg")) {
 	//	printf("Could not load asteroid texture!");
 	//}
+
+	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.use();
+	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
+	m_shader.SetMatrix4("projection", projection);
+
+	m_circleRenderer.init(60, &m_shader);
 
 	if (!asteroidComponents.empty()) {
 		printf("AsteroidComponent list isn't empty.\n");
@@ -468,18 +443,19 @@ void ::AsteroidSystem::initialize(int numAsteroids, int maxShapes, PlayerShip* p
 		//shapes[i] = shape;
 		//CircleShape* shapeptr = &shapes[i];
 
-		CollisionComponent* c = new CollisionComponent;
-		c->name = "Asteroid";
-		//c->currPos = shape.getPosition();
-		//c->oldPos = shape.getPosition();
-		//c->radius = shape.getRadius();
-		collisionComponents.push_back(collision::add_object(c));
-
-
 		AsteroidComponent a;
-		//a.health = shape.getRadius() * 1.5f;
+		a.position = glm::vec2(rand() % sWidth, -(50 + rand() % 500));
+		a.radius = 10 + rand() % 40;
+		a.health = a.radius * 1.5f;
 		a.speed = 50 + (rand() % 100);
 		asteroidComponents.push_back(a);
+
+		CollisionComponent* c = new CollisionComponent;
+		c->name = "Asteroid";
+		c->currPos = a.position;
+		c->oldPos = a.position;
+		c->radius = a.radius;
+		collisionComponents.push_back(collision::add_object(c));
 	}
 }
 
@@ -500,24 +476,24 @@ void AsteroidSystem::updatePositions(float dt) {
 	for (int i = 0; i < m_numAsteroids; i++) {
 		float speed = asteroidComponents.data()[i].speed;
 		int health = asteroidComponents.data()[i].health;
-		//float newRadius = shapes[i].getRadius();
+		float newRadius = asteroidComponents[i].radius;
 		//if (i == 0) printf("Position:%f\n", shape->getPosition().y);
-		//collisionComponents.data()[i]->oldPos = shapes[i].getPosition();
-		//shapes[i].move(0, speed * dt);
+		collisionComponents.data()[i]->oldPos = asteroidComponents[i].position;
+		asteroidComponents[i].position += glm::vec2(0, speed * dt);//shapes[i].move(0, speed * dt);
 
-		//if (health <= 0 || (shapes[i].getPosition().y > sHeight + 50)) {
-		//	if (health <= 0) {
-		//		m_player->m_score += shapes[i].getRadius();
-		//	}
-		//	shapes[i].setPosition(rand() % sWidth, -50);
-		//	newRadius = 10 + rand() % 40;
-		//	shapes[i].setRadius(newRadius);
-		//	shapes[i].setOrigin(newRadius, newRadius);
-		//	collisionComponents[i]->radius = newRadius;
-		//	asteroidComponents[i].health = newRadius * 1.5f;
-		//	asteroidComponents[i].speed = 50 + (rand() % 100);
-		//}
-		//collisionComponents[i]->currPos = shapes[i].getPosition();
+		if (health <= 0 || (asteroidComponents[i].position.y > sHeight + 50)) {
+			if (health <= 0) {
+				m_player->setScore(m_player->getScore() + asteroidComponents[i].radius);
+			}
+			asteroidComponents[i].position = glm::vec2(rand() % sWidth, -50);
+			newRadius = 10 + rand() % 40;
+			asteroidComponents[i].radius = newRadius;
+			//shapes[i].setOrigin(newRadius, newRadius);
+			collisionComponents[i]->radius = newRadius;
+			asteroidComponents[i].health = newRadius * 1.5f;
+			asteroidComponents[i].speed = 50 + (rand() % 100);
+		}
+		collisionComponents[i]->currPos = asteroidComponents[i].position;
 	}
 }
 
@@ -534,9 +510,9 @@ void AsteroidSystem::handleCollisions() {
 }
 
 void AsteroidSystem::drawShapes() {
-	//for (int i = 0; i < m_numAsteroids; i++) {
-	//	window.draw(shapes[i]);
-	//}
+	for (int i = 0; i < m_numAsteroids; i++) {
+		m_circleRenderer.draw(asteroidComponents[i].position, 0.0f, asteroidComponents[i].radius, m_color);
+	}
 }
 
 void VehicleSystem::Init(int count, PlayerShip* player) {
@@ -551,6 +527,19 @@ void VehicleSystem::Init(int count, PlayerShip* player) {
 	//	shapes = nullptr;
 	//}
 	//shapes = new sf::ConvexShape[m_numVehicles];
+
+	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.use();
+	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
+	m_shader.SetMatrix4("projection", projection);
+
+	GLfloat vertices[] = {
+		0.0f, 0.0f,
+		25.0f, 10.0f,
+		0.0f, 20.0f
+	};
+
+	m_polyRenderer.init(vertices, 6, glm::vec2(12.5f, 10.0f), GL_TRIANGLES, &m_shader);
 
 	for (int i = 0; i < m_numVehicles; i++) {
 		//sf::ConvexShape shape;
@@ -569,14 +558,14 @@ void VehicleSystem::Init(int count, PlayerShip* player) {
 		//shapes[i] = shape;
 
 		VehicleComponent v;
-		v.m_Position = glm::vec2(rand() % sWidth, -50);
+		v.m_Position = glm::vec2(300, 100);
 		v.health = m_maxHealth;
 		vehicleComponents.push_back(v);
 
 		CollisionComponent* c = new CollisionComponent;
 		c->name = "Boid";
-		//c->oldPos = shapes[i].getPosition();
-		//c->currPos = shapes[i].getPosition();
+		c->oldPos = v.m_Position;
+		c->currPos = v.m_Position;
 		c->radius = 11.0f;
 		collisionComponents.push_back(collision::add_object(c));
 	}
@@ -682,52 +671,51 @@ void VehicleSystem::Update(float dt) {
 		if (vehicleComponents[i].health <= 0) {
 			m_player->setScore(m_player->getScore() + 20);
 			vehicleComponents[i].m_Position = glm::vec2(rand() % sWidth, -50);
-			//shapes[i].setPosition(rand() % sWidth, -50);
 			vehicleComponents[i].health = m_maxHealth;
 		}
-		//vehicleComponents[i].Seek(m_Target);
-		//vehicleComponents[i].Arrive(m_Target);
 
 		ApplyForce(ComputeSeparation(&vehicleComponents[i]) * m_Separation);
-		ApplyForce(ComputeAlignment(&vehicleComponents[i]) * m_Alignment);
-		ApplyForce(ComputeCohesion(&vehicleComponents[i]) * m_Cohesion);
-		//ApplyForce(Seek(&vehicleComponents[i], m_player->m_shape.getPosition()) * m_Seek);
-		ApplyForce(WallsForce(&vehicleComponents[i]) * 2.0f);
+		//ApplyForce(ComputeAlignment(&vehicleComponents[i]) * m_Alignment);
+		//ApplyForce(ComputeCohesion(&vehicleComponents[i]) * m_Cohesion);
+		//ApplyForce(Seek(&vehicleComponents[i], m_player->getPosition()) * m_Seek);
+		//ApplyForce(WallsForce(&vehicleComponents[i]) * 2.0f);
+
+		//if (i == 2) printf("Position %d: x:%f, y:%f\n", i, vehicleComponents[i].m_Position.x, vehicleComponents[i].m_Position.y);
 
 		//printf("Separation:%f \n", ComputeSeparation(&vehicleComponents[i]));
 		vehicleComponents[i].m_Velocity += m_Acceleration * dt;
 		dcMath::Limit(vehicleComponents[i].m_Velocity, m_MaxSpeed);
 		vehicleComponents[i].m_Position += vehicleComponents[i].m_Velocity * dt;
-		m_Acceleration = m_Acceleration * 0.0f; //reset so forces don't continue when stopped
+		m_Acceleration = glm::vec2(0, 0); //reset so forces don't continue when stopped
 
-												//if (m_Position.x > SCREEN_WIDTH) {
-												//	m_Position.x -= SCREEN_WIDTH;
-												//}
-												//else if (m_Position.x < 0) {
-												//	m_Position.x += SCREEN_WIDTH;
-												//}
+		//if (m_Position.x > SCREEN_WIDTH) {
+		//	m_Position.x -= SCREEN_WIDTH;
+		//}
+		//else if (m_Position.x < 0) {
+		//	m_Position.x += SCREEN_WIDTH;
+		//}
 
-												//if (m_Position.y > SCREEN_HEIGHT) {
-												//	m_Position.y -= SCREEN_HEIGHT;
-												//}
-												//else if (m_Position.y < 0) {
-												//	m_Position.y += SCREEN_HEIGHT;
-												//}
-												//printf("m_Position: %f, %f\n", m_Position.x, m_Position.y);
-												//printf("m_Velocity: %f, %f\n", m_Velocity.x, m_Velocity.y);
+		//if (m_Position.y > SCREEN_HEIGHT) {
+		//	m_Position.y -= SCREEN_HEIGHT;
+		//}
+		//else if (m_Position.y < 0) {
+		//	m_Position.y += SCREEN_HEIGHT;
+		//}
+		//printf("m_Position: %f, %f\n", m_Position.x, m_Position.y);
+		//printf("m_Velocity: %f, %f\n", m_Velocity.x, m_Velocity.y);
 
-												//Set new shape position and rotation
-		//shapes[i].setPosition(vehicleComponents[i].m_Position);
+		//Set new shape position and rotation
 		//printf("Heading: %f\n", dcMath::Heading(m_Velocity));
-		//shapes[i].setRotation(dcMath::Heading(vehicleComponents[i].m_Velocity));
-		//collisionComponents[i]->currPos = shapes[i].getPosition();
+		vehicleComponents[i].rotation = dcMath::Heading(vehicleComponents[i].m_Velocity);
+		collisionComponents[i]->currPos = vehicleComponents[i].m_Position;
 	}
 }
 
 void VehicleSystem::Draw() {
-	//for (size_t i = 0; i < vehicleComponents.size(); i++) {
-	//	window.draw(shapes[i]);
-	//}
+	for (size_t i = 0; i < vehicleComponents.size(); i++) {
+		//if (i == 8) printf("%f\n", vehicleComponents[i].m_Position);
+		m_polyRenderer.draw(vehicleComponents[i].m_Position, vehicleComponents[i].rotation, glm::vec2(1, 1), m_color);
+	}
 }
 
 void VehicleSystem::AddVehicle(const unsigned int count = 1, glm::vec2 position = glm::vec2(sWidth / 2, sHeight / 2)) {
@@ -838,6 +826,7 @@ glm::vec2 VehicleSystem::ComputeSeparation(VehicleComponent* v) {
 	glm::vec2 steer = desired - v->m_Velocity;
 	dcMath::Limit(steer, m_MaxForce);
 
+	printf("Steer: %f,%f\n", steer.x, steer.y);
 	return steer;
 }
 

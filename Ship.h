@@ -24,6 +24,7 @@ public:
 	void handleCollision();
 	void draw();
 
+	glm::vec2 getPosition() { return m_position; }
 	int getScore() { return m_score; }
 	void setScore(int newScore) { m_score = newScore; }
 
@@ -31,10 +32,11 @@ private:
 	//Rendering
 	dcRender::PolyRenderer m_polyRenderer;
 	dcRender::Shader m_shader;
+	glm::vec3 m_color = glm::vec3(1, 1, 1);
 
 	//State Data
-	Vector2f dir = Vector2f(0, 0); //size 8
-	Vector2f vel = Vector2f(0, 0); //size 8
+	glm::vec2 dir = glm::vec2(0, 0); //size 8
+	glm::vec2 vel = glm::vec2(0, 0); //size 8
 	glm::vec2 m_position;
 	float m_rotation;
 	float m_speed = 0; //size 4
@@ -60,20 +62,22 @@ private:
 //class Laser : public GameObject {
 //public:
 //	Laser();
-//	void fire(Vector2f shipDir, Vector2f shipPos);
+//	void fire(glm::vec2 shipDir, glm::vec2 shipPos);
 //	virtual void update(float dt);
 //	virtual void draw();
-//	virtual Vector2f getCenter();
+//	virtual glm::vec2 getCenter();
 //	virtual void checkCollisionWith(GameObject * obj);
 //private:
 //	CircleShape shape;
-//	Vector2f dir = Vector2f(0,0);
+//	glm::vec2 dir = glm::vec2(0,0);
 //	float speed = 0;
 //};
 
 struct LaserComponent {
-	Vector2f dir = Vector2f(0, 0);
+	glm::vec2 position = glm::vec2(0, 0);
+	glm::vec2 dir = glm::vec2(0, 0);
 	float lifetime = 0;
+	float radius;
 };
 
 class LaserSystem {
@@ -89,46 +93,42 @@ class LaserSystem {
 
 	// Component lists
 	//CircleShape* shapes = nullptr;
+
+	//Rendering
+	dcRender::CircleRenderer m_circleRenderer;
+	dcRender::Shader m_shader;
+	glm::vec3 m_color = glm::vec3(1, 1, 1);
+
 	std::vector<LaserComponent> laserComponents;
 	std::vector<CollisionComponent*> collisionComponents;
 
 public:
 	void initialize(int numLasers, int maxShapes, PlayerShip* player);
 	void destroy();
-	void fire(Vector2f shipDir, Vector2f shipPos);
+	void fire(glm::vec2 shipDir, glm::vec2 shipPos);
 	void updatePositions(float dt);
 	void handleCollisions();
 	void drawShapes();
 };
 
 /* Asteroid Stuff */
-
-//class Asteroid : public GameObject {
-//public:
-//	Asteroid(float r, sf::Texture* texture);
-//	virtual void update(float dt);
-//	virtual void draw();
-//	virtual Vector2f getCenter();
-//	virtual void checkCollisionWith(GameObject * obj);
-//private:
-//	Vector2f vel = Vector2f(0, 0);
-//	void initAsteroid(float r, sf::Texture* texture);
-//	int health = 1000;
-//	float speed = 0;
-//};
-
 struct AsteroidComponent {
+	glm::vec2 position = glm::vec2(0, 0);
 	int health = 1000;
 	int maxHealth = 1000;
 	float speed = 0;
+	float radius;
 };
 
 class AsteroidSystem {
 	// Component lists
-	//CircleShape* shapes = nullptr;
-	int m_maxShapes;
 	std::vector<AsteroidComponent> asteroidComponents;
 	std::vector<CollisionComponent*> collisionComponents;
+
+	//Rendering
+	dcRender::CircleRenderer m_circleRenderer;
+	dcRender::Shader m_shader;
+	glm::vec3 m_color = glm::vec3(1, 1, 1);
 
 	//Shared data
 	int m_numAsteroids = 0;
@@ -136,7 +136,7 @@ class AsteroidSystem {
 	PlayerShip* m_player = nullptr;
 public:
 	//Behavior
-	void initialize(int numAsteroids, int maxShapes, PlayerShip* player);
+	void initialize(int numAsteroids, PlayerShip* player);
 	void destroy();
 	void updatePositions(float dt);
 	void handleCollisions();
@@ -144,8 +144,9 @@ public:
 };
 
 struct VehicleComponent {
-	glm::vec2 m_Position;
-	glm::vec2 m_Velocity;
+	glm::vec2 m_Position = glm::vec2(0,0);
+	glm::vec2 m_Velocity = glm::vec2(0, 0);
+	float rotation = 0;
 	int health = 0;
 };
 
@@ -177,6 +178,11 @@ public:
 	float m_CoToggle = 1;
 
 private:
+	//Rendering
+	dcRender::PolyRenderer m_polyRenderer;
+	dcRender::Shader m_shader;
+	glm::vec3 m_color = glm::vec3(0, 0, 1);
+
 	glm::vec2 m_Target;
 
 	//sf::Font m_Font;
