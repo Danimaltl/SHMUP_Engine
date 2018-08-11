@@ -10,7 +10,7 @@ namespace collision {
 	const int ROWS = 10;
 	std::vector<CollisionComponent*> grid[COLUMNS][ROWS];
 
-	sf::Vector2i getBucket(Vector2f pos) {
+	sf::Vector2i getBucket(glm::vec2 pos) {
 		int col = int(pos.x / BUCKET_WIDTH);
 		if (col < 0)
 			col = 0;
@@ -54,7 +54,7 @@ namespace collision {
 		return box1.intersects(box2);
 	}
 
-	bool checkCollisionRadius(float r1, float r2, sf::Vector2f p1, sf::Vector2f p2) {
+	bool checkCollisionRadius(float r1, float r2, glm::vec2 p1, glm::vec2 p2) {
 		return dcMath::Magnitude(p1 - p2) < (r1 + r2);
 	}
 

@@ -25,11 +25,8 @@
 #define M_PI 3.14159265358979323846
 #endif // !M_PI
 
-extern sf::RenderWindow window;
+extern sf::Window window;
 //extern ViewManager viewMan;
 extern unsigned int sWidth;
 extern unsigned int sHeight;
-extern sf::Font font;
-
-float length(sf::Vector2f v);
-sf::Vector2f rotate(sf::Vector2f v, float radians);
+//extern sf::Font font;

@@ -4,19 +4,19 @@
 #include "Globals.h"
 
 namespace dcMath {
-	float Magnitude(const sf::Vector2f& vector);
+	float Magnitude(const glm::vec2& vector);
 
-	sf::Vector2f Normalize(sf::Vector2f vector);
+	glm::vec2 Normalize(glm::vec2 vector);
 
-	void Limit(sf::Vector2f& vector, float limit);
+	void Limit(glm::vec2& vector, float limit);
 
-	float Dot(sf::Vector2f v1, sf::Vector2f v2);
+	float Dot(glm::vec2 v1, glm::vec2 v2);
 
 	float Dot(sf::Vector3f v1, sf::Vector3f v2);
 
-	float AngleBetween(sf::Vector2f v1, sf::Vector2f v2);
+	float AngleBetween(glm::vec2 v1, glm::vec2 v2);
 
-	float Heading(const sf::Vector2f& vector);
+	float Heading(const glm::vec2& vector);
 
 	float Map(float value, float start1, float  stop1, float  start2, float stop2);
 }

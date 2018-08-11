@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "dcMath.h"
+#include "dcRenderer.h"
 #include "Easings.h"
 #include <iostream>
 
@@ -10,15 +11,32 @@
 //Size 376
 class PlayerShip {
 public:
-	sf::ConvexShape m_shape; //size 272
-	sf::Texture m_texture;
-	sf::Text shieldsText;
-	sf::Text armorText;
-	sf::Text scoreText;
+	//sf::ConvexShape m_shape; //size 272
+	//sf::Texture m_texture;
+	//sf::Text shieldsText;
+	//sf::Text armorText;
+	//sf::Text scoreText;
+
+	//Behavior
+	void init();
+	bool updateFirst(float dt);
+	void updatePosition(float dt);
+	void handleCollision();
+	void draw();
+
+	int getScore() { return m_score; }
+	void setScore(int newScore) { m_score = newScore; }
+
+private:
+	//Rendering
+	dcRender::PolyRenderer m_polyRenderer;
+	dcRender::Shader m_shader;
 
 	//State Data
 	Vector2f dir = Vector2f(0, 0); //size 8
 	Vector2f vel = Vector2f(0, 0); //size 8
+	glm::vec2 m_position;
+	float m_rotation;
 	float m_speed = 0; //size 4
 	float m_armor = 0;
 	float m_shields = 0;
@@ -35,33 +53,23 @@ public:
 
 	//Components
 	CollisionComponent* collisionComponent = nullptr;
-
-	//Behavior
-	void init(sf::Font& font);
-	bool updateFirst(float dt);
-	void updatePosition(float dt);
-	void handleCollision();
-	void drawTexts();
-
-private:
-
 };
 
 /* Laser Stuff */
 
-class Laser : public GameObject {
-public:
-	Laser();
-	void fire(Vector2f shipDir, Vector2f shipPos);
-	virtual void update(float dt);
-	virtual void draw();
-	virtual Vector2f getCenter();
-	virtual void checkCollisionWith(GameObject * obj);
-private:
-	CircleShape shape;
-	Vector2f dir = Vector2f(0,0);
-	float speed = 0;
-};
+//class Laser : public GameObject {
+//public:
+//	Laser();
+//	void fire(Vector2f shipDir, Vector2f shipPos);
+//	virtual void update(float dt);
+//	virtual void draw();
+//	virtual Vector2f getCenter();
+//	virtual void checkCollisionWith(GameObject * obj);
+//private:
+//	CircleShape shape;
+//	Vector2f dir = Vector2f(0,0);
+//	float speed = 0;
+//};
 
 struct LaserComponent {
 	Vector2f dir = Vector2f(0, 0);
@@ -80,7 +88,7 @@ class LaserSystem {
 	bool firing = false;
 
 	// Component lists
-	CircleShape* shapes = nullptr;
+	//CircleShape* shapes = nullptr;
 	std::vector<LaserComponent> laserComponents;
 	std::vector<CollisionComponent*> collisionComponents;
 
@@ -95,19 +103,19 @@ public:
 
 /* Asteroid Stuff */
 
-class Asteroid : public GameObject {
-public:
-	Asteroid(float r, sf::Texture* texture);
-	virtual void update(float dt);
-	virtual void draw();
-	virtual Vector2f getCenter();
-	virtual void checkCollisionWith(GameObject * obj);
-private:
-	Vector2f vel = Vector2f(0, 0);
-	void initAsteroid(float r, sf::Texture* texture);
-	int health = 1000;
-	float speed = 0;
-};
+//class Asteroid : public GameObject {
+//public:
+//	Asteroid(float r, sf::Texture* texture);
+//	virtual void update(float dt);
+//	virtual void draw();
+//	virtual Vector2f getCenter();
+//	virtual void checkCollisionWith(GameObject * obj);
+//private:
+//	Vector2f vel = Vector2f(0, 0);
+//	void initAsteroid(float r, sf::Texture* texture);
+//	int health = 1000;
+//	float speed = 0;
+//};
 
 struct AsteroidComponent {
 	int health = 1000;
@@ -117,14 +125,14 @@ struct AsteroidComponent {
 
 class AsteroidSystem {
 	// Component lists
-	CircleShape* shapes = nullptr;
+	//CircleShape* shapes = nullptr;
 	int m_maxShapes;
 	std::vector<AsteroidComponent> asteroidComponents;
 	std::vector<CollisionComponent*> collisionComponents;
 
 	//Shared data
 	int m_numAsteroids = 0;
-	sf::Texture asteroidTexture;
+	//sf::Texture asteroidTexture;
 	PlayerShip* m_player = nullptr;
 public:
 	//Behavior
@@ -136,8 +144,8 @@ public:
 };
 
 struct VehicleComponent {
-	sf::Vector2f m_Position;
-	sf::Vector2f m_Velocity;
+	glm::vec2 m_Position;
+	glm::vec2 m_Velocity;
 	int health = 0;
 };
 
@@ -149,14 +157,14 @@ public:
 	void handleCollisions();
 	void Draw();
 
-	void AddVehicle(const unsigned int count, sf::Vector2f position);
+	void AddVehicle(const unsigned int count, glm::vec2 position);
 	void RemoveVehicle(unsigned int count);
 
-	sf::ConvexShape* shapes = nullptr;
+	//sf::ConvexShape* shapes = nullptr;
 	std::vector<VehicleComponent> vehicleComponents;
 	std::vector<CollisionComponent*> collisionComponents;
 
-	sf::Vector2f m_Acceleration;
+	glm::vec2 m_Acceleration;
 	int m_maxShapes;
 	int m_numVehicles;
 	float m_Separation = 1.2f;
@@ -169,10 +177,10 @@ public:
 	float m_CoToggle = 1;
 
 private:
-	sf::Vector2f m_Target;
+	glm::vec2 m_Target;
 
-	sf::Font m_Font;
-	sf::Text m_Text;
+	//sf::Font m_Font;
+	//sf::Text m_Text;
 
 	bool m_MousePressed = false;
 	bool m_KeyPressed = false;
@@ -189,14 +197,14 @@ private:
 
 	PlayerShip* m_player = nullptr;
 
-	void ApplyForce(const sf::Vector2f& force);
+	void ApplyForce(const glm::vec2& force);
 
-	sf::Vector2f ComputeSeparation(VehicleComponent* v);
-	sf::Vector2f ComputeAlignment(VehicleComponent* v);
-	sf::Vector2f ComputeCohesion(VehicleComponent* v);
-	sf::Vector2f WallsForce(VehicleComponent* v);
+	glm::vec2 ComputeSeparation(VehicleComponent* v);
+	glm::vec2 ComputeAlignment(VehicleComponent* v);
+	glm::vec2 ComputeCohesion(VehicleComponent* v);
+	glm::vec2 WallsForce(VehicleComponent* v);
 
 	//Move towards target
-	sf::Vector2f Seek(VehicleComponent* v, const sf::Vector2f& target);
-	sf::Vector2f Arrive(VehicleComponent* v, const sf::Vector2f& target);
+	glm::vec2 Seek(VehicleComponent* v, const glm::vec2& target);
+	glm::vec2 Arrive(VehicleComponent* v, const glm::vec2& target);
 };

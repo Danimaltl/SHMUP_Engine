@@ -1,13 +1,13 @@
 #include "dcMath.h"
 
-float dcMath::Magnitude(const sf::Vector2f& vector) {
+float dcMath::Magnitude(const glm::vec2& vector) {
 	return sqrtf((vector.x * vector.x) + (vector.y * vector.y));
 }
 
-sf::Vector2f dcMath::Normalize(sf::Vector2f vector) {
+glm::vec2 dcMath::Normalize(glm::vec2 vector) {
 	float length = Magnitude(vector);
 
-	if (length == 0) return sf::Vector2f(0, 0);
+	if (length == 0) return glm::vec2(0, 0);
 
 	vector.x = vector.x / length;
 	vector.y = vector.y / length;
@@ -15,7 +15,7 @@ sf::Vector2f dcMath::Normalize(sf::Vector2f vector) {
 	return vector;
 }
 
-void dcMath::Limit(sf::Vector2f& vector, float limit) {
+void dcMath::Limit(glm::vec2& vector, float limit) {
 	if (Magnitude(vector) > limit) {
 		vector = Normalize(vector);
 		vector.x *= limit;
@@ -23,7 +23,7 @@ void dcMath::Limit(sf::Vector2f& vector, float limit) {
 	}
 }
 
-float dcMath::Dot(sf::Vector2f v1, sf::Vector2f v2) {
+float dcMath::Dot(glm::vec2 v1, glm::vec2 v2) {
 	return v1.x*v2.x + v1.y*v2.y;
 }
 
@@ -31,11 +31,11 @@ float dcMath::Dot(sf::Vector3f v1, sf::Vector3f v2) {
 	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 }
 
-float dcMath::AngleBetween(sf::Vector2f v1, sf::Vector2f v2) {
+float dcMath::AngleBetween(glm::vec2 v1, glm::vec2 v2) {
 	return acos(Dot(v1, v2) / (Magnitude(v1) * Magnitude(v2)));
 }
 
-float dcMath::Heading(const sf::Vector2f& vector) {
+float dcMath::Heading(const glm::vec2& vector) {
 	float result = atan2(vector.y, vector.x);
 	result = result * (float)(180 / M_PI);
 	return result;

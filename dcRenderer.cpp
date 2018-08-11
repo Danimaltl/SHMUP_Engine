@@ -45,7 +45,7 @@ void dcRender::CircleRenderer::init(int numPoints, Shader* shader) {
 }
 
 void dcRender::CircleRenderer::draw(glm::vec2 position, float rotation, float radius, glm::vec3 color) {
-	m_shader->activate();
+	m_shader->use();
 	glm::mat4 model(1);
 	model = glm::translate(model, glm::vec3(position, 0.0f));
 	model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -59,20 +59,15 @@ void dcRender::CircleRenderer::draw(glm::vec2 position, float rotation, float ra
 	glBindVertexArray(0);
 }
 
-void dcRender::PolyRenderer::init(const std::vector<glm::vec2>& points, glm::vec2 center, GLuint drawMethod, Shader* shader) {
+void dcRender::PolyRenderer::init(GLfloat* points, int size, glm::vec2 center, GLuint drawMethod, Shader* shader) {
 	float radius = 1;
 	m_shader = shader;
-	m_numPoints = points.size();
-	m_vertArraySize = m_numPoints * 2;
+	m_vertArraySize = size;
 	m_drawMethod = drawMethod;
 	m_center = center;
 
 	GLuint VBO;
-	GLfloat vertices[] = {
-		0.0f, 0.0f,
-		25.0f, 10.0f,
-		0.0f, 20.0f
-	};
+	GLfloat* vertices = points;
 
 	glGenVertexArrays(1, &m_VAO);
 	glGenBuffers(1, &VBO);
@@ -87,19 +82,19 @@ void dcRender::PolyRenderer::init(const std::vector<glm::vec2>& points, glm::vec
 	glBindVertexArray(0);
 }
 
-void dcRender::PolyRenderer::draw(glm::vec2 position, float rotation, glm::vec2 size, glm::vec3 color) {
-	m_shader->activate();
+void dcRender::PolyRenderer::draw(glm::vec2 position, float rotation, glm::vec2 scale, glm::vec3 color) {
+	m_shader->use();
 	glm::mat4 model(1);
 
 	model = glm::translate(model, glm::vec3(position, 0.0f));
 
 	//model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
-	model = glm::translate(model, glm::vec3(m_center.x * size.x, m_center.y * size.y, 0.0f));
+	model = glm::translate(model, glm::vec3(m_center.x * scale.x, m_center.y * scale.y, 0.0f));
 	model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(-m_center.x * size.x, -m_center.y * size.y, 0.0f));
+	model = glm::translate(model, glm::vec3(-m_center.x * scale.x, -m_center.y * scale.y, 0.0f));
 	//model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
-	model = glm::scale(model, glm::vec3(size, 1.0f));
+	model = glm::scale(model, glm::vec3(scale, 1.0f));
 
 	m_shader->SetMatrix4("model", model);
 	m_shader->SetVector3f("circleColor", color);
@@ -198,7 +193,7 @@ void dcRender::Shader::checkCompileErrors(GLuint object, std::string type)
 void dcRender::Shader::SetMatrix4(const GLchar *name, const glm::mat4 &matrix) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
-		//printf("Couldn't find mat4 uniform: %s\n", name);
+		printf("Couldn't find mat4 uniform: %s\n", name);
 	}
 	glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(matrix));
 }
@@ -206,7 +201,7 @@ void dcRender::Shader::SetMatrix4(const GLchar *name, const glm::mat4 &matrix) {
 void dcRender::Shader::SetFloat(const GLchar *name, GLfloat value) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
-		//printf("Couldn't find mat4 uniform: %s\n", name);
+		printf("Couldn't find mat4 uniform: %s\n", name);
 	}
 	glUniform1f(uniform, value);
 }
@@ -214,7 +209,7 @@ void dcRender::Shader::SetFloat(const GLchar *name, GLfloat value) {
 void dcRender::Shader::SetVector3f(const GLchar *name, const glm::vec3 &value) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
-		//printf("Couldn't find mat4 uniform: %s\n", name);
+		printf("Couldn't find mat4 uniform: %s\n", name);
 	}
 	glUniform3f(uniform, value.x, value.y, value.z);
 }

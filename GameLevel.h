@@ -31,15 +31,15 @@ namespace game_component {
 		int score = 0;
 		int lives = 0;
 
-		Vertex background[4];
+		//Vertex background[4];
 
 		AsteroidSystem asteroidSystem;
 		LaserSystem laserSystem;
 		VehicleSystem vehicleSystem;
 
-		sf::Text fpsText;
-		sf::Text title;
-		sf::Font font;
+		//sf::Text fpsText;
+		//sf::Text title;
+		//sf::Font font;
 
 		sf::Clock clock;
 

@@ -20,8 +20,8 @@ namespace dcRender {
 
 	class PolyRenderer {
 	public:
-		void init(const std::vector<glm::vec2>& points, glm::vec2 center, GLuint drawMethod, Shader* shader);
-		void draw(glm::vec2 position, float rotation, glm::vec2 size, glm::vec3 color);
+		void init(GLfloat* points, int size, glm::vec2 center, GLuint drawMethod, Shader* shader);
+		void draw(glm::vec2 position, float rotation, glm::vec2 scale, glm::vec3 color);
 	private:
 		GLuint m_VAO;
 		Shader* m_shader = nullptr;
@@ -33,8 +33,9 @@ namespace dcRender {
 
 	class Shader {
 	public:
+		const glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 		Shader();
-		void activate() { glUseProgram(m_id); }
+		void use() { glUseProgram(m_id); }
 		void compile(const GLchar* vertexSource, const GLchar* fragmentSource);
 		void loadFromFile(const char* vertexFile, const char* fragmentFile);
 

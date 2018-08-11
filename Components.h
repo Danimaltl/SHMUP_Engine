@@ -4,15 +4,15 @@
 struct CollisionComponent {
 	std::string otherName;
 	std::string name;
-	sf::Vector2f oldPos;
-	sf::Vector2f currPos;
+	glm::vec2 oldPos;
+	glm::vec2 currPos;
 	float radius;
 	bool collided = false;
 	bool active = true;
 };
 
 namespace collision {
-	sf::Vector2i getBucket(Vector2f pos);
+	sf::Vector2i getBucket(glm::vec2 pos);
 	void bucket_add(sf::Vector2i b, CollisionComponent* obj);
 	void bucket_remove(Vector2i b, CollisionComponent* obj);
 	bool checkCollision(const sf::FloatRect& box1, const sf::FloatRect& box2);
