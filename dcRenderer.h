@@ -13,8 +13,10 @@ namespace dcRender {
 		~CircleRenderer();
 		void init(int numPoints, Shader* shader);
 		void draw(glm::vec2 position, float rotation, float radius, glm::vec3 color);
+		void destroy();
 	private:
-		GLuint m_VAO;
+		GLuint m_VAO = 0;
+		GLuint m_VBO = 0;
 		Shader* m_shader = nullptr;
 		int m_numPoints;
 		int m_vertArraySize;
@@ -26,8 +28,10 @@ namespace dcRender {
 		~PolyRenderer();
 		void init(GLfloat* points, int size, glm::vec2 center, GLuint drawMethod, Shader* shader);
 		void draw(glm::vec2 position, float rotation, glm::vec2 scale, glm::vec3 color);
+		void destroy();
 	private:
-		GLuint m_VAO;
+		GLuint m_VAO = 0;
+		GLuint m_VBO = 0;
 		Shader* m_shader = nullptr;
 		int m_numPoints;
 		int m_vertArraySize;
@@ -43,6 +47,7 @@ namespace dcRender {
 		void use() { glUseProgram(m_id); }
 		void compile(const GLchar* vertexSource, const GLchar* fragmentSource);
 		void loadFromFile(const char* vertexFile, const char* fragmentFile);
+		void destroy();
 
 		void SetMatrix4(const GLchar *name, const glm::mat4 &matrix);
 		void SetFloat(const GLchar *name, GLfloat value);

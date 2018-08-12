@@ -43,10 +43,10 @@ namespace game_component {
 	}
 
 	void GameLevel::destroy() {
+		player.destroy();
 		vehicleSystem.destroy();
 		laserSystem.destroy();
 		asteroidSystem.destroy();
-		delete circleShader;
 		collision::DestroyAllColliders();
 	}
 

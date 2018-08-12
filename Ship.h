@@ -23,6 +23,7 @@ public:
 	void updatePosition(float dt);
 	void handleCollision();
 	void draw();
+	void destroy();
 
 	glm::vec2 getPosition() { return m_position; }
 	int getScore() { return m_score; }

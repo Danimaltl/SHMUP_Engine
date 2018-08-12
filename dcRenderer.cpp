@@ -20,7 +20,6 @@ void dcRender::CircleRenderer::init(int numPoints, Shader* shader) {
 	m_numPoints = numPoints;
 	m_vertArraySize = numPoints * 2;
 
-	GLuint VBO;
 	GLfloat* vertices = new float[m_vertArraySize];
 
 	glm::mat4 model(1);
@@ -37,9 +36,9 @@ void dcRender::CircleRenderer::init(int numPoints, Shader* shader) {
 	}
 
 	glGenVertexArrays(1, &m_VAO);
-	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &m_VBO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_vertArraySize, vertices, GL_STATIC_DRAW);
 
 	glBindVertexArray(m_VAO);
@@ -67,6 +66,11 @@ void dcRender::CircleRenderer::draw(glm::vec2 position, float rotation, float ra
 	glBindVertexArray(0);
 }
 
+void dcRender::CircleRenderer::destroy() {
+	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &m_VBO);
+}
+
 dcRender::PolyRenderer::PolyRenderer() {
 
 }
@@ -83,13 +87,12 @@ void dcRender::PolyRenderer::init(GLfloat* points, int size, glm::vec2 center, G
 	m_drawMethod = drawMethod;
 	m_center = center;
 
-	GLuint VBO;
 	GLfloat* vertices = points;
 
 	glGenVertexArrays(1, &m_VAO);
-	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &m_VBO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_vertArraySize, vertices, GL_STATIC_DRAW);
 
 	glBindVertexArray(m_VAO);
@@ -119,6 +122,11 @@ void dcRender::PolyRenderer::draw(glm::vec2 position, float rotation, glm::vec2 
 	glBindVertexArray(m_VAO);
 	glDrawArrays(m_drawMethod, 0, m_numPoints);
 	glBindVertexArray(0);
+}
+
+void dcRender::PolyRenderer::destroy() {
+	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &m_VBO);
 }
 
 dcRender::Shader::Shader() {
@@ -181,6 +189,10 @@ void dcRender::Shader::loadFromFile(const char* vertexFile, const char* fragment
 	const GLchar* fShaderCode = fragmentCode.c_str();
 	// 2. Now create shader object from source code
 	this->compile(vShaderCode, fShaderCode);
+}
+
+void dcRender::Shader::destroy() {
+	glDeleteProgram(m_id);
 }
 
 void dcRender::Shader::checkCompileErrors(GLuint object, std::string type)

@@ -18,18 +18,9 @@ void PlayerShip::init() {
 	iTimerCurr = iTimerMax;
 
 	regenDelayMax = 2.0f;
-	regenDelayCurr = regenDelayMax ;
-
-	/* Define Shape data */
-	//m_texture.loadFromFile("Seal.png");
-	//m_shape.setTexture(&m_texture);
-	//m_shape.setPointCount(4);
-	//m_shape.setPoint(0, glm::vec2(0, 0));
-	//m_shape.setPoint(1, glm::vec2(50, 25));
-	//m_shape.setPoint(2, glm::vec2(50, 50));
-	//m_shape.setPoint(3, glm::vec2(0,75));
-	//m_shape.setOrigin(m_shape.getLocalBounds().width/2, m_shape.getLocalBounds().height / 2);
+	regenDelayCurr = regenDelayMax;
 	
+	//rendering
 	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
@@ -120,55 +111,14 @@ bool PlayerShip::updateFirst(float dt) {
 }
 
 void PlayerShip::updatePosition(float dt) {
-	//sizeof(sf::Sprite);
-	//sizeof(texture);
-	//sizeof(radius);
-	//sizeof(dir);
-	//sizeof(float);
-	//sizeof(int);
-	//sizeof(size_t);
-	//sizeof(Ship);
-	//sizeof(std::string);
-	//sizeof(std::vector<Ship>);
-
 	glm::vec2 newPos = m_position;
 	collisionComponent->oldPos = newPos;
-
-	//if (Keyboard::isKeyPressed(Keyboard::Left)) {
-	//	m_shape.move(glm::vec2(-speed * dt, 0));
-	//}
-	//else if (Keyboard::isKeyPressed(Keyboard::Right)) {
-	//	m_shape.move(glm::vec2(speed * dt, 0));
-	//}
 
 	dir.x = cosf(m_rotation * (M_PI / 180));
 	dir.y = sinf(m_rotation * (M_PI / 180));
 
-	//if (Keyboard::isKeyPressed(Keyboard::Up)) {
-	//	m_shape.move(glm::vec2(0, -speed * dt));
-	//}
-	//else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-	//	m_shape.move(glm::vec2(0, speed * dt));
-	//}
-
 	sf::Vector2i mousePos = Mouse::getPosition(window);
 	glm::vec2 mousePosF((float)mousePos.x, (float)mousePos.y);
-
-	//if (mousePos.x < 0) {
-	//	sf::Mouse::setPosition(sf::Vector2i(0, mousePos.y), window);
-	//}
-	//else if (mousePos.x > sWidth) {
-	//	sf::Mouse::setPosition(sf::Vector2i(sWidth, mousePos.y), window);
-	//}
-
-	//if (mousePos.y < 0) {
-	//	sf::Mouse::setPosition(sf::Vector2i(mousePos.x, 0), window);
-	//}
-	//else if (mousePos.y > sHeight) {
-	//	sf::Mouse::setPosition(sf::Vector2i(mousePos.x, sHeight), window);
-	//}
-
-
 
 	//Move if mouse is on screen and ball isn't past paddle
 	if (mousePosF.x >= 0 && mousePosF.x <= sWidth && mousePosF.y >= 0 && mousePosF.y <= sHeight) {
@@ -209,7 +159,12 @@ void PlayerShip::draw() {
 	//window.draw(armorText);
 	//window.draw(scoreText);
 	//printf("m_position x:%f, y:%f\n", m_position.x, m_position.y);
-	m_polyRenderer.draw(m_position, m_rotation, glm::vec2(1, 1), glm::vec3(1, 1, 1));
+	m_polyRenderer.draw(m_position, m_rotation, glm::vec2(1, 1), m_color);
+}
+
+void PlayerShip::destroy() {
+	m_polyRenderer.destroy();
+	m_shader.destroy();
 }
 
 
@@ -276,6 +231,9 @@ void LaserSystem::destroy() {
 	collisionComponents.resize(0);
 	laserComponents.clear();
 	laserComponents.resize(0);
+
+	m_circleRenderer.destroy();
+	m_shader.destroy();
 }
 
 //void LaserSystem::fire(glm::vec2 shipDir, glm::vec2 shipPos) {
@@ -468,6 +426,9 @@ void AsteroidSystem::destroy() {
 	collisionComponents.resize(0);
 	asteroidComponents.clear();
 	asteroidComponents.resize(0);
+
+	m_circleRenderer.destroy();
+	m_shader.destroy();
 }
 
 void AsteroidSystem::updatePositions(float dt) {
@@ -591,6 +552,9 @@ void VehicleSystem::destroy() {
 	collisionComponents.resize(0);
 	vehicleComponents.clear();
 	vehicleComponents.resize(0);
+
+	m_polyRenderer.destroy();
+	m_shader.destroy();
 }
 
 void VehicleSystem::handleCollisions() {

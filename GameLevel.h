@@ -32,8 +32,6 @@ namespace game_component {
 		int lives = 0;
 
 		float rotateAngle = 0;
-		dcRender::Shader* circleShader = nullptr;
-		dcRender::PolyRenderer polyRenderer;
 
 		//Vertex background[4];
 
