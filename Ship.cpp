@@ -40,8 +40,6 @@ void PlayerShip::init() {
 	/*Spatial data*/
 	m_position = glm::vec2(sWidth / 2, sHeight / 2);
 	m_rotation = -M_PI/2;
-	//m_shape.setPosition(sWidth / 2, sHeight / 2);
-	//m_shape.setRotation(-90);
 
 	/* Text data */
 	//shieldsText.setFont(font);
@@ -316,54 +314,6 @@ void LaserSystem::drawShapes() {
 Asteroid Class
 
 */
-
-//Asteroid::Asteroid(float r, sf::Texture* texture) {
-//	initAsteroid(r, texture);
-//}
-//
-//void Asteroid::initAsteroid(float r, sf::Texture* texture) {
-//	shape.setRadius(r);
-//	shape.setOrigin(r, r);
-//	shape.setPosition(rand() % sWidth, 100);
-//	shape.setTexture(texture);
-//	lifetime = 1;
-//	name = "Asteroid";
-//	speed = 20 + (rand() % 100);
-//	health = r * r;
-//}
-//
-//void Asteroid::update(float dt) {
-//	if (shape.getPosition().y > sHeight + 50) {
-//		shape.setPosition(rand() % sWidth, -50);
-//		shape.setRadius(10 + rand() % 40);
-//	}
-//
-//	shape.move(0, speed * dt);
-//	if (health <= 0) {
-//		shape.setPosition(rand() % sWidth, -50);
-//		shape.setRadius(10 + rand() % 40);
-//		health = shape.getRadius() * 10;
-//		speed = 50 + (rand() % 100);
-//	}
-//}
-//
-//void Asteroid::draw() {
-//	window.draw(shape);
-//}
-//
-//glm::vec2 Asteroid::getCenter() {
-//	return shape.getPosition();
-//}
-//
-//void Asteroid::checkCollisionWith(GameObject* other) {
-//	collided = false;
-//	if (shape.getGlobalBounds().intersects(other->shape.getGlobalBounds())) {
-//		//printf("Collided with: %s\n", other->name.c_str());
-//		//health -= 10;
-//		//other->lifetime = 0;
-//		collided = true;
-//	}
-//}
 
 void ::AsteroidSystem::initialize(int numAsteroids, PlayerShip* player) {
 	m_player = player;
@@ -670,7 +620,7 @@ void VehicleSystem::Update(float dt) {
 
 		//Set new shape position and rotation
 		//printf("Heading: %f\n", dcMath::Heading(m_Velocity));
-		vehicleComponents[i].rotation = dcMath::Heading(vehicleComponents[i].m_Velocity);
+		vehicleComponents[i].rotation = dcMath::VectorToAngle(vehicleComponents[i].m_Velocity);
 		collisionComponents[i]->currPos = vehicleComponents[i].m_Position;
 	}
 }
@@ -790,7 +740,6 @@ glm::vec2 VehicleSystem::ComputeSeparation(VehicleComponent* v) {
 	glm::vec2 steer = desired - v->m_Velocity;
 	dcMath::Limit(steer, m_MaxForce);
 
-	printf("Steer: %f,%f\n", steer.x, steer.y);
 	return steer;
 }
 

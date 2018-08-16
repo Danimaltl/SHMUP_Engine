@@ -16,7 +16,9 @@ namespace dcMath {
 
 	float AngleBetween(glm::vec2 v1, glm::vec2 v2);
 
-	float Heading(const glm::vec2& vector);
+	float VectorToAngle(const glm::vec2& vector);
+
+	glm::vec2 AngleToVector(float angle);
 
 	float Map(float value, float start1, float  stop1, float  start2, float stop2);
 }

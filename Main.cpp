@@ -39,7 +39,8 @@ int main()
 
 	sf::Clock clock;
 
-
+	glm::vec2 v = dcMath::AngleToVector((1.33f)*M_PI);
+	printf("v: %f, %f\n", v.x, v.y);
 
 	bool running = true;
 	std::unique_ptr<AppState> currentState(new MainMenu());
