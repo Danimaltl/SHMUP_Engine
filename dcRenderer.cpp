@@ -59,7 +59,7 @@ void dcRender::CircleRenderer::draw(glm::vec2 position, float rotation, float ra
 	model = glm::scale(model, glm::vec3(radius, radius, 1.0f));
 
 	m_shader->SetMatrix4("model", model);
-	m_shader->SetVector3f("circleColor", color);
+	m_shader->SetVector3("circleColor", color);
 
 	glBindVertexArray(m_VAO);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, m_numPoints);
@@ -117,7 +117,7 @@ void dcRender::PolyRenderer::draw(glm::vec2 position, float rotation, glm::vec2 
 	model = glm::scale(model, glm::vec3(scale, 1.0f));
 
 	m_shader->SetMatrix4("model", model);
-	m_shader->SetVector3f("circleColor", color);
+	m_shader->SetVector3("circleColor", color);
 
 	glBindVertexArray(m_VAO);
 	glDrawArrays(m_drawMethod, 0, m_numPoints);
@@ -239,10 +239,18 @@ void dcRender::Shader::SetFloat(const GLchar *name, GLfloat value) {
 	glUniform1f(uniform, value);
 }
 
-void dcRender::Shader::SetVector3f(const GLchar *name, const glm::vec3 &value) {
+void dcRender::Shader::SetVector3(const GLchar *name, const glm::vec3 &value) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
 		printf("Couldn't find mat4 uniform: %s\n", name);
 	}
 	glUniform3f(uniform, value.x, value.y, value.z);
+}
+
+void dcRender::Shader::SetVector2(const GLchar *name, const glm::vec2 &value) {
+	GLuint uniform = glGetUniformLocation(m_id, name);
+	if (uniform == -1) {
+		printf("Couldn't find mat4 uniform: %s\n", name);
+	}
+	glUniform2f(uniform, value.x, value.y);
 }
