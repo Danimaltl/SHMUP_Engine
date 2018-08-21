@@ -25,13 +25,14 @@
     <ClCompile Include="dcRenderer.cpp" />
     <ClCompile Include="Easings.cpp" />
     <ClCompile Include="GameLevel.cpp" />
-    <ClCompile Include="GameLevel_Object.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="Background.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppState.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="dcMath.h" />
     <ClInclude Include="dcRenderer.h" />

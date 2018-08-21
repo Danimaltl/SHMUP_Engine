@@ -14,10 +14,7 @@ namespace game_component {
 	/* *************** */
 
 	void GameLevel::initGame() {
-		//background[0] = Vertex(Vector2f(0, 0), sf::Color::Red);
-		//background[1] = Vertex(Vector2f(sWidth, 0), sf::Color::Blue);
-		//background[2] = Vertex(Vector2f(sWidth, sHeight), sf::Color::Green);
-		//background[3] = Vertex(Vector2f(0, sHeight), sf::Color::Magenta);
+		background.init();
 
 		vehicleSystem.Init(10, &player);
 
@@ -43,6 +40,7 @@ namespace game_component {
 	}
 
 	void GameLevel::destroy() {
+		background.destroy();
 		player.destroy();
 		vehicleSystem.destroy();
 		laserSystem.destroy();
@@ -58,6 +56,7 @@ namespace game_component {
 			window.close();
 		}
 
+		background.update(dt);
 		vehicleSystem.Update(dt);
 
 		if (player.updateFirst(dt)) {
@@ -88,6 +87,7 @@ namespace game_component {
 		//window.setView(viewMan.getView());
 		//window.clear();
 		//window.draw(background, 4, sf::Quads);
+		background.draw();
 
 		asteroidSystem.drawShapes();
 		laserSystem.drawShapes();

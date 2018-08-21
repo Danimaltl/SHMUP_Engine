@@ -59,21 +59,6 @@ private:
 };
 
 /* Laser Stuff */
-
-//class Laser : public GameObject {
-//public:
-//	Laser();
-//	void fire(glm::vec2 shipDir, glm::vec2 shipPos);
-//	virtual void update(float dt);
-//	virtual void draw();
-//	virtual glm::vec2 getCenter();
-//	virtual void checkCollisionWith(GameObject * obj);
-//private:
-//	CircleShape shape;
-//	glm::vec2 dir = glm::vec2(0,0);
-//	float speed = 0;
-//};
-
 struct LaserComponent {
 	glm::vec2 position = glm::vec2(0, 0);
 	glm::vec2 dir = glm::vec2(0, 0);

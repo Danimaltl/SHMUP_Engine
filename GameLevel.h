@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "Ship.h"
+#include "Background.h"
 #include <memory>
 
 namespace game {
@@ -33,7 +34,7 @@ namespace game_component {
 
 		float rotateAngle = 0;
 
-		//Vertex background[4];
+		Background background;
 
 		AsteroidSystem asteroidSystem;
 		LaserSystem laserSystem;
