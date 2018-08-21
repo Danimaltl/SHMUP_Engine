@@ -14,6 +14,7 @@ namespace game_component {
 	/* *************** */
 
 	void GameLevel::initGame() {
+		
 		background.init();
 
 		vehicleSystem.Init(10, &player);

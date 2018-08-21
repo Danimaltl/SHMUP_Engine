@@ -78,4 +78,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="2dshape.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="circleShape.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="cubeShape.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="circleShape.vert">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

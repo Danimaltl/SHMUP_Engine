@@ -43,9 +43,11 @@ int main()
 	printf("v: %f, %f\n", v.x, v.y);
 
 	bool running = true;
-	std::unique_ptr<AppState> currentState(new MainMenu());
+	std::unique_ptr<AppState> currentState(new game_component::GameLevel(1));
 	while (window.isOpen())
 	{
+		sizeof(float);
+
 		sf::Event event;
 		float dt = clock.restart().asSeconds();
 		while (window.pollEvent(event)) {

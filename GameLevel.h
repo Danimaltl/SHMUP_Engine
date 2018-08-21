@@ -27,7 +27,7 @@ namespace game_component {
 		GameLevel(int level);
 		virtual ~GameLevel();
 
-		bool firing = true;
+		bool firing = false;
 		PlayerShip player;
 		int score = 0;
 		int lives = 0;

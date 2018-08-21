@@ -114,10 +114,11 @@ class AsteroidSystem {
 	//Rendering
 	dcRender::CircleRenderer m_circleRenderer;
 	dcRender::Shader m_shader;
-	glm::vec3 m_color = glm::vec3(1, 1, 1);
+	glm::vec3 m_color = glm::vec3(0, 0, 0);
 
 	//Shared data
 	int m_numAsteroids = 0;
+	float m_time = 0;
 	//sf::Texture asteroidTexture;
 	PlayerShip* m_player = nullptr;
 public:

@@ -51,7 +51,8 @@ namespace dcRender {
 
 		void SetMatrix4(const GLchar *name, const glm::mat4 &matrix);
 		void SetFloat(const GLchar *name, GLfloat value);
-		void SetVector3f(const GLchar *name, const glm::vec3 &value);
+		void SetVector3(const GLchar *name, const glm::vec3 &value);
+		void SetVector2(const GLchar *name, const glm::vec2 &value);
 
 		GLuint getID() { return m_id; }
 	private:

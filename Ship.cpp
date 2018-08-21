@@ -330,10 +330,11 @@ void ::AsteroidSystem::initialize(int numAsteroids, PlayerShip* player) {
 	//	printf("Could not load asteroid texture!");
 	//}
 
-	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.loadFromFile("circleShape.vert", "circleShape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 	m_shader.SetMatrix4("projection", projection);
+	m_shader.SetVector2("resolution", glm::vec2(600, 800));
 
 	m_circleRenderer.init(60, &m_shader);
 
@@ -382,6 +383,7 @@ void AsteroidSystem::destroy() {
 }
 
 void AsteroidSystem::updatePositions(float dt) {
+	m_time += dt;
 	//printf("numAsteroids: %d, asteroidComponents.size(): %d, shapes.size(): %d\n", entity.numAsteroids, entity.asteroidComponents.size(), entity.shapes.size());
 	//assert(entity->numAsteroids == entity->asteroidComponents.size() && entity->numAsteroids == entity->shapes.size());
 	for (int i = 0; i < m_numAsteroids; i++) {
@@ -421,6 +423,7 @@ void AsteroidSystem::handleCollisions() {
 }
 
 void AsteroidSystem::drawShapes() {
+	m_shader.SetFloat("time", m_time);
 	for (int i = 0; i < m_numAsteroids; i++) {
 		m_circleRenderer.draw(asteroidComponents[i].position, 0.0f, asteroidComponents[i].radius, m_color);
 	}
