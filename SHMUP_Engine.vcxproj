@@ -47,6 +47,8 @@
     <None Include="circleShape.frag" />
     <None Include="circleShape.vert" />
     <None Include="cubeShape.vert" />
+    <None Include="text.frag" />
+    <None Include="text.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

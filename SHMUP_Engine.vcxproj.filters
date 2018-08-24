@@ -91,5 +91,11 @@
     <None Include="circleShape.vert">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="text.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="text.frag">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

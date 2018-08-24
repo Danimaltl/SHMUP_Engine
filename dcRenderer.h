@@ -1,5 +1,6 @@
 //Dan Cochran
 //Based on https://learnopengl.com/In-Practice/2D-Game/Setting-up
+//			https://learnopengl.com/In-Practice/Text-Rendering
 
 #pragma once
 #include "Globals.h"
@@ -58,5 +59,27 @@ namespace dcRender {
 	private:
 		void checkCompileErrors(GLuint object, std::string type);
 		GLuint m_id;
+	};
+
+	/* Text Rendering */
+	struct TextChar {
+		GLuint TextureID;
+		glm::ivec2 size;
+		glm::ivec2 bearing;
+		GLuint advance;
+	};
+
+	class TextRenderer {
+	public:
+		TextRenderer();
+		~TextRenderer();
+		void init();
+		void draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	private:
+		GLuint m_VAO = 0;
+		GLuint m_VBO = 0;
+		Shader m_shader;
+		glm::vec2 m_center;
+		TextChar m_characters[128];
 	};
 }

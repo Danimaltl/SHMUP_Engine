@@ -1,3 +1,6 @@
+//Dan Cochran 2018
+//Uses FreeType https://www.freetype.org/
+
 #define GLEW_STATIC
 
 #include <GL/glew.h>
@@ -29,13 +32,18 @@ int main()
 	settings.stencilBits = 8;
 	window.create(VideoMode(sWidth, sHeight),"SHMUP Engine", sf::Style::Titlebar | sf::Style::Close, settings);
 
+	// Set OpenGL options
 	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
 	glewInit();
 
 	//viewMan.setView(window.getDefaultView());
+
+	dcRender::TextRenderer textRender;
+	textRender.init();
 
 	sf::Clock clock;
 
@@ -64,6 +72,9 @@ int main()
 
 		AppState* next = currentState->update(dt);
 		currentState->draw();
+
+		textRender.draw("apple", 100, 100, 1, glm::vec3(1, 0, 0));
+
 		window.display();
 
 		if (next != nullptr) {
