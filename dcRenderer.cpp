@@ -344,6 +344,8 @@ void dcRender::TextRenderer::init() {
 }
 
 void dcRender::TextRenderer::draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color) {
+	y = (GLfloat)sHeight - y;
+
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	
@@ -390,4 +392,8 @@ void dcRender::TextRenderer::draw(std::string text, GLfloat x, GLfloat y, GLfloa
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
+}
+
+void dcRender::TextRenderer::draw(TextComponent t) {
+	draw(t.text, t.position.x, t.position.y, t.scale, t.color);
 }

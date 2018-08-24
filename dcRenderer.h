@@ -69,12 +69,20 @@ namespace dcRender {
 		GLuint advance;
 	};
 
+	struct TextComponent {
+		std::string text;
+		glm::vec3 color;
+		glm::vec2 position;
+		GLfloat scale;
+	};
+
 	class TextRenderer {
 	public:
 		TextRenderer();
 		~TextRenderer();
 		void init();
 		void draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+		void draw(TextComponent t);
 	private:
 		GLuint m_VAO = 0;
 		GLuint m_VBO = 0;

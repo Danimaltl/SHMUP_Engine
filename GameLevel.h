@@ -40,9 +40,10 @@ namespace game_component {
 		LaserSystem laserSystem;
 		VehicleSystem vehicleSystem;
 
-		//sf::Text fpsText;
-		//sf::Text title;
-		//sf::Font font;
+		dcRender::TextRenderer textRenderer;
+
+		dcRender::TextComponent fpsText;
+		dcRender::TextComponent title;
 
 		sf::Clock clock;
 

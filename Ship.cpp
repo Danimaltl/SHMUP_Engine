@@ -37,6 +37,8 @@ void PlayerShip::init() {
 
 	m_polyRenderer.init(vertices, 12, glm::vec2(25.0f, 37.5f), GL_TRIANGLES, &m_shader);
 
+	m_textRenderer.init();
+
 	/*Spatial data*/
 	m_position = glm::vec2(sWidth / 2, sHeight / 2);
 	m_rotation = -M_PI/2;

@@ -11,11 +11,9 @@
 //Size 376
 class PlayerShip {
 public:
-	//sf::ConvexShape m_shape; //size 272
-	//sf::Texture m_texture;
-	//sf::Text shieldsText;
-	//sf::Text armorText;
-	//sf::Text scoreText;
+	std::string shieldsText;
+	std::string armorText;
+	std::string scoreText;
 
 	//Behavior
 	void init();
@@ -32,6 +30,7 @@ public:
 private:
 	//Rendering
 	dcRender::PolyRenderer m_polyRenderer;
+	dcRender::TextRenderer m_textRenderer;
 	dcRender::Shader m_shader;
 	glm::vec3 m_color = glm::vec3(1, 1, 1);
 

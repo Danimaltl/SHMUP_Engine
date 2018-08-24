@@ -19,13 +19,11 @@ namespace game_component {
 
 		vehicleSystem.Init(10, &player);
 
-		//if (!font.loadFromFile("arial.ttf")) {
-		//	std::cout << "Couldn't load font!" << std::endl;
-		//}
-		//fpsText.setFont(font);
-		//fpsText.setCharacterSize(50);
-		//fpsText.setFillColor(sf::Color::Green);
-		//fpsText.setPosition(10, 10);
+		textRenderer.init();
+
+		fpsText.scale = 1;
+		fpsText.color = glm::vec3(0, 1, 0);
+		fpsText.position = glm::vec2(30,40);
 
 		//title.setFont(font);
 		//title.setCharacterSize(50);
@@ -102,8 +100,8 @@ namespace game_component {
 		//player.drawTexts();
 
 		sf::Time elapsed = clock.restart();
-		//fpsText.setString(std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds()))));
-		//window.draw(fpsText);
+		fpsText.text = std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds())));
+		textRenderer.draw(fpsText);
 		//window.draw(title);
 	}
 
