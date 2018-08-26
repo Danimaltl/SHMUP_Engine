@@ -44,24 +44,18 @@ void PlayerShip::init() {
 	m_rotation = -M_PI/2;
 
 	/* Text data */
-	//shieldsText.setFont(font);
-	//shieldsText.setCharacterSize(50);
-	//shieldsText.setFillColor(sf::Color::Blue);
-	//shieldsText.setPosition(m_shape.getPosition() + glm::vec2(30, -20));
+	shieldsText.color = glm::vec3(0.0f, 0.0f, 1.0f);
+	shieldsText.position = m_position + glm::vec2(30, -20);
 
-	//armorText.setFont(font);
-	//armorText.setCharacterSize(50);
-	//armorText.setFillColor(sf::Color::Black);
-	//armorText.setPosition(m_shape.getPosition() + glm::vec2(30, 20));
+	armorText.color = glm::vec3(0.5f, 0.5f, 0.5f);
+	armorText.position = m_position + glm::vec2(30, 20);
 
-	//scoreText.setFont(font);
-	//scoreText.setCharacterSize(50);
-	//scoreText.setFillColor(sf::Color::Yellow);
-	//scoreText.setPosition(glm::vec2(20, sHeight - 100));
-	//scoreText.setString(std::to_string(m_score));
+	scoreText.color = glm::vec3(1.0f, 1.0f, 0.0f);
+	scoreText.position = glm::vec2(20, sHeight - 100);
+	scoreText.text = std::to_string(m_score);
 
-	//shieldsText.setString(std::to_string((int)m_shields));
-	//armorText.setString(std::to_string((int)m_armor));
+	shieldsText.text = std::to_string((int)m_shields);
+	armorText.text = std::to_string((int)m_armor);
 
 	CollisionComponent* c = new CollisionComponent;
 	c->name = "Player";
@@ -72,12 +66,12 @@ void PlayerShip::init() {
 }
 
 bool PlayerShip::updateFirst(float dt) {
-	//shieldsText.setPosition(m_shape.getPosition() + glm::vec2(30, -20));
-	//armorText.setPosition(m_shape.getPosition() + glm::vec2(30, 20));
+	shieldsText.position = m_position + glm::vec2(30, -20);
+	armorText.position = m_position + glm::vec2(30, 20);
 
-	//shieldsText.setString(std::to_string((int)m_shields));
-	//armorText.setString(std::to_string((int)m_armor));
-	//scoreText.setString(std::to_string(m_score));
+	shieldsText.text = std::to_string((int)m_shields);
+	armorText.text = std::to_string((int)m_armor);
+	scoreText.text = std::to_string(m_score);
 
 	if (m_shields <= 0 && !regenDelayActive) {
 		m_shields = 0;
@@ -155,9 +149,9 @@ void PlayerShip::handleCollision() {
 }
 
 void PlayerShip::draw() {
-	//window.draw(shieldsText);
-	//window.draw(armorText);
-	//window.draw(scoreText);
+	m_textRenderer.draw(shieldsText);
+	m_textRenderer.draw(armorText);
+	m_textRenderer.draw(scoreText);
 	//printf("m_position x:%f, y:%f\n", m_position.x, m_position.y);
 	m_polyRenderer.draw(m_position, m_rotation, glm::vec2(1, 1), m_color);
 }

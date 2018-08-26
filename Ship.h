@@ -11,9 +11,9 @@
 //Size 376
 class PlayerShip {
 public:
-	std::string shieldsText;
-	std::string armorText;
-	std::string scoreText;
+	dcRender::TextComponent shieldsText;
+	dcRender::TextComponent armorText;
+	dcRender::TextComponent scoreText;
 
 	//Behavior
 	void init();
@@ -35,11 +35,11 @@ private:
 	glm::vec3 m_color = glm::vec3(1, 1, 1);
 
 	//State Data
-	glm::vec2 dir = glm::vec2(0, 0); //size 8
-	glm::vec2 vel = glm::vec2(0, 0); //size 8
+	glm::vec2 dir = glm::vec2(0, 0);
+	glm::vec2 vel = glm::vec2(0, 0);
 	glm::vec2 m_position;
 	float m_rotation;
-	float m_speed = 0; //size 4
+	float m_speed = 0;
 	float m_armor = 0;
 	float m_shields = 0;
 	float m_regenRate = 0;

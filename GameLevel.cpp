@@ -15,7 +15,7 @@ namespace game_component {
 
 	void GameLevel::initGame() {
 		
-		background.init();
+		//background.init();
 
 		vehicleSystem.Init(10, &player);
 
@@ -25,12 +25,6 @@ namespace game_component {
 		fpsText.color = glm::vec3(0, 1, 0);
 		fpsText.position = glm::vec2(30,40);
 
-		//title.setFont(font);
-		//title.setCharacterSize(50);
-		//title.setFillColor(sf::Color::Green);
-		//title.setString("Component Version");
-		//title.setPosition(sWidth/2 - title.getLocalBounds().width / 2 + 10, 10);
-
 		player.init();
 
 		asteroidSystem.initialize(10, &player);
@@ -39,7 +33,7 @@ namespace game_component {
 	}
 
 	void GameLevel::destroy() {
-		background.destroy();
+		//background.destroy();
 		player.destroy();
 		vehicleSystem.destroy();
 		laserSystem.destroy();
@@ -55,7 +49,7 @@ namespace game_component {
 			window.close();
 		}
 
-		background.update(dt);
+		//background.update(dt);
 		vehicleSystem.Update(dt);
 
 		if (player.updateFirst(dt)) {
@@ -85,15 +79,11 @@ namespace game_component {
 	void GameLevel::draw() {
 		//window.setView(viewMan.getView());
 		//window.clear();
-		//window.draw(background, 4, sf::Quads);
-		background.draw();
+		//background.draw();
 
 		asteroidSystem.drawShapes();
 		laserSystem.drawShapes();
-		//window.draw(player.m_shape);
-		//printf("Drawing player!\n");
 		player.draw();
-		//circleRenderer.draw(glm::vec2(200, 200), rotateAngle, 100.0f, glm::vec3(1.0f, 0.0f, 1.0f));
 
 		vehicleSystem.Draw();
 
@@ -102,7 +92,6 @@ namespace game_component {
 		sf::Time elapsed = clock.restart();
 		fpsText.text = std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds())));
 		textRenderer.draw(fpsText);
-		//window.draw(title);
 	}
 
 	GameLevel::GameLevel(int level) {

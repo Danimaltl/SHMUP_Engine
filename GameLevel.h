@@ -34,7 +34,7 @@ namespace game_component {
 
 		float rotateAngle = 0;
 
-		Background background;
+		//Background background;
 
 		AsteroidSystem asteroidSystem;
 		LaserSystem laserSystem;

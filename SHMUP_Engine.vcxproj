@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="2dshape.frag" />
+    <None Include="2dshape.vert" />
     <None Include="circleShape.frag" />
     <None Include="circleShape.vert" />
     <None Include="cubeShape.vert" />

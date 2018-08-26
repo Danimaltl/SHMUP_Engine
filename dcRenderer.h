@@ -70,10 +70,10 @@ namespace dcRender {
 	};
 
 	struct TextComponent {
-		std::string text;
-		glm::vec3 color;
-		glm::vec2 position;
-		GLfloat scale;
+		std::string text = "";
+		glm::vec3 color = glm::vec3(1.0f,1.0f,1.0f);
+		glm::vec2 position = glm::vec2(0.0f,0.0f);
+		GLfloat scale = 1.0f;
 	};
 
 	class TextRenderer {

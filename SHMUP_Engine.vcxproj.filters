@@ -97,5 +97,8 @@
     <None Include="text.frag">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="2dshape.vert">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
