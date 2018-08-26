@@ -37,8 +37,6 @@ Window window;
 //Object for manipulating view
 //ViewManager viewMan(window.getDefaultView());
 
-
-
 int main()
 {
 	sf::ContextSettings settings;
@@ -58,7 +56,6 @@ int main()
 
 	sf::Clock clock;
 
-	bool running = true;
 	std::unique_ptr<AppState> currentState(new MainMenu());
 	while (window.isOpen())
 	{

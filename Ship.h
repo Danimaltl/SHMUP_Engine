@@ -11,6 +11,9 @@
 //Size 376
 class PlayerShip {
 public:
+	PlayerShip() {};
+	~PlayerShip() {};
+
 	dcRender::TextComponent shieldsText;
 	dcRender::TextComponent armorText;
 	dcRender::TextComponent scoreText;
@@ -88,6 +91,9 @@ class LaserSystem {
 	std::vector<CollisionComponent*> collisionComponents;
 
 public:
+	LaserSystem() {};
+	~LaserSystem() {}
+
 	void initialize(int numLasers, int maxShapes, PlayerShip* player);
 	void destroy();
 	void fire(glm::vec2 shipDir, glm::vec2 shipPos);
@@ -121,6 +127,9 @@ class AsteroidSystem {
 	//sf::Texture asteroidTexture;
 	PlayerShip* m_player = nullptr;
 public:
+	AsteroidSystem() {};
+	~AsteroidSystem() {};
+
 	//Behavior
 	void initialize(int numAsteroids, PlayerShip* player);
 	void destroy();
@@ -138,6 +147,9 @@ struct VehicleComponent {
 
 class VehicleSystem {
 public:
+	VehicleSystem() {};
+	~VehicleSystem() {};
+
 	void destroy();
 	void Init(int count, PlayerShip* player);
 	void Update(float dt);

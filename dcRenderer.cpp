@@ -255,7 +255,7 @@ void dcRender::Shader::SetVector2(const GLchar *name, const glm::vec2 &value) {
 }
 
 dcRender::TextRenderer::TextRenderer() {
-
+	
 }
 
 dcRender::TextRenderer::~TextRenderer() {
@@ -401,4 +401,8 @@ void dcRender::TextRenderer::destroy() {
 	m_shader.destroy();
 	glDeleteVertexArrays(1, &m_VAO);
 	glDeleteBuffers(1, &m_VBO);
+
+	for (int i = 0; i < 128; i++) {
+		glDeleteTextures(1, &m_characters[i].TextureID);
+	}
 }
