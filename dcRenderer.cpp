@@ -158,7 +158,6 @@ void dcRender::Shader::compile(const GLchar* vertexSource, const GLchar* fragmen
 	// Delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(sVertex);
 	glDeleteShader(sFragment);
-	printf("Shader probably compiled!\n");
 }
 
 void dcRender::Shader::loadFromFile(const char* vertexFile, const char* fragmentFile) {
@@ -396,4 +395,10 @@ void dcRender::TextRenderer::draw(std::string text, GLfloat x, GLfloat y, GLfloa
 
 void dcRender::TextRenderer::draw(TextComponent t) {
 	draw(t.text, t.position.x, t.position.y, t.scale, t.color);
+}
+
+void dcRender::TextRenderer::destroy() {
+	m_shader.destroy();
+	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &m_VBO);
 }

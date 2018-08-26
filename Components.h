@@ -9,6 +9,8 @@ struct CollisionComponent {
 	float radius;
 	bool collided = false;
 	bool active = true;
+	~CollisionComponent() {};
+	CollisionComponent() {};
 };
 
 namespace collision {

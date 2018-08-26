@@ -2,20 +2,9 @@
 
 namespace game_component {
 
-	/*sf::Shape version*/
-
-	//const int MAX_COLLIDERS = 300;
-	//CollisionComponent colliders[MAX_COLLIDERS];
-	//CollisionComponent* collidersPtr = colliders;
-	//int collidersSize = 0;
-
-
-
-	/* *************** */
-
 	void GameLevel::initGame() {
 		
-		//background.init();
+		background.init();
 
 		vehicleSystem.Init(10, &player);
 
@@ -33,12 +22,13 @@ namespace game_component {
 	}
 
 	void GameLevel::destroy() {
-		//background.destroy();
+		background.destroy();
 		player.destroy();
 		vehicleSystem.destroy();
 		laserSystem.destroy();
 		asteroidSystem.destroy();
 		collision::DestroyAllColliders();
+		textRenderer.destroy();
 	}
 
 	AppState* GameLevel::update(float dt) {
@@ -49,7 +39,7 @@ namespace game_component {
 			window.close();
 		}
 
-		//background.update(dt);
+		background.update(dt);
 		vehicleSystem.Update(dt);
 
 		if (player.updateFirst(dt)) {
@@ -79,15 +69,13 @@ namespace game_component {
 	void GameLevel::draw() {
 		//window.setView(viewMan.getView());
 		//window.clear();
-		//background.draw();
+		background.draw();
 
 		asteroidSystem.drawShapes();
 		laserSystem.drawShapes();
 		player.draw();
 
 		vehicleSystem.Draw();
-
-		//player.drawTexts();
 
 		sf::Time elapsed = clock.restart();
 		fpsText.text = std::to_string(static_cast<int>(std::round(1.0f / elapsed.asSeconds())));
@@ -99,6 +87,6 @@ namespace game_component {
 	}
 
 	GameLevel::~GameLevel() {
-		printf("Destructor is being called.\n");
+
 	}
 }

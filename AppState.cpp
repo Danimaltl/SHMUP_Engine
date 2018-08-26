@@ -1,39 +1,26 @@
 #include "AppState.h"
 #include "GameLevel.h"
-#include "Globals.h"
 
-//Text title;
-//Text start;
-//Text quit;
-//
-//Texture bgTexture;
-//Sprite background;
+void MainMenu::initMenu() {
+	printf("Init main menu\n");
 
-void initMenu() {
-	//bgTexture.loadFromFile("bg.jpg");
-	//background.setTexture(bgTexture);
+	textRenderer.init();
 
-	//title.setFont(font);
-	//title.setString("Dan's Asteroids");
-	//title.setCharacterSize(50);
-	//title.setOrigin(title.getLocalBounds().width / 2, title.getLocalBounds().height / 2);
-	//title.setPosition(sWidth / 2, 100);
-	//
+	title.text = "Day of Saturn";
+	title.position = glm::vec2(sWidth / 2 - 100, 100);
 
-	//start.setFont(font);
-	//start.setString("Press SPACE to start game.");
-	//start.setPosition(10, sHeight / 2);
+	start.text = "Press SPACE to start game.";
+	start.position = glm::vec2(10, sHeight / 2);
 
-	//quit.setFont(font);
-	//quit.setString("Press q to quit.");
-	//quit.setPosition(sWidth - 210, sHeight / 2);
+	quit.text = "Press q to quit.";
+	quit.position = glm::vec2(10, sHeight / 2 + 50);
+
 }
 
 //Main Menu Functions
 AppState* MainMenu::update(float dt) {
 	//title.rotate(100 * dt);
 	if (Keyboard::isKeyPressed(Keyboard::Space)) {
-		//return new game::GameLevel(1);
 		return new game_component::GameLevel(1);
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Q)) {
@@ -47,10 +34,9 @@ AppState* MainMenu::update(float dt) {
 void MainMenu::draw() {
 	//cout << "drawing\n";
 	//window.clear();
-	//window.draw(background);
-	//window.draw(title);
-	//window.draw(start);
-	//window.draw(quit);
+	textRenderer.draw(title);
+	textRenderer.draw(start);
+	textRenderer.draw(quit);
 }
 
 MainMenu::MainMenu() {
@@ -58,9 +44,9 @@ MainMenu::MainMenu() {
 }
 
 MainMenu::~MainMenu() {
-	printf("Destructor is being called.\n");
+
 }
 
 void MainMenu::destroy() {
-
+	textRenderer.destroy();
 }

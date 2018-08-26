@@ -74,12 +74,15 @@ namespace dcRender {
 		glm::vec3 color = glm::vec3(1.0f,1.0f,1.0f);
 		glm::vec2 position = glm::vec2(0.0f,0.0f);
 		GLfloat scale = 1.0f;
+		TextComponent() {}
+		~TextComponent(){};
 	};
 
 	class TextRenderer {
 	public:
 		TextRenderer();
 		~TextRenderer();
+		void destroy();
 		void init();
 		void draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 		void draw(TextComponent t);

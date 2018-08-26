@@ -157,6 +157,7 @@ void PlayerShip::draw() {
 }
 
 void PlayerShip::destroy() {
+	m_textRenderer.destroy();
 	m_polyRenderer.destroy();
 	m_shader.destroy();
 }

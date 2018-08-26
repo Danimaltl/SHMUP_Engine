@@ -1,6 +1,20 @@
 //Dan Cochran 2018
 //Uses FreeType https://www.freetype.org/
 
+// debug_new.cpp
+// compile by using: cl /EHsc /W4 /D_DEBUG /MDd debug_new.cpp
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
+
 #define GLEW_STATIC
 
 #include <GL/glew.h>
@@ -40,27 +54,20 @@ int main()
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	//viewMan.setView(window.getDefaultView());
-
-	dcRender::TextRenderer textRender;
-	textRender.init();
+	//viewMan.setView(window.getDefaultView());;
 
 	sf::Clock clock;
 
-	glm::vec2 v = dcMath::AngleToVector((1.33f)*M_PI);
-	printf("v: %f, %f\n", v.x, v.y);
-
 	bool running = true;
-	std::unique_ptr<AppState> currentState(new game_component::GameLevel(1));
+	std::unique_ptr<AppState> currentState(new MainMenu());
 	while (window.isOpen())
 	{
-		sizeof(float);
-
 		sf::Event event;
 		float dt = clock.restart().asSeconds();
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
+				currentState->destroy();
 				window.close();
 				break;
 			}
@@ -73,8 +80,6 @@ int main()
 		AppState* next = currentState->update(dt);
 		currentState->draw();
 
-		textRender.draw("apple", 100, 100, 1, glm::vec3(1, 0, 0));
-
 		window.display();
 
 		if (next != nullptr) {
@@ -85,6 +90,6 @@ int main()
 	}
 
 	window.close();
-
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
