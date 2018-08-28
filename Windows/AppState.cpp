@@ -20,10 +20,10 @@ void MainMenu::initMenu() {
 //Main Menu Functions
 AppState* MainMenu::update(float dt) {
 	//title.rotate(100 * dt);
-	if (Keyboard::isKeyPressed(Keyboard::Space)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		return new game_component::GameLevel(1);
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Q)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 		window.close();
 	}
 

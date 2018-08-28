@@ -16,9 +16,8 @@ struct CollisionComponent {
 namespace collision {
 	sf::Vector2i getBucket(glm::vec2 pos);
 	void bucket_add(sf::Vector2i b, CollisionComponent* obj);
-	void bucket_remove(Vector2i b, CollisionComponent* obj);
-	bool checkCollision(const sf::FloatRect& box1, const sf::FloatRect& box2);
-	void detect_collisions(CollisionComponent* obj, Vector2i b);
+	void bucket_remove(sf::Vector2i b, CollisionComponent* obj);
+	void detect_collisions(CollisionComponent* obj, sf::Vector2i b);
 	CollisionComponent* add_object(CollisionComponent* obj);
 	void CheckAllCollisions();
 	void DestroyAllColliders();

@@ -13,13 +13,13 @@ void PlayerShip::init() {
 	m_shields = 100;
 	m_regenRate = 10;
 	m_score = 0;
-	
+
 	iTimerMax = 0.75f;
 	iTimerCurr = iTimerMax;
 
 	regenDelayMax = 2.0f;
 	regenDelayCurr = regenDelayMax;
-	
+
 	//rendering
 	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
 	m_shader.use();
@@ -111,7 +111,7 @@ void PlayerShip::updatePosition(float dt) {
 	dir.x = cosf(m_rotation * (M_PI / 180));
 	dir.y = sinf(m_rotation * (M_PI / 180));
 
-	sf::Vector2i mousePos = Mouse::getPosition(window);
+	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	glm::vec2 mousePosF((float)mousePos.x, (float)mousePos.y);
 
 	//Move if mouse is on screen and ball isn't past paddle
@@ -236,7 +236,7 @@ void LaserSystem::destroy() {
 //}
 
 void LaserSystem::updatePositions(float dt) {
-	if (Mouse::isButtonPressed(Mouse::Left)) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		//printf("Left mouse pressed.\n");
 		if (firing == false) {
 			for (int i = 0; i < m_numLasers; i++) {
@@ -258,7 +258,7 @@ void LaserSystem::updatePositions(float dt) {
 		}
 		//cout << laserResetCurrent << endl;
 	}
-	else if (!Mouse::isButtonPressed(Mouse::Left)) {
+	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		laserResetCurrent = laserResetMax;
 		firing = false;
 	}

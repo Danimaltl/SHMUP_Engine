@@ -1,0 +1,113 @@
+# depslib dependency file v1.0
+1535438091 source:/home/dan/SHMUP_Engine/Linux/AppState.cpp
+	"AppState.h"
+	"GameLevel.h"
+
+1535433404 /home/dan/SHMUP_Engine/Linux/AppState.h
+	<vector>
+	"Globals.h"
+	"dcRenderer.h"
+
+1535437933 /home/dan/SHMUP_Engine/Linux/Globals.h
+	<GL/glew.h>
+	<SFML/Window.hpp>
+	<SFML/Audio.hpp>
+	<SFML/System.hpp>
+	<SFML/OpenGL.hpp>
+	<glm/glm.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<ft2build.h>
+	<iostream>
+	<sstream>
+	<fstream>
+	<cmath>
+	<string>
+	<assert.h>
+
+1535433404 /home/dan/SHMUP_Engine/Linux/ViewManager.h
+	<SFML/Graphics.hpp>
+	<SFML/Window.hpp>
+	<SFML/Audio.hpp>
+	<SFML/Network.hpp>
+	<SFML/System.hpp>
+	<SFML/OpenGL.hpp>
+	<SFML/Main.hpp>
+
+1535433404 /home/dan/SHMUP_Engine/Linux/dcRenderer.h
+	"Globals.h"
+
+1535433404 /home/dan/SHMUP_Engine/Linux/GameLevel.h
+	"Globals.h"
+	"AppState.h"
+	"GameObject.h"
+	"Components.h"
+	"Ship.h"
+	"Background.h"
+	<memory>
+
+1535433404 /home/dan/SHMUP_Engine/Linux/GameObject.h
+
+1535438012 /home/dan/SHMUP_Engine/Linux/Components.h
+	"Globals.h"
+
+1535433404 /home/dan/SHMUP_Engine/Linux/Ship.h
+	"Globals.h"
+	"GameObject.h"
+	"Components.h"
+	"dcMath.h"
+	"dcRenderer.h"
+	"Easings.h"
+	<iostream>
+
+1535436017 /home/dan/SHMUP_Engine/Linux/dcMath.h
+	<cmath>
+	"Globals.h"
+
+1535433404 /home/dan/SHMUP_Engine/Linux/Easings.h
+	<cmath>
+
+1535433404 /home/dan/SHMUP_Engine/Linux/Background.h
+	"Globals.h"
+	"dcRenderer.h"
+
+1535443009 source:/home/dan/SHMUP_Engine/Linux/Background.cpp
+	"Background.h"
+
+1535438142 source:/home/dan/SHMUP_Engine/Linux/Collision.cpp
+	"Components.h"
+	"dcMath.h"
+
+1535433404 source:/home/dan/SHMUP_Engine/Linux/dcMath.cpp
+	"dcMath.h"
+
+1535442372 source:/home/dan/SHMUP_Engine/Linux/dcRenderer.cpp
+	"dcRenderer.h"
+
+1535433404 source:/home/dan/SHMUP_Engine/Linux/Easings.cpp
+	<iostream>
+	"Easings.h"
+
+1535438172 source:/home/dan/SHMUP_Engine/Linux/GameLevel.cpp
+	"GameLevel.h"
+
+1535433404 source:/home/dan/SHMUP_Engine/Linux/Globals.cpp
+	"Globals.h"
+
+1535439300 source:/home/dan/SHMUP_Engine/Linux/Main.cpp
+	<GL/glew.h>
+	<cmath>
+	<iostream>
+	<memory>
+	"Globals.h"
+	"AppState.h"
+	"GameLevel.h"
+
+1535438320 source:/home/dan/SHMUP_Engine/Linux/Ship.cpp
+	"Ship.h"
+
+1535433404 source:/home/dan/SHMUP_Engine/Linux/ViewManager.cpp
+	"ViewManager.h"
+	"Easings.h"
+	<iostream>
+

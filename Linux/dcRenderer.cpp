@@ -164,28 +164,34 @@ void dcRender::Shader::loadFromFile(const char* vertexFile, const char* fragment
 	// 1. Retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
 	std::string fragmentCode;
+    std::ifstream vShaderFile;
+    std::ifstream fShaderFile;
+    // ensure ifstream objects can throw exceptions:
+    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 	try
 	{
 		// Open files
-		std::ifstream vertexShaderFile(vertexFile);
-		std::ifstream fragmentShaderFile(fragmentFile);
+		vShaderFile.open(vertexFile);
+		fShaderFile.open(fragmentFile);
 		std::stringstream vShaderStream, fShaderStream;
 		// Read file's buffer contents into streams
-		vShaderStream << vertexShaderFile.rdbuf();
-		fShaderStream << fragmentShaderFile.rdbuf();
+		vShaderStream << vShaderFile.rdbuf();
+		fShaderStream << fShaderFile.rdbuf();
 		// close file handlers
-		vertexShaderFile.close();
-		fragmentShaderFile.close();
+		vShaderFile.close();
+		fShaderFile.close();
 		// Convert stream into string
 		vertexCode = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
 	}
-	catch (std::exception e)
+	catch (const std::ifstream::failure& e)
 	{
-		std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
+		std::cout << "ERROR::SHADER: Failed to read shader files: "<< vertexFile << ", " << fragmentFile << std::endl;
 	}
 	const GLchar* vShaderCode = vertexCode.c_str();
 	const GLchar* fShaderCode = fragmentCode.c_str();
+
 	// 2. Now create shader object from source code
 	this->compile(vShaderCode, fShaderCode);
 }
@@ -233,7 +239,7 @@ void dcRender::Shader::SetMatrix4(const GLchar *name, const glm::mat4 &matrix) {
 void dcRender::Shader::SetFloat(const GLchar *name, GLfloat value) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
-		printf("Couldn't find mat4 uniform: %s\n", name);
+		printf("Couldn't find float uniform: %s\n", name);
 	}
 	glUniform1f(uniform, value);
 }
@@ -241,7 +247,7 @@ void dcRender::Shader::SetFloat(const GLchar *name, GLfloat value) {
 void dcRender::Shader::SetVector3(const GLchar *name, const glm::vec3 &value) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
-		printf("Couldn't find mat4 uniform: %s\n", name);
+		printf("Couldn't find vec3 uniform: %s\n", name);
 	}
 	glUniform3f(uniform, value.x, value.y, value.z);
 }
@@ -249,13 +255,13 @@ void dcRender::Shader::SetVector3(const GLchar *name, const glm::vec3 &value) {
 void dcRender::Shader::SetVector2(const GLchar *name, const glm::vec2 &value) {
 	GLuint uniform = glGetUniformLocation(m_id, name);
 	if (uniform == -1) {
-		printf("Couldn't find mat4 uniform: %s\n", name);
+		printf("Couldn't find vec2 uniform: %s\n", name);
 	}
 	glUniform2f(uniform, value.x, value.y);
 }
 
 dcRender::TextRenderer::TextRenderer() {
-	
+
 }
 
 dcRender::TextRenderer::~TextRenderer() {
@@ -289,7 +295,7 @@ void dcRender::TextRenderer::init() {
 	// Load first 128 characters of ASCII set
 	for (GLubyte c = 0; c < 128; c++)
 	{
-		// Load character glyph 
+		// Load character glyph
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 		{
 			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
@@ -347,8 +353,8 @@ void dcRender::TextRenderer::draw(std::string text, GLfloat x, GLfloat y, GLfloa
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
-	
-	// Activate corresponding render state	
+
+	// Activate corresponding render state
 	m_shader.use();
 	m_shader.SetVector3("textColor", color);
 	glActiveTexture(GL_TEXTURE0);

@@ -35,7 +35,7 @@ namespace collision {
 
 	}
 
-	void bucket_remove(Vector2i b, CollisionComponent* obj)
+	void bucket_remove(sf::Vector2i b, CollisionComponent* obj)
 	{
 		std::vector<CollisionComponent*> & v
 			= grid[b.x][b.y];
@@ -50,15 +50,11 @@ namespace collision {
 		}
 	}
 
-	bool checkCollision(const sf::FloatRect& box1, const sf::FloatRect& box2) {
-		return box1.intersects(box2);
-	}
-
 	bool checkCollisionRadius(float r1, float r2, glm::vec2 p1, glm::vec2 p2) {
 		return dcMath::Magnitude(p1 - p2) < (r1 + r2);
 	}
 
-	void detect_collisions(CollisionComponent* obj, Vector2i b)
+	void detect_collisions(CollisionComponent* obj, sf::Vector2i b)
 	{
 		obj->collided = false;
 		int left = std::max(b.x - 1, 0);
@@ -100,8 +96,8 @@ namespace collision {
 		for (int i = 0; i < colliders.size(); ++i) {
 			CollisionComponent * collision = colliders[i];
 			if (collision->active == false) continue;
-			Vector2i curBucket = getBucket(collision->oldPos);
-			Vector2i newBucket = getBucket(collision->currPos);
+			sf::Vector2i curBucket = getBucket(collision->oldPos);
+			sf::Vector2i newBucket = getBucket(collision->currPos);
 			if (curBucket != newBucket) {
 				bucket_remove(curBucket, collision);
 				bucket_add(newBucket, collision);
@@ -117,7 +113,7 @@ namespace collision {
 			colliders[i] = nullptr;
 		}
 		colliders.clear();
-		
+
 		if (!colliders.empty()) {
 			printf("Colliders isn't empty!\n");
 		}

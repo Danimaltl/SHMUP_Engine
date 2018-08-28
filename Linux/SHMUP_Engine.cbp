@@ -31,6 +31,43 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="2dshape.frag" />
+		<Unit filename="2dshape.vert" />
+		<Unit filename="AppState.cpp" />
+		<Unit filename="AppState.h" />
+		<Unit filename="Background.cpp" />
+		<Unit filename="Background.h" />
+		<Unit filename="Collision.cpp" />
+		<Unit filename="Components.h" />
+		<Unit filename="Easings.cpp" />
+		<Unit filename="Easings.h" />
+		<Unit filename="GameLevel.cpp" />
+		<Unit filename="GameLevel.h" />
+		<Unit filename="GameObject.h" />
+		<Unit filename="Globals.cpp" />
+		<Unit filename="Globals.h" />
+		<Unit filename="Main.cpp" />
+		<Unit filename="README.md" />
+		<Unit filename="SHMUP_Engine.cbp" />
+		<Unit filename="SHMUP_Engine.sln" />
+		<Unit filename="SHMUP_Engine.vcxproj" />
+		<Unit filename="SHMUP_Engine.vcxproj.filters" />
+		<Unit filename="Seal.png" />
+		<Unit filename="Ship.cpp" />
+		<Unit filename="Ship.h" />
+		<Unit filename="arial.ttf" />
+		<Unit filename="bg.jpg" />
+		<Unit filename="circleShape.frag" />
+		<Unit filename="circleShape.vert" />
+		<Unit filename="cubeShape.frag" />
+		<Unit filename="cubeShape.vert" />
+		<Unit filename="dcMath.cpp" />
+		<Unit filename="dcMath.h" />
+		<Unit filename="dcRenderer.cpp" />
+		<Unit filename="dcRenderer.h" />
+		<Unit filename="rock.jpg" />
+		<Unit filename="text.frag" />
+		<Unit filename="text.vert" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -3,7 +3,7 @@
 namespace game_component {
 
 	void GameLevel::initGame() {
-		
+
 		background.init();
 
 		vehicleSystem.Init(10, &player);
@@ -32,10 +32,10 @@ namespace game_component {
 	}
 
 	AppState* GameLevel::update(float dt) {
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 			return new MainMenu();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Q)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 			window.close();
 		}
 
