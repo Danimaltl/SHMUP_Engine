@@ -15,90 +15,67 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="..\src\AppState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AppState.cpp">
+    <ClCompile Include="..\src\Background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Easings.cpp">
+    <ClCompile Include="..\src\Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Globals.cpp">
+    <ClCompile Include="..\src\dcMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ship.cpp">
+    <ClCompile Include="..\src\dcRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dcMath.cpp">
+    <ClCompile Include="..\src\Easings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameLevel.cpp">
+    <ClCompile Include="..\src\GameLevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
+    <ClCompile Include="..\src\Globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dcRenderer.cpp">
+    <ClCompile Include="..\src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
+    <ClCompile Include="..\src\Ship.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AppState.h">
+    <ClInclude Include="..\src\AppState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Easings.h">
+    <ClInclude Include="..\src\Background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="..\src\Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
+    <ClInclude Include="..\src\dcMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ship.h">
+    <ClInclude Include="..\src\dcRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dcMath.h">
+    <ClInclude Include="..\src\Easings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components.h">
+    <ClInclude Include="..\src\GameLevel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dcRenderer.h">
+    <ClInclude Include="..\src\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Background.h">
+    <ClInclude Include="..\src\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameLevel.h">
+    <ClInclude Include="..\src\Ship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="2dshape.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="circleShape.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="cubeShape.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="circleShape.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="text.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="text.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="2dshape.vert">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

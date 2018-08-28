@@ -64,7 +64,7 @@ void Background::init() {
 
 	glBindVertexArray(m_VAO);
 
-	m_shader.loadFromFile("cubeShape.vert", "cubeShape.frag");
+	m_shader.loadFromFile("shaders/cubeShape.vert", "shaders/cubeShape.frag");
 	m_shader.use();
 
 	// Specify the layout of the vertex data
@@ -94,7 +94,6 @@ void Background::init() {
 
 void Background::update(float dt) {
 	m_time += dt;
-	printf("%f\n", m_time);
 	m_shader.SetFloat("time", m_time);
 }
 

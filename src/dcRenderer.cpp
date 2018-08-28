@@ -270,7 +270,7 @@ dcRender::TextRenderer::~TextRenderer() {
 
 void dcRender::TextRenderer::init() {
 
-	m_shader.loadFromFile("text.vert", "text.frag");
+	m_shader.loadFromFile("shaders/text.vert", "shaders/text.frag");
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(sWidth), 0.0f, static_cast<GLfloat>(sHeight));
 	m_shader.use();
 	m_shader.SetMatrix4("projection", projection);
@@ -283,7 +283,7 @@ void dcRender::TextRenderer::init() {
 
 	// Load font as face
 	FT_Face face;
-	if (FT_New_Face(ft, "arial.ttf", 0, &face))
+	if (FT_New_Face(ft, "assets/arial.ttf", 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 	// Set size to load glyphs as

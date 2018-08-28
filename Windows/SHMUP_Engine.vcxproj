@@ -19,37 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AppState.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="dcMath.cpp" />
-    <ClCompile Include="dcRenderer.cpp" />
-    <ClCompile Include="Easings.cpp" />
-    <ClCompile Include="GameLevel.cpp" />
-    <ClCompile Include="Globals.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Ship.cpp" />
-    <ClCompile Include="Background.cpp" />
+    <ClCompile Include="..\src\AppState.cpp" />
+    <ClCompile Include="..\src\Background.cpp" />
+    <ClCompile Include="..\src\Collision.cpp" />
+    <ClCompile Include="..\src\dcMath.cpp" />
+    <ClCompile Include="..\src\dcRenderer.cpp" />
+    <ClCompile Include="..\src\Easings.cpp" />
+    <ClCompile Include="..\src\GameLevel.cpp" />
+    <ClCompile Include="..\src\Globals.cpp" />
+    <ClCompile Include="..\src\Main.cpp" />
+    <ClCompile Include="..\src\Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AppState.h" />
-    <ClInclude Include="Background.h" />
-    <ClInclude Include="Components.h" />
-    <ClInclude Include="dcMath.h" />
-    <ClInclude Include="dcRenderer.h" />
-    <ClInclude Include="Easings.h" />
-    <ClInclude Include="GameLevel.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Globals.h" />
-    <ClInclude Include="Ship.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="2dshape.frag" />
-    <None Include="2dshape.vert" />
-    <None Include="circleShape.frag" />
-    <None Include="circleShape.vert" />
-    <None Include="cubeShape.vert" />
-    <None Include="text.frag" />
-    <None Include="text.vert" />
+    <ClInclude Include="..\src\AppState.h" />
+    <ClInclude Include="..\src\Background.h" />
+    <ClInclude Include="..\src\Components.h" />
+    <ClInclude Include="..\src\dcMath.h" />
+    <ClInclude Include="..\src\dcRenderer.h" />
+    <ClInclude Include="..\src\Easings.h" />
+    <ClInclude Include="..\src\GameLevel.h" />
+    <ClInclude Include="..\src\GameObject.h" />
+    <ClInclude Include="..\src\Globals.h" />
+    <ClInclude Include="..\src\Ship.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

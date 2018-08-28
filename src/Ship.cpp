@@ -21,7 +21,7 @@ void PlayerShip::init() {
 	regenDelayCurr = regenDelayMax;
 
 	//rendering
-	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.loadFromFile("shaders/2dshape.vert", "shaders/2dshape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 	m_shader.SetMatrix4("projection", projection);
@@ -179,7 +179,7 @@ void LaserSystem::initialize(int numLasers, int maxShapes, PlayerShip* player) {
 	//}
 	//shapes = new sf::CircleShape[maxShapes];
 
-	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.loadFromFile("shaders/2dshape.vert", "shaders/2dshape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 	m_shader.SetMatrix4("projection", projection);
@@ -327,7 +327,7 @@ void ::AsteroidSystem::initialize(int numAsteroids, PlayerShip* player) {
 	//	printf("Could not load asteroid texture!");
 	//}
 
-	m_shader.loadFromFile("circleShape.vert", "circleShape.frag");
+	m_shader.loadFromFile("shaders/circleShape.vert", "shaders/circleShape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 	m_shader.SetMatrix4("projection", projection);
@@ -439,7 +439,7 @@ void VehicleSystem::Init(int count, PlayerShip* player) {
 	//}
 	//shapes = new sf::ConvexShape[m_numVehicles];
 
-	m_shader.loadFromFile("2dshape.vert", "2dshape.frag");
+	m_shader.loadFromFile("shaders/2dshape.vert", "shaders/2dshape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 	m_shader.SetMatrix4("projection", projection);
