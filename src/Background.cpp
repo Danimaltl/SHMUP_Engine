@@ -94,6 +94,7 @@ void Background::init() {
 
 void Background::update(float dt) {
 	m_time += dt;
+	m_shader.use();
 	m_shader.SetFloat("time", m_time);
 }
 

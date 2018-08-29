@@ -236,6 +236,7 @@ void LaserSystem::destroy() {
 //}
 
 void LaserSystem::updatePositions(float dt) {
+	m_time += dt;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		//printf("Left mouse pressed.\n");
 		if (firing == false) {
@@ -327,7 +328,7 @@ void ::AsteroidSystem::initialize(int numAsteroids, PlayerShip* player) {
 	//	printf("Could not load asteroid texture!");
 	//}
 
-	m_shader.loadFromFile("shaders/circleShape.vert", "shaders/circleShape.frag");
+	m_shader.loadFromFile("shaders/advCircleShape.vert", "shaders/advCircleShape.frag");
 	m_shader.use();
 	glm::mat4 projection = glm::ortho(0.0f, 600.0f, 800.0f, 0.0f, -1.0f, 1.0f);
 	m_shader.SetMatrix4("projection", projection);
@@ -420,8 +421,13 @@ void AsteroidSystem::handleCollisions() {
 }
 
 void AsteroidSystem::drawShapes() {
+	m_shader.use();
 	m_shader.SetFloat("time", m_time);
+	printf("Time: %f\n", m_time);
+	glm::vec2 pos = m_player->getPosition();
 	for (int i = 0; i < m_numAsteroids; i++) {
+		m_shader.use();
+		m_shader.SetVector2("center", asteroidComponents[i].position);
 		m_circleRenderer.draw(asteroidComponents[i].position, 0.0f, asteroidComponents[i].radius, m_color);
 	}
 }

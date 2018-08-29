@@ -78,6 +78,7 @@ class LaserSystem {
 	float laserResetMax = 0;
 	float laserResetCurrent = 0;
 	bool firing = false;
+	float m_time = 0;
 
 	// Component lists
 	//CircleShape* shapes = nullptr;
@@ -119,7 +120,7 @@ class AsteroidSystem {
 	//Rendering
 	dcRender::CircleRenderer m_circleRenderer;
 	dcRender::Shader m_shader;
-	glm::vec3 m_color = glm::vec3(0, 0, 0);
+	glm::vec3 m_color = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	//Shared data
 	int m_numAsteroids = 0;

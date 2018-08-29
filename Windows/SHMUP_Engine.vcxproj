@@ -42,6 +42,18 @@
     <ClInclude Include="..\src\Globals.h" />
     <ClInclude Include="..\src\Ship.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\2dshape.frag" />
+    <None Include="..\shaders\2dshape.vert" />
+    <None Include="..\shaders\advCircleShape.frag" />
+    <None Include="..\shaders\advCircleShape.vert" />
+    <None Include="..\shaders\circleShape.frag" />
+    <None Include="..\shaders\circleShape.vert" />
+    <None Include="..\shaders\cubeShape.frag" />
+    <None Include="..\shaders\cubeShape.vert" />
+    <None Include="..\shaders\text.frag" />
+    <None Include="..\shaders\text.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{a169890e-1e5a-4222-89e9-c82f705c3df0}</ProjectGuid>

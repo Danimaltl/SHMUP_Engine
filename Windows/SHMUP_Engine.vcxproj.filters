@@ -78,4 +78,36 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\2dshape.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\2dshape.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\circleShape.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\circleShape.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\cubeShape.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\cubeShape.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\text.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\text.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\advCircleShape.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\shaders\advCircleShape.vert">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
