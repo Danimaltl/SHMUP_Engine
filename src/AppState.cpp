@@ -2,8 +2,6 @@
 #include "GameLevel.h"
 
 void MainMenu::initMenu() {
-	printf("Init main menu\n");
-
 	textRenderer.init();
 
 	title.text = "Day of Saturn";

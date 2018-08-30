@@ -423,7 +423,6 @@ void AsteroidSystem::handleCollisions() {
 void AsteroidSystem::drawShapes() {
 	m_shader.use();
 	m_shader.SetFloat("time", m_time);
-	printf("Time: %f\n", m_time);
 	glm::vec2 pos = m_player->getPosition();
 	for (int i = 0; i < m_numAsteroids; i++) {
 		m_shader.use();
