@@ -193,7 +193,7 @@ private:
 	float m_MaxSpeed;
 	float m_MaxForce;
 
-	float m_maxHealth;
+	int m_maxHealth;
 
 	float m_ArriveRadius;
 	float m_NeighborRadius;

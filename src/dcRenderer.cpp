@@ -28,7 +28,7 @@ void dcRender::CircleRenderer::init(int numPoints, Shader* shader) {
 
 	for (int i = 0; i < numPoints * 2; i += 2) {
 		float angle = (float)i * 2.0f * (float)M_PI / (float)numPoints;
-		vertices[i] = cos(angle) * radius;
+		vertices[i] = (float)(cos(angle) * radius); //Fun float conversion and possible overflow
 		vertices[i + 1] = sin(angle) * radius;
 
 		glm::vec4 vert = model * glm::vec4(vertices[i], vertices[i + 1], 0.0f, 1.0f);

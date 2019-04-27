@@ -41,7 +41,7 @@ void PlayerShip::init() {
 
 	/*Spatial data*/
 	m_position = glm::vec2(sWidth / 2, sHeight / 2);
-	m_rotation = -M_PI/2;
+	m_rotation = (float)-M_PI/2;
 
 	/* Text data */
 	shieldsText.color = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -108,8 +108,8 @@ void PlayerShip::updatePosition(float dt) {
 	glm::vec2 newPos = m_position;
 	collisionComponent->oldPos = newPos;
 
-	dir.x = cosf(m_rotation * (M_PI / 180));
-	dir.y = sinf(m_rotation * (M_PI / 180));
+	dir.x = cosf(m_rotation * (float)(M_PI / 180));
+	dir.y = sinf(m_rotation * (float)(M_PI / 180));
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	glm::vec2 mousePosF((float)mousePos.x, (float)mousePos.y);
@@ -242,8 +242,8 @@ void LaserSystem::updatePositions(float dt) {
 		if (firing == false) {
 			for (int i = 0; i < m_numLasers; i++) {
 				collisionComponents[i]->oldPos = laserComponents[i].position;
-				if (laserComponents[i].lifetime <= 0) {
-					laserComponents[i].lifetime = m_maxLifetime;
+				if (laserComponents[i].lifetime <= 0.0f) {
+					laserComponents[i].lifetime = (float)m_maxLifetime;
 					laserComponents[i].position = m_player->getPosition();
 					//printf("Setting position to: %f, %f\n", m_player->m_shape.getPosition().x, m_player->m_shape.getPosition().y);
 					collisionComponents[i]->active = true;
@@ -352,9 +352,9 @@ void ::AsteroidSystem::initialize(int numAsteroids, PlayerShip* player) {
 
 		AsteroidComponent a;
 		a.position = glm::vec2(rand() % sWidth, -(50 + rand() % 500));
-		a.radius = 10 + rand() % 40;
-		a.health = a.radius * 1.5f;
-		a.speed = 50 + (rand() % 100);
+		a.radius = (float)(10 + rand() % 40);
+		a.health = (int)(a.radius * 1.5f);
+		a.speed = (float)(50 + (rand() % 100));
 		asteroidComponents.push_back(a);
 
 		CollisionComponent* c = new CollisionComponent;
@@ -394,15 +394,15 @@ void AsteroidSystem::updatePositions(float dt) {
 
 		if (health <= 0 || (asteroidComponents[i].position.y > sHeight + 50)) {
 			if (health <= 0) {
-				m_player->setScore(m_player->getScore() + asteroidComponents[i].radius);
+				m_player->setScore(m_player->getScore() + (int)asteroidComponents[i].radius);
 			}
 			asteroidComponents[i].position = glm::vec2(rand() % sWidth, -50);
-			newRadius = 10 + rand() % 40;
+			newRadius = (float)(10 + rand() % 40);
 			asteroidComponents[i].radius = newRadius;
 			//shapes[i].setOrigin(newRadius, newRadius);
 			collisionComponents[i]->radius = newRadius;
-			asteroidComponents[i].health = newRadius * 1.5f;
-			asteroidComponents[i].speed = 50 + (rand() % 100);
+			asteroidComponents[i].health = (int)(newRadius * 1.5f);
+			asteroidComponents[i].speed = (float)(50 + (rand() % 100));
 		}
 		collisionComponents[i]->currPos = asteroidComponents[i].position;
 	}
@@ -584,7 +584,7 @@ void VehicleSystem::Update(float dt) {
 	//	printf("Cohesion: %f\n", m_CoToggle);
 	//}
 
-	for (size_t i = 0; i < m_numVehicles; i++) {
+	for (int i = 0; i < m_numVehicles; i++) {
 		collisionComponents[i]->oldPos = vehicleComponents[i].m_Position;
 
 		if (vehicleComponents[i].health <= 0) {

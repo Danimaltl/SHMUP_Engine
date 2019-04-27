@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Easings.h";
+#include "Easings.h"
 
 using namespace std;
 
@@ -11,8 +11,8 @@ float lerp(float t, float b, float c, float d) {
 }
 
 float lerp(float startPos, float targetPos, float progress) {
-	if ((1 - progress) < .01) return targetPos;
-	return (1 - progress) * startPos + progress * targetPos;
+	if ((1.0f - progress) < .01f) return targetPos;
+	return (1.0f - progress) * startPos + progress * targetPos;
 }
 
 float smoothStep(float x) {
@@ -71,8 +71,8 @@ float elasticEaseIn(float t, float b, float c, float d) {
 	float p = d*.3f;
 	float a = c;
 	float s = p / 4;
-	float postFix = a*pow(2, 10 * (t -= 1)); // this is a fix, again, with post-increment operators
-	return -(postFix * sin((t*d - s)*(2 * M_PI) / p)) + b;
+	float postFix = a*(float)pow(2, 10 * (t -= 1)); // this is a fix, again, with post-increment operators
+	return -(postFix * (float)sin((t*d - s)*(2 * M_PI) / p)) + b;
 }
 
 float elasticEaseOut(float t, float b, float c, float d) {
@@ -80,7 +80,7 @@ float elasticEaseOut(float t, float b, float c, float d) {
 	float p = d*.3f;
 	float a = c;
 	float s = p / 4;
-	return (a*pow(2, -10 * t) * sin((t*d - s)*(2 * M_PI) / p) + c + b);
+	return (a*(float)pow(2, -10 * t) * (float)sin((t*d - s)*(2 * M_PI) / p) + c + b);
 }
 
 float elasticEaseInOut(float t, float b, float c, float d) {
@@ -90,9 +90,9 @@ float elasticEaseInOut(float t, float b, float c, float d) {
 	float s = p / 4;
 
 	if (t < 1) {
-		float postFix = a*pow(2, 10 * (t -= 1)); // postIncrement is evil
-		return -.5f*(postFix* sin((t*d - s)*(2 * M_PI) / p)) + b;
+		float postFix = a*(float)pow(2, 10 * (t -= 1)); // postIncrement is evil
+		return -.5f*(postFix* (float)sin((t*d - s)*(2 * M_PI) / p)) + b;
 	}
-	float postFix = a*pow(2, -10 * (t -= 1)); // postIncrement is evil
-	return postFix * sin((t*d - s)*(2 * M_PI) / p)*.5f + c + b;
+	float postFix = a*(float)pow(2, -10 * (t -= 1)); // postIncrement is evil
+	return postFix * (float)sin((t*d - s)*(2 * M_PI) / p)*.5f + c + b;
 }

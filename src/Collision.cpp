@@ -4,8 +4,8 @@
 namespace collision {
 	std::vector<CollisionComponent*> colliders;
 
-	const float BUCKET_WIDTH = sWidth / 4;
-	const float BUCKET_HEIGHT = sHeight / 6;
+	const float BUCKET_WIDTH = (float)sWidth / 4;
+	const float BUCKET_HEIGHT = (float)sHeight / 6;
 	const int COLUMNS = 10;
 	const int ROWS = 10;
 	std::vector<CollisionComponent*> grid[COLUMNS][ROWS];
@@ -40,7 +40,7 @@ namespace collision {
 		std::vector<CollisionComponent*> & v
 			= grid[b.x][b.y];
 
-		for (int i = 0; i < v.size(); ++i)
+		for (size_t i = 0; i < v.size(); ++i)
 		{
 			if (v[i] == obj)
 			{
@@ -93,7 +93,7 @@ namespace collision {
 
 	void CheckAllCollisions() {
 		//Check all collisions
-		for (int i = 0; i < colliders.size(); ++i) {
+		for (size_t i = 0; i < colliders.size(); ++i) {
 			CollisionComponent * collision = colliders[i];
 			if (collision->active == false) continue;
 			sf::Vector2i curBucket = getBucket(collision->oldPos);
@@ -108,7 +108,7 @@ namespace collision {
 
 	void DestroyAllColliders() {
 		printf("Destroying all colliders.\n");
-		for (int i = 0; i < colliders.size(); i++) {
+		for (size_t i = 0; i < colliders.size(); i++) {
 			delete colliders[i];
 			colliders[i] = nullptr;
 		}

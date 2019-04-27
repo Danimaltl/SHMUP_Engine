@@ -12,8 +12,8 @@
 #include "AppState.h"
 #include "GameLevel.h"
 
-unsigned int sWidth = 600;
-unsigned int sHeight = 800;
+int sWidth = 600;
+int sHeight = 800;
 
 //Window to be displayed throughout game
 sf::Window window;

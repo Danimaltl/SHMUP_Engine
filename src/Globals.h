@@ -28,6 +28,6 @@
 
 extern sf::Window window;
 //extern ViewManager viewMan;
-extern unsigned int sWidth;
-extern unsigned int sHeight;
+extern int sWidth;
+extern int sHeight;
 //extern sf::Font font;
